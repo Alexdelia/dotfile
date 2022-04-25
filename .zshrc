@@ -119,12 +119,30 @@ alias	gac="git commit -am"
 alias	gam="git commit --amend -m"
 #alias	git tree="git log --graph --oneline --decorate"
 
+alias	sl="ls"
+alias	mk="make"
+alias	amke="make"
+alias	mkae="make"
+alias	maek="make"
+alias	ivm="vim"
+alias	imv="vim"
+alias	s="sudo"
+alias	gti="git"
+
+alias	neo="neofetch"
 alias	to="bashtop"
+alias	poke="pokemon-colorscripts -r"
 
 alias	rmbk=~/p/bin/utility/rmbk.sh
-alias	w2x=/var/lib/flatpak/app/com.github.nihui.waifu2x-ncnn-vulkan/current/8bf9ef4885a0ca7426344fd1a080f8290c42373bb3e7aa5327a189c9319b4a27/export/bin/com.github.nihui.waifu2x-ncnn-vulkan
+#alias	w2x=/var/lib/flatpak/app/com.github.nihui.waifu2x-ncnn-vulkan/current/8bf9ef4885a0ca7426344fd1a080f8290c42373bb3e7aa5327a189c9319b4a27/export/bin/com.github.nihui.waifu2x-ncnn-vulkan
+alias	waifu2x=/home/alex/Ware/waifu2x-ncnn-vulkan-20210521-ubuntu/waifu2x-ncnn-vulkan
+alias	w2x=/home/alex/Ware/waifu2x-ncnn-vulkan-20210521-ubuntu/waifu2x-ncnn-vulkan
 alias	auto_w2x=/home/alex/p/bin/utility/auto_waifu2x.sh
+alias	aw2x=/home/alex/p/bin/utility/auto_waifu2x.sh
 alias	ani-cli=/home/alex/Ware/ani-cli/ani-cli
+#alias	yuzu=/home/alex/Games/Yuzu/yuzu-20211121-0aeea0346.AppImage
+#alias	yuzu=/home/alex/Games/Yuzu/yuzu-20220219-60c527fd0.AppImage
+alias	yuzu=/home/alex/Games/Yuzu/yuzu-20220305-ed691f09c.AppImage
 
 #autojump
 	[[ -s /home/alex/.autojump/etc/profile.d/autojump.sh ]] && source /home/alex/.autojump/etc/profile.d/autojump.sh
