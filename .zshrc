@@ -117,7 +117,7 @@ alias	clangW="clang -Wall -Werror -Wextra"
 alias	gco="git commit -m"
 alias	gac="git commit -am"
 alias	gam="git commit --amend -m"
-#alias	git tree="git log --graph --oneline --decorate"
+alias	gtree="git log --graph --oneline --decorate"
 
 alias	sl="ls"
 alias	mk="make"
