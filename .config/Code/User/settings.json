@@ -1,0 +1,46 @@
+{
+    "42header.email": "adelille@student.42.fr",
+    "42header.username": "adelille",
+    "files.autoSave": "onWindowChange",
+    "editor.insertSpaces": false,
+	"editor.detectIndentation": false,
+	"editor.renderFinalNewline": false,
+	"explorer.confirmDragAndDrop": false,
+	"editor.fontFamily": "'Roboto Mono', Consolas, 'Source Code Pro Italic', 'Source Code Pro Bold Italic'",
+
+	"workbench.colorCustomizations": {
+		"editor.background":	"#0D1117",
+		//"editorLineNumber.foreground": "#ff0000",
+		"editorLineNumber.activeForeground":	"#DDDDDD",
+		"editorCursor.background":	"#0D1117",
+		"editorCursor.foreground":	"#D4B6CA",
+
+		"editor.selectionBackground":	"#ffe3e94d",
+		"editor.inactiveSelectionBackground":	"#ff0000",
+		//"editor.selectionHighlightBackground":	"#00ff00",
+		//"editor.selectionHighlightBorder":		"#0000ff",
+		"editor.findMatchHighlightBackground":		"#ff0000",
+
+		"editorBracketMatch.background":			"#ffe3e94d",
+		"editorBracketMatch.border":				"#ffffff00",
+	},
+
+	"editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": [
+                 "string.quoted.double.cpp", 
+                 ],
+                 "settings": {
+                 "foreground": "#85C057",
+                 }
+            },
+			{
+                "scope": ["keyword.control"],
+					"settings": {"foreground": "#EC8E2C",}
+			},
+        ]
+	},
+	"editor.autoClosingBrackets": "never",
+	"editor.autoClosingQuotes": "never",
+}
