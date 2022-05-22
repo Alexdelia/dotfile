@@ -1,0 +1,50 @@
+{
+    "42header.email":		"adelille@student.42.fr",
+    "42header.username":	"adelille",
+
+    "files.autoSave":	"onWindowChange",
+    "editor.insertSpaces":			false,
+	"editor.detectIndentation":		false,
+	"editor.renderFinalNewline":	false,
+	"explorer.confirmDragAndDrop":	false,
+	"editor.fontFamily":	"'Roboto Mono', Consolas, 'Source Code Pro Italic', 'Source Code Pro Bold Italic'",
+	"editor.autoClosingBrackets":	"never",
+	"editor.autoClosingQuotes":		"never",
+	"problems.showCurrentInStatus":	true,
+	
+	"vim.statusBarColorControl":	true,
+	"vim.statusBarColors.normal":	"#36296b",
+	"vim.statusBarColors.insert":	"#731bb3",
+	"vim.statusBarColors.visual":	"#857a00",
+	"vim.statusBarColors.visualblock":	"#00b2c9",
+	"vim.statusBarColors.visualline":	"#9c001d",
+
+	"workbench.colorCustomizations": {
+		"editor.background": "#0D1117",
+		"statusBar.background": "#36296b",
+		"statusBar.foreground": "#ffffff",
+		"editorLineNumber.activeForeground": "#DDDDDD",
+		"editorCursor.background": "#0D1117",
+		"editorCursor.foreground": "#D4B6CA",
+		"editor.selectionBackground": "#ffe3e94d",
+		"editor.inactiveSelectionBackground": "#ff0000",
+		"editor.findMatchHighlightBackground": "#ff0000",
+		"editorBracketMatch.background": "#ffe3e94d",
+		"editorBracketMatch.border": "#ffffff00",
+		"statusBar.noFolderBackground": "#36296b",
+		"statusBar.debuggingBackground": "#36296b"
+	},
+
+	"editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+				"scope": ["string.quoted.double"],
+					"settings": {"foreground": "#85C057",}
+            },
+			{
+                "scope": ["keyword.control"],
+					"settings": {"foreground": "#EC8E2C",}
+			},
+        ]
+	},
+}
