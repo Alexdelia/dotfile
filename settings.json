@@ -7,7 +7,7 @@
 	"editor.detectIndentation":		false,
 	"editor.renderFinalNewline":	false,
 	"explorer.confirmDragAndDrop":	false,
-	"editor.fontFamily":	"'Roboto Mono', Consolas, 'Source Code Pro Italic', 'Source Code Pro Bold Italic'",
+	"editor.fontFamily":	"'Roboto Mono', Consolas",
 	"editor.autoClosingBrackets":	"never",
 	"editor.autoClosingQuotes":		"never",
 	"problems.showCurrentInStatus":	true,
@@ -32,18 +32,69 @@
 		"editorBracketMatch.background": "#ffe3e94d",
 		"editorBracketMatch.border": "#ffffff00",
 		"statusBar.noFolderBackground": "#36296b",
-		"statusBar.debuggingBackground": "#36296b"
+		"statusBar.debuggingBackground": "#36296b",
+		"editorBracketHighlight.foreground1": "#F0F6FC",
+		"editorBracketHighlight.foreground2": "#ffff26",
+		"editorBracketHighlight.foreground3": "#26ff96",
+		"editorBracketHighlight.foreground4": "#b43bff",
+		"editorBracketHighlight.foreground5": "#ff00f7",
+		"editorBracketHighlight.foreground6": "#ff5500",
+		"editorBracketHighlight.unexpectedBracket.foreground": "#ff0000"
 	},
 
 	"editor.tokenColorCustomizations": {
         "textMateRules": [
             {
 				"scope": ["string.quoted.double"],
-					"settings": {"foreground": "#85C057",}
+					"settings": {"foreground": "#85C057"}
+            },
+            {
+				"scope": ["constant.character.escape"],
+					"settings": {"foreground": "#FFD7D7"}
             },
 			{
-                "scope": ["keyword.control"],
-					"settings": {"foreground": "#EC8E2C",}
+                "scope": ["keyword.control", "keyword.operator.functionlike", "keyword.operator.sizeof"],
+					//"settings": {"foreground": "#EC8E2C"}
+					//"settings": {"foreground": "#FFD141"}
+					"settings": {"foreground": "#d9b036"}
+			},
+			{
+                "scope": ["keyword.control.while", "keyword.control.for"],
+					//"settings": {"foreground": "#B986C0"}
+					"settings": {"foreground": "#cb62d9"}
+			},
+			{
+                "scope": ["entity.name.function"],
+					"settings": {"fontStyle": "bold", "foreground": "#79C0FF"}
+			},
+			{
+                "scope": ["entity.name.function.operator",
+						"keyword.operator.arithmetic", "keyword.operator.comparison",
+						"keyword.operator.assignment",
+						"punctuation.separator.pointer-access", "punctuation.separator.dot-access"],
+					"settings": {"fontStyle": "", "foreground": "#ff9999"}
+			},
+			{
+                "scope": ["keyword.operator.bitwise"],
+					"settings": {"fontStyle": "italic", "foreground": "#ff9999"}
+			},
+			{
+                "scope": ["variable"],
+					//"settings": {"fontStyle": "italic", "foreground": "#F0F6FC"}
+					"settings": {"fontStyle": "italic", "foreground": "#ebfcfc"}
+			},
+			{
+                "scope": ["comment"],
+					"settings": {"fontStyle": "italic", "foreground": "#79C0FF"}
+			},
+			{
+                "scope": ["constant.language.NULL"],
+					"settings": {"fontStyle": "", "foreground": "#cc27e3"}
+			},
+			{
+                "scope": ["entity.name.function.preprocessor"],
+					//"settings": {"fontStyle": "", "foreground": "#c7a5cc"}
+					"settings": {"fontStyle": "", "foreground": "#3c5ee6"}
 			},
         ]
 	},
