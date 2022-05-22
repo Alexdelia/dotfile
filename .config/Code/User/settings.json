@@ -1,46 +1,101 @@
 {
-    "42header.email": "adelille@student.42.fr",
-    "42header.username": "adelille",
-    "files.autoSave": "onWindowChange",
-    "editor.insertSpaces": false,
-	"editor.detectIndentation": false,
-	"editor.renderFinalNewline": false,
-	"explorer.confirmDragAndDrop": false,
-	"editor.fontFamily": "'Roboto Mono', Consolas, 'Source Code Pro Italic', 'Source Code Pro Bold Italic'",
+    "42header.email":		"adelille@student.42.fr",
+    "42header.username":	"adelille",
+
+    "files.autoSave":	"onWindowChange",
+    "editor.insertSpaces":			false,
+	"editor.detectIndentation":		false,
+	"editor.renderFinalNewline":	false,
+	"explorer.confirmDragAndDrop":	false,
+	"editor.fontFamily":	"'Roboto Mono', Consolas",
+	"editor.autoClosingBrackets":	"never",
+	"editor.autoClosingQuotes":		"never",
+	"problems.showCurrentInStatus":	true,
+	
+	"vim.statusBarColorControl":	true,
+	"vim.statusBarColors.normal":	"#36296b",
+	"vim.statusBarColors.insert":	"#731bb3",
+	"vim.statusBarColors.visual":	"#857a00",
+	"vim.statusBarColors.visualblock":	"#00b2c9",
+	"vim.statusBarColors.visualline":	"#9c001d",
 
 	"workbench.colorCustomizations": {
-		"editor.background":	"#0D1117",
-		//"editorLineNumber.foreground": "#ff0000",
-		"editorLineNumber.activeForeground":	"#DDDDDD",
-		"editorCursor.background":	"#0D1117",
-		"editorCursor.foreground":	"#D4B6CA",
-
-		"editor.selectionBackground":	"#ffe3e94d",
-		"editor.inactiveSelectionBackground":	"#ff0000",
-		//"editor.selectionHighlightBackground":	"#00ff00",
-		//"editor.selectionHighlightBorder":		"#0000ff",
-		"editor.findMatchHighlightBackground":		"#ff0000",
-
-		"editorBracketMatch.background":			"#ffe3e94d",
-		"editorBracketMatch.border":				"#ffffff00",
+		"editor.background": "#0D1117",
+		"statusBar.background": "#36296b",
+		"statusBar.foreground": "#ffffff",
+		"editorLineNumber.activeForeground": "#DDDDDD",
+		"editorCursor.background": "#0D1117",
+		"editorCursor.foreground": "#D4B6CA",
+		"editor.selectionBackground": "#ffe3e94d",
+		"editor.inactiveSelectionBackground": "#ff0000",
+		"editor.findMatchHighlightBackground": "#ff0000",
+		"editorBracketMatch.background": "#ffe3e94d",
+		"editorBracketMatch.border": "#ffffff00",
+		"statusBar.noFolderBackground": "#36296b",
+		"statusBar.debuggingBackground": "#36296b",
+		"editorBracketHighlight.foreground1": "#f0f6fcc1",
+		"editorBracketHighlight.foreground2": "#ffff2690",
+		"editorBracketHighlight.foreground3": "#26ff9690",
+		"editorBracketHighlight.foreground4": "#b43bff90",
+		"editorBracketHighlight.foreground5": "#ff00f790",
+		"editorBracketHighlight.foreground6": "#ff009d90",
+		"editorBracketHighlight.unexpectedBracket.foreground": "#ff0000"
 	},
 
 	"editor.tokenColorCustomizations": {
         "textMateRules": [
             {
-                "scope": [
-                 "string.quoted.double.cpp", 
-                 ],
-                 "settings": {
-                 "foreground": "#85C057",
-                 }
+				"scope": ["string.quoted.double"],
+					"settings": {"foreground": "#85C057"}
+            },
+            {
+				"scope": ["constant.character.escape"],
+					"settings": {"foreground": "#FFD7D7"}
             },
 			{
-                "scope": ["keyword.control"],
-					"settings": {"foreground": "#EC8E2C",}
+                "scope": ["keyword.control", "keyword.operator.functionlike", "keyword.operator.sizeof"],
+					//"settings": {"foreground": "#EC8E2C"}
+					//"settings": {"foreground": "#FFD141"}
+					"settings": {"foreground": "#d9b036"}
+			},
+			{
+                "scope": ["keyword.control.while", "keyword.control.for"],
+					//"settings": {"foreground": "#B986C0"}
+					"settings": {"foreground": "#cb62d9"}
+			},
+			{
+                "scope": ["entity.name.function"],
+					"settings": {"fontStyle": "bold", "foreground": "#79C0FF"}
+			},
+			{
+                "scope": ["entity.name.function.operator",
+						"keyword.operator.arithmetic", "keyword.operator.comparison",
+						"keyword.operator.assignment",
+						"punctuation.separator.pointer-access", "punctuation.separator.dot-access"],
+					"settings": {"fontStyle": "", "foreground": "#ff9999"}
+			},
+			{
+                "scope": ["keyword.operator.bitwise"],
+					"settings": {"fontStyle": "italic", "foreground": "#ff9999"}
+			},
+			{
+                "scope": ["variable"],
+					//"settings": {"fontStyle": "italic", "foreground": "#F0F6FC"}
+					"settings": {"fontStyle": "italic", "foreground": "#ebfcfc"}
+			},
+			{
+                "scope": ["comment"],
+					"settings": {"fontStyle": "italic", "foreground": "#79C0FF"}
+			},
+			{
+                "scope": ["constant.language.NULL"],
+					"settings": {"fontStyle": "", "foreground": "#cc27e3"}
+			},
+			{
+                "scope": ["entity.name.function.preprocessor"],
+					//"settings": {"fontStyle": "", "foreground": "#c7a5cc"}
+					"settings": {"fontStyle": "", "foreground": "#3c5ee6"}
 			},
         ]
 	},
-	"editor.autoClosingBrackets": "never",
-	"editor.autoClosingQuotes": "never",
 }
