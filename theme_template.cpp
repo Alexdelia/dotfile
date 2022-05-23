@@ -9,26 +9,27 @@ int	foo(int ac, char **av, const std::string &tmp)
 	static	long			sl;
 	std::string				s = "Hello Wordl!";
 	std::string::iterator	y = s.begin();
-	int						x;
+	int						x = 1234567890;
 
 	x = x + x;
 	x = x - x;
 	x = x * x;
 	x = x / x;
-	x++; ++x;
-	x--; --x;
-	y++; ++y;
-	y--; --y;
 	x += x;
 	x -= x;
 	x *= x;
 	x /= x;
+	x++; ++x;
+	x--; --x;
+	y++; ++y;
+	y--; --y;
 
 	av[0] = NULL;
 	av->hey;
 	av.hey;
 	y->begin();
 	y->hey;
+	(*(*y)).begin();
 
 	x = &sl;
 	x = *sl;
