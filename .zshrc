@@ -109,6 +109,7 @@ export	PATH=/home/alex/Ware:$PATH
 # alias	norminette="~/.norminette/norminette.rb"
 # alias	norminette_v2="~/.norminette_old/norminette.rb"
 alias	nor="norminette"
+alias	py42="~/goinfre/$USER/miniconda3"
 
 #alias	gcc="clang-9"
 #alias	clang="clang-9"
@@ -118,6 +119,7 @@ alias	gco="git commit -m"
 alias	gac="git commit -am"
 alias	gam="git commit --amend -m"
 alias	gtree="git log --graph --oneline --decorate"
+alias	gpn="/home/alex/p/bin/utility/gpn.sh"
 
 alias	sl="ls"
 alias	mk="make"
@@ -128,6 +130,7 @@ alias	ivm="vim"
 alias	imv="vim"
 alias	s="sudo"
 alias	gti="git"
+alias	c="cargo"
 
 alias	neo="neofetch"
 alias	to="bashtop"
