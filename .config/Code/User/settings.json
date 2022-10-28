@@ -27,15 +27,15 @@
 		"editor.selectionBackground": "#ffe3e94d",
 		"editorBracketMatch.background": "#ffe3e94d",
 		"editorBracketMatch.border": "#ffffff00",
-		"statusBar.noFolderBackground": "#0C0E14",
-		"statusBar.debuggingBackground": "#0C0E14",
+		"statusBar.noFolderBackground": "#731bb360",
+		"statusBar.debuggingBackground": "#731bb360",
 		"editorBracketHighlight.foreground1": "#f0f6fcc1",
 		"editorBracketHighlight.foreground2": "#ffff2690",
 		"editorBracketHighlight.foreground3": "#26ff9690",
 		"editorBracketHighlight.foreground4": "#b43bff90",
 		"editorBracketHighlight.foreground5": "#ff00f790",
 		"editorBracketHighlight.foreground6": "#ff009d90",
-		"statusBar.background": "#0C0E14",
+		"statusBar.background": "#731bb360",
 		"editor.background": "#0D1117",
 		"activityBar.background": "#07090c",
 		"sideBar.background": "#0C0E14",
@@ -265,6 +265,16 @@
 			},
 			{
 				"scope": [
+					"variable.parameter.function.language.special.self",
+					"variable.language.self"
+				],
+				"settings": {
+					"fontStyle": "italic",
+					"foreground": "#545ee9b8"
+				}
+			},
+			{
+				"scope": [
 					"storage.type"
 				],
 				"settings": {
@@ -373,4 +383,14 @@
 		"editor.defaultFormatter": "yzhang.markdown-all-in-one"
 	},
 	"terminal.integrated.inheritEnv": false,
+	"files.exclude": {
+		"**/.trunk/*out": true
+	},
+	"trunk.trunkGrayOutNonBlockingIssues": false,
+	"files.watcherExclude": {
+		"**/.trunk/*out": true
+	},
+	"[rust]": {
+		"editor.defaultFormatter": "rust-lang.rust-analyzer"
+	},
 }
