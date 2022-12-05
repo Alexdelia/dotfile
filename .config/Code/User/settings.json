@@ -41,7 +41,9 @@
 		"sideBar.background": "#0C0E14",
 		"editorGroupHeader.tabsBackground": "#0C0E14",
 		"tab.inactiveBackground": "#1d1f23",
-		"statusBar.foreground": "#ffffff"
+		"statusBar.foreground": "#ffffff",
+		"editorInlayHint.background": "#0000",
+		"editorInlayHint.foreground": "#ffffff64"
 	},
 	"editor.tokenColorCustomizations": {
 		"textMateRules": [
@@ -389,6 +391,15 @@
 					"foreground": "#dac829de"
 				}
 			},
+			{
+				"scope": [
+					"meta.interpolation"
+				],
+				"settings": {
+					"fontStyle": "",
+					"foreground": "#942cc4"
+				}
+			}
 		],
 	},
 	"editor.semanticTokenColorCustomizations": {
@@ -416,6 +427,15 @@
 	"[typescriptreact]": {
 		"editor.defaultFormatter": "vscode.typescript-language-features"
 	},
+	"[javascript]": {
+		"editor.formatOnSave": false,
+	},
+	"[javascriptreact]": {
+		"editor.formatOnSave": false,
+	},
+	"[scss]": {
+		"editor.formatOnSave": false,
+	},
 	"[css]": {
 		"editor.defaultFormatter": "vscode.css-language-features"
 	},
@@ -432,7 +452,8 @@
 	],
 	"editor.inlineSuggest.enabled": true,
 	"editor.codeActionsOnSave": {
-		"source.organizeImports": true
+		"source.organizeImports": true,
+		"source.fixAll.eslint": true
 	},
 	"github.copilot.enable": {
 		"*": true,
