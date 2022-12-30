@@ -441,7 +441,7 @@
 	},
 	"[python]": {
 		"editor.insertSpaces": true,
-		"editor.formatOnSave": false,
+		"editor.formatOnSave": true,
 	},
 	"python.analysis.typeCheckingMode": "basic",
 	"python.linting.pylintEnabled": true,
@@ -450,6 +450,7 @@
 	"python.analysis.extraPaths": [
 		"./sources"
 	],
+	"python.formatting.provider": "yapf",
 	"editor.inlineSuggest.enabled": true,
 	"editor.codeActionsOnSave": {
 		"source.organizeImports": true,
