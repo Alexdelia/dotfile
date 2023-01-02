@@ -27,3 +27,4 @@ split_before_dot = true
 split_before_first_argument = true
 split_before_logical_operator = true
 split_complex_comprehension = true
+split_penalty_import_names = 10
