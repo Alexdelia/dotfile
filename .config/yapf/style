@@ -18,7 +18,6 @@ spaces_around_default_or_named_assign = false
 spaces_around_dict_delimiters = false
 spaces_around_list_delimiters = false
 spaces_around_tuple_delimiters = false
-spaces_before_comment = 1
 space_inside_brackets = false
 split_all_comma_separated_values = false
 split_before_bitwise_operator = true
