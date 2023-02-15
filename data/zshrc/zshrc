@@ -1,0 +1,20 @@
+typeset -a src
+
+SRC_PATH="$HOME/.config/zsh/config.d/"
+
+src+="main.zsh"
+src+="alias.zsh"
+src+="export.zsh"
+src+="autojump.zsh"
+src+="conda.zsh"
+
+for file in $src[@]; do
+    if [[ -a "$SRC_PATH$file" ]]; then
+        source "$SRC_PATH$file"
+    else
+        echo -e "\033[33;1mWARNING\t\033[35;1m$file\033[0m not found"
+    fi
+done
+
+unset SRC_PATH
+unset src

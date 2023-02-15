@@ -1,3 +1,11 @@
+[zsh]
+"~/.zshrc" = 'zsh/zshrc'
+"~/.config/zsh/config.d/main.zsh" = 'zsh/main.zsh'
+"~/.config/zsh/config.d/alias.zsh" = 'zsh/alias.zsh'
+"~/.config/zsh/config.d/export.zsh" = 'zsh/export.zsh'
+"~/.config/zsh/config.d/autojump.zsh" = 'zsh/autojump.zsh'
+"~/.config/zsh/config.d/conda.zsh" = 'zsh/conda.zsh'
+
 [grub]
-"/etc/default/grub" = "grub/grub"
-"/etc/default/grub_bg.png" = "grub/grub_bg_640x480_stretched_dark.png"
+"/etc/default/grub" = 'grub/grub'
+"/etc/default/grub_bg.png" = 'grub/grub_bg_640x480_stretched_dark.png'
