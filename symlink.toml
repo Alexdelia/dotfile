@@ -27,4 +27,4 @@ update = 'optional'
 
 [yapf]
 update = 'always'
-"~/.config/yapf/style" = 'yapf/style'
+"~/.config/yapf/style" = 'yapf'
