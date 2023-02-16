@@ -27,3 +27,14 @@ update = 'optional'
 [yapf]
 update = 'always'
 "~/.config/yapf/style" = 'yapf'
+
+[font]
+update = 'never'
+"~/.local/share/fonts/*" = 'font/*'
+
+[DE]
+update = 'never'
+"~/.icons/*" = 'DE/cursor/*'
+"~/.themes/*" = 'DE/theme/*'
+"/usr/share/icons/*" = 'DE/icon/*'
+"/usr/share/mint-artwork/sounds/*" = 'DE/sound/*'
