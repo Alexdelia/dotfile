@@ -7,6 +7,9 @@ alias	py42="~/goinfre/$USER/miniconda3"
 #alias	clang="clang-9"
 alias	clangW="clang -Wall -Werror -Wextra"
 
+alias	ga="git add --all && git status --short"
+alias 	gc="git commit --message"
+alias	gst="git status --short"
 alias	gtree="git log --graph --oneline --decorate"
 alias	gpn="/home/alex/p/bin/utility/gpn.sh"
 
