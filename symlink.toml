@@ -1,5 +1,5 @@
 [zsh]
-update = 'Decim'
+update = [ 'Decim' ]
 "~/.zshrc" = 'zsh/zshrc'
 "~/.config/zsh/config.d/main.zsh" = 'zsh/main.zsh'
 "~/.config/zsh/config.d/alias.zsh" = 'zsh/alias.zsh'
@@ -7,7 +7,7 @@ update = 'Decim'
 "~/.config/zsh/config.d/conda.zsh" = 'zsh/conda.zsh'
 
 [vscode]
-update = 'Decim'
+update = [ 'Decim' ]
 "~/.config/Code/User/settings.json" = 'vscode/settings.json'
 
 [grub]
@@ -22,7 +22,8 @@ update = 'always'
 
 [neofetch]
 update = 'optional'
-"~/.config/neofetch/config.conf" = 'neofetch.conf'
+"~/.config/neofetch/config.conf" = 'neofetch/config.conf'
+"~/.config/neofetch/img.conf" = 'neofetch/img.png'
 
 [yapf]
 update = 'always'
