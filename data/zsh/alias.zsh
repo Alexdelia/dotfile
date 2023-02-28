@@ -25,6 +25,8 @@ alias	gti="git"
 alias	c="cargo"
 alias	s="sudo"
 
+alias	up="sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y"
+
 alias	neo="neofetch"
 alias	to="bashtop"
 alias	poke="pokemon-colorscripts -r"
