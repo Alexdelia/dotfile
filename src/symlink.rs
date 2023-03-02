@@ -15,7 +15,8 @@
 
 use std::fs;
 use std::io::Result;
-use std::path::Path;
+use std::path::{Path, PathBuf};
+
 pub struct Symlink<'a> {
     pub path: &'a Path,
     pub target: &'a Path,
@@ -45,15 +46,31 @@ fn exist(path: &Path) -> bool {
     }
 }
 
-fn to_absolute(path: &str) -> Path {
-	if path.starts_with("~/") {
-		let home = std::env::var("HOME").unwrap();
-		let path = path.replace("~/", &home);
-		Path::new(&path)
-	} else {
-		Path::new(path)
-	}
+fn to_absolute(path: &str) -> Result<PathBuf> {
+    let mut path = path.to_string();
+
+    if path.starts_with("~/") {
+        let home = std::env::var("HOME").unwrap();
+        path = path.replace("~/", &home);
+    }
+
+    let path = Path::new(&path);
+    if path.is_absolute() {
+        Ok(path.to_path_buf())
+    } else {
+        Err(std::io::Error::new(
+            std::io::ErrorKind::Other,
+            "did not manage to convert to absolute path",
+        ))
+    }
 }
+// if path.starts_with("~/") {
+// 	let home = std::env::var("HOME").unwrap();
+// 	let path = path.replace("~/", &home);
+// 	Path::new(&path)
+// } else {
+// 	Path::new(path)
+// }
 
 #[cfg(test)]
 mod tests {
@@ -64,9 +81,10 @@ mod tests {
     fn test_symlink() {
         dbg!(std::env::current_dir());
 
-		l = vec!("noexist", "exist", "sml_exist", "sml_noexist");
-		for p in l {
-			let p = to_absolute(p);
-			dbg!(p, fs::symlink_metadata(p), p.exists());
+        let l = vec!["noexist", "exist", "sml_exist", "sml_noexist"];
+        for p in l {
+            let p = to_absolute(p);
+            dbg!(p, fs::symlink_metadata(p), p.exists());
+        }
     }
 }
