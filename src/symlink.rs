@@ -49,9 +49,9 @@ fn exist(path: &Path) -> bool {
 fn to_absolute(path: &str) -> Result<PathBuf> {
     let mut path = path.to_string();
 
-    if path.starts_with("~/") {
+    if path.starts_with("~") {
         let home = std::env::var("HOME").unwrap();
-        path = path.replace("~/", &home);
+        path = path.replacen("~", &home, 1);
     }
 
     let path = Path::new(&path);
@@ -75,7 +75,7 @@ fn to_absolute(path: &str) -> Result<PathBuf> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::path::Path;
+    use std::{fmt::format, path::Path};
 
     #[test]
     fn test_symlink() {
@@ -83,8 +83,15 @@ mod tests {
 
         let l = vec!["noexist", "exist", "sml_exist", "sml_noexist"];
         for p in l {
-            let p = to_absolute(p);
-            dbg!(p, fs::symlink_metadata(p), p.exists());
+            dbg!(p);
+            let p = to_absolute(format!("~/goinfre/{}", p).as_str());
+            dbg!(&p);
+            if p.is_ok() {
+                dbg!(
+                    fs::symlink_metadata(p.as_ref().unwrap()),
+                    p.unwrap().exists()
+                );
+            }
         }
     }
 }
