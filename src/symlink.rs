@@ -19,9 +19,16 @@ use std::path::{Path, PathBuf};
 
 pub const DEFAULT_SYMLINK_FILE: &str = "symlink.toml";
 
-pub struct Symlink<'a> {
-    pub path: &'a Path,
-    pub target: &'a Path,
+pub type Env = Vec<EnvType>;
+
+pub enum EnvType {
+    Grouped((String, Vec<Symlink>)),
+    Alone(Symlink),
+}
+
+pub struct Symlink {
+    pub path: PathBuf,
+    pub target: PathBuf,
 }
 
 pub fn symlink(symlink: Symlink) -> Result<()> {
