@@ -1,11 +1,12 @@
-// mod symlink;
+mod escape;
 mod io;
+mod symlink;
 
 use miette::Result;
 
 fn main() -> Result<()> {
     println!("Hello, world!");
-    // dbg!(parse::read("symlink.toml")?);
-    io::parse::read("no.toml")?;
+    // dbg!(io::parse::read("symlink.toml")?);
+    io::parse::read("some.toml")?;
     Ok(())
 }

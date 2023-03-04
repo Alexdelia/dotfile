@@ -17,6 +17,8 @@ use std::fs;
 use std::io::Result;
 use std::path::{Path, PathBuf};
 
+pub const DEFAULT_SYMLINK_FILE: &str = "symlink.toml";
+
 pub struct Symlink<'a> {
     pub path: &'a Path,
     pub target: &'a Path,
