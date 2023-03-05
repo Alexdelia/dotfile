@@ -1,7 +1,7 @@
-use crate::escape::{BWARNING as W, GRE as G, MUT as M, RESET as D};
-use crate::io::{ESCAPE_HYPERLINK_E as EHE, ESCAPE_HYPERLINK_S as EHS, URL};
+use crate::escape::{EHS, EHE, W, V, M, D, H, C, YEL, B, BLU};
+use crate::io::{URL};
 use crate::symlink::{Env, EnvType, Symlink, DEFAULT_SYMLINK_FILE};
-use miette::Diagnostic;
+use miette::{SourceSpan, Diagnostic};
 use std::fs;
 use std::path::{Path, PathBuf};
 use thiserror::Error;
@@ -25,9 +25,9 @@ pub enum ParseError {
     #[diagnostic(
         code(parse::read),
         url("{}{}", URL, file!()),
-        help("the file {M}{file}{D} should be a {G}valid toml{D} file
-you can check the example file \x1b[32;1m{DEFAULT_SYMLINK_FILE}\x1b[0m {EHS}{URL}{DEFAULT_SYMLINK_FILE}{EHE}
-or the {G}toml{D} documentation {EHS}{URL}{DEFAULT_SYMLINK_FILE}{EHE}")
+        help("the file {M}{file}{D} should be a {V}valid toml{D} file
+you can check the example file {V}{DEFAULT_SYMLINK_FILE}{D} {EHS}{URL}{DEFAULT_SYMLINK_FILE}{EHE}
+or the {V}toml{D} documentation {EHS}{URL}{DEFAULT_SYMLINK_FILE}{EHE}")
     )]
     ParseStrToTOML {
         #[source]
@@ -40,26 +40,65 @@ or the {G}toml{D} documentation {EHS}{URL}{DEFAULT_SYMLINK_FILE}{EHE}")
     #[diagnostic(
 		code(parse::toml_to_env),
 		url("{}{}", URL, file!()),
-		help("the file {M}{file}{D} should be a {G}valid toml{D} that define the {G}symlink{D}
-you can check the example file \x1b[32;1m{DEFAULT_SYMLINK_FILE}\x1b[0m {EHS}{URL}{DEFAULT_SYMLINK_FILE}{EHE}")
+		help("the file {M}{file}{D} should be a {V}valid toml{D} that define the {V}symlink{D}
+you can check the example file {V}{DEFAULT_SYMLINK_FILE}{D} {EHS}{URL}{DEFAULT_SYMLINK_FILE}{EHE}")
 	)]
     ParseTOMLToEnv {
         #[source_code]
         file: String,
     },
 
-    #[error("could not {W}parse {M}{file}{D} to valid list of {W}symlink{D}")]
+    #[error("{reason}
+
+could not {W}parse {M}{file}{D} to valid list of {W}symlink{D}")]
     #[diagnostic(
-		code(parse::toml_to_env),
+		code(parse::value_to_env),
 		url("{}{}", URL, file!()),
-		help("the file {M}{file}{D} should be a {G}valid toml{D} that define the {G}symlink{D}
-you can check the example file \x1b[32;1m{DEFAULT_SYMLINK_FILE}\x1b[0m {EHS}{URL}{DEFAULT_SYMLINK_FILE}{EHE}")
+		help("{advice}
+
+the file {M}{file}{D} should be a {V}valid toml{D} that define the {V}symlink{D}
+
+{H}example:{D}
+
+{C}# optional title{D}
+{B}{YEL}[title]{D}
+{C}# optional update frequency{D}
+{C}# key (string) = value ('always' | 'never' | 'optional' | [ 'ListOfComputerNameToAlwaysUpdate', 'OtherComputerName' ]){D}
+update = 'always'
+{C}# symlink list{D}
+{C}# key (string) = value (string){D}
+\"~/path/to/dotfile/where/symlink/will/be\" = \"path/of/actual/dotfile/stored/in/data/directory\"
+
+
+you can check the example file {V}{DEFAULT_SYMLINK_FILE}{D} {EHS}{URL}{DEFAULT_SYMLINK_FILE}{EHE}")
 	)]
     ParseSymlinkWrongType {
         #[source_code]
-        file: String,
+        file_name: String,
+		#[source_code]
+		file: String,
+		#[label]
+		wrong_bit: SourceSpan,
+
         reason: String,
         advice: String,
+
+		pub fn new(file: String, key: &str, reason: String, advice: String) -> Self {
+			let content = fs::read_to_string(&file).unwrap_or_else(|_| String::from("ENABLE TO READ FILE\n"));
+		
+			// will not work if the key is repeated in the file
+			// and the first one is not the one that cause the error
+			let s = content.find(key).unwrap_or(0);
+			let e = content[s..].find('\n').unwrap_or(content.len());
+		
+			Self {
+				file_name: file,
+				file: content,
+				wrong_bit: (s..e).into(),
+				reason,
+				advice,
+			}
+		}
     },
 }
 
@@ -121,10 +160,14 @@ fn toml_to_env(file: &str, toml: toml::Value) -> Result<Env, ParseError> {
                 target: PathBuf::from(k),
             })),
             _ => {
-                return Err(ParseError::ParseTOMLToEnv {
-                    file: file.to_string(),
-                    reason: advice: String::new(),
-                })
+                return Err(ParseError::ParseSymlinkWrongType::new(
+					file.to_string(),
+					k,
+					"{W}value {v}{D} for key {M}{k}{D} is not a {W}string{D} or {W}table{D}".to_string(),
+					"the {W}value{D} should either be:
+	- a {V}string{D} that represent the path of the actual dotfile
+	- a {V}table{D} that represent a list of symlink".to_string(),
+				))
             }
         }
     }

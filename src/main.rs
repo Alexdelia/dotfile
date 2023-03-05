@@ -6,6 +6,6 @@ use miette::Result;
 
 fn main() -> Result<()> {
     println!("Hello, world!");
-    dbg!(io::parse::test("symlink.toml")?);
+    // dbg!(io::parse::test("symlink.toml")?);
     Ok(())
 }
