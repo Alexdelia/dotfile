@@ -47,6 +47,20 @@ you can check the example file \x1b[32;1m{DEFAULT_SYMLINK_FILE}\x1b[0m {EHS}{URL
         #[source_code]
         file: String,
     },
+
+    #[error("could not {W}parse {M}{file}{D} to valid list of {W}symlink{D}")]
+    #[diagnostic(
+		code(parse::toml_to_env),
+		url("{}{}", URL, file!()),
+		help("the file {M}{file}{D} should be a {G}valid toml{D} that define the {G}symlink{D}
+you can check the example file \x1b[32;1m{DEFAULT_SYMLINK_FILE}\x1b[0m {EHS}{URL}{DEFAULT_SYMLINK_FILE}{EHE}")
+	)]
+    ParseSymlinkWrongType {
+        #[source_code]
+        file: String,
+        reason: String,
+        advice: String,
+    },
 }
 
 /*
@@ -109,6 +123,7 @@ fn toml_to_env(file: &str, toml: toml::Value) -> Result<Env, ParseError> {
             _ => {
                 return Err(ParseError::ParseTOMLToEnv {
                     file: file.to_string(),
+                    reason: advice: String::new(),
                 })
             }
         }
