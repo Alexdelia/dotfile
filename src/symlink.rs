@@ -21,11 +21,13 @@ pub const DEFAULT_SYMLINK_FILE: &str = "symlink.toml";
 
 pub type Env = Vec<EnvType>;
 
+#[derive(Debug)] // TODO: remove
 pub enum EnvType {
     Grouped((String, Vec<Symlink>)),
     Alone(Symlink),
 }
 
+#[derive(Debug)] // TODO: remove
 pub struct Symlink {
     pub path: PathBuf,
     pub target: PathBuf,

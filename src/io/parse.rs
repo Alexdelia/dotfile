@@ -1,14 +1,14 @@
-use crate::escape::{EHS, EHE, W, V, M, D, H, C, YEL, B, BLU};
-use crate::io::{URL};
+use crate::escape::{B, BLU, BW, C, D, EHE, EHS, H, M, V, YEL};
+use crate::io::URL;
 use crate::symlink::{Env, EnvType, Symlink, DEFAULT_SYMLINK_FILE};
-use miette::{SourceSpan, Diagnostic};
+use miette::{Diagnostic, SourceSpan};
 use std::fs;
 use std::path::{Path, PathBuf};
 use thiserror::Error;
 
 #[derive(Error, Diagnostic, Debug)]
 pub enum ParseError {
-    #[error("could not {W}read {M}{file}{D}")]
+    #[error("could not {BW}read {M}{file}{D}")]
     #[diagnostic(
         code(parse::read),
         url("{}{}", URL, file!()),
@@ -21,7 +21,7 @@ pub enum ParseError {
         file: String,
     },
 
-    #[error("could not {W}parse {M}{file}{D} to {W}toml{D}")]
+    #[error("could not {BW}parse {M}{file}{D} to {BW}toml{D}")]
     #[diagnostic(
         code(parse::read),
         url("{}{}", URL, file!()),
@@ -36,7 +36,7 @@ or the {V}toml{D} documentation {EHS}{URL}{DEFAULT_SYMLINK_FILE}{EHE}")
         file: String,
     },
 
-    #[error("could not {W}parse {M}{file}{D} to valid list of {W}symlink{D}")]
+    #[error("could not {BW}parse {M}{file}{D} to valid list of {BW}symlink{D}")]
     #[diagnostic(
 		code(parse::toml_to_env),
 		url("{}{}", URL, file!()),
@@ -48,9 +48,11 @@ you can check the example file {V}{DEFAULT_SYMLINK_FILE}{D} {EHS}{URL}{DEFAULT_S
         file: String,
     },
 
-    #[error("{reason}
+    #[error(
+        "{reason}
 
-could not {W}parse {M}{file}{D} to valid list of {W}symlink{D}")]
+could not {BW}parse {M}{file}{D} to valid list of {BW}symlink{D}"
+    )]
     #[diagnostic(
 		code(parse::value_to_env),
 		url("{}{}", URL, file!()),
@@ -75,59 +77,46 @@ you can check the example file {V}{DEFAULT_SYMLINK_FILE}{D} {EHS}{URL}{DEFAULT_S
     ParseSymlinkWrongType {
         #[source_code]
         file_name: String,
-		#[source_code]
-		file: String,
-		#[label]
-		wrong_bit: SourceSpan,
+        #[source_code]
+        file: String,
+        #[label]
+        wrong_bit: SourceSpan,
 
         reason: String,
         advice: String,
-
-		pub fn new(file: String, key: &str, reason: String, advice: String) -> Self {
-			let content = fs::read_to_string(&file).unwrap_or_else(|_| String::from("ENABLE TO READ FILE\n"));
-		
-			// will not work if the key is repeated in the file
-			// and the first one is not the one that cause the error
-			let s = content.find(key).unwrap_or(0);
-			let e = content[s..].find('\n').unwrap_or(content.len());
-		
-			Self {
-				file_name: file,
-				file: content,
-				wrong_bit: (s..e).into(),
-				reason,
-				advice,
-			}
-		}
     },
 }
 
-/*
+impl ParseError {
+    pub fn wrong_type(file: String, key: &str, reason: String, advice: String) -> Self {
+        let content =
+            fs::read_to_string(&file).unwrap_or_else(|_| String::from("ENABLE TO READ FILE\n"));
+
+        // will not work if the key is repeated in the file
+        // and the first one is not the one that cause the error
+        let s = content.find(key).unwrap_or(0);
+        let e = content[s..].find('\n').unwrap_or(content.len());
+
+        Self::ParseSymlinkWrongType {
+            file_name: file,
+            file: content,
+            wrong_bit: (s..e).into(),
+            reason,
+            advice,
+        }
+    }
+}
+
 pub fn parse<P>(file: P) -> Result<Env, ParseError>
 where
     P: AsRef<Path> + std::fmt::Display,
 {
-    let table = read(file)?;
+    let env = toml_to_env(file.to_string().as_str(), read(file)?)?;
+
+    Ok(env)
 }
-*/
 
 fn read<P>(file: P) -> Result<toml::Value, ParseError>
-where
-    P: AsRef<Path> + std::fmt::Display,
-{
-    Ok(
-        toml::from_str(&fs::read_to_string(&file).map_err(|e| ParseError::Read {
-            source: e,
-            file: file.to_string(),
-        })?)
-        .map_err(|e| ParseError::ParseStrToTOML {
-            source: e,
-            file: file.to_string(),
-        })?,
-    )
-}
-
-pub fn test<P>(file: P) -> Result<toml::Value, ParseError>
 where
     P: AsRef<Path> + std::fmt::Display,
 {
@@ -152,22 +141,25 @@ fn toml_to_env(file: &str, toml: toml::Value) -> Result<Env, ParseError> {
 
     for (k, v) in table {
         match v {
-            toml::Value::Table(table) => {
-                env.push(EnvType::Grouped((k, table_to_grouped(file, table)?)))
-            }
+            toml::Value::Table(table) => env.push(EnvType::Grouped((
+                k.to_owned(),
+                table_to_grouped(file, table.to_owned())?,
+            ))),
             toml::Value::String(string) => env.push(EnvType::Alone(Symlink {
                 path: PathBuf::from(string),
                 target: PathBuf::from(k),
             })),
             _ => {
-                return Err(ParseError::ParseSymlinkWrongType::new(
-					file.to_string(),
-					k,
-					"{W}value {v}{D} for key {M}{k}{D} is not a {W}string{D} or {W}table{D}".to_string(),
-					"the {W}value{D} should either be:
+                return Err(ParseError::wrong_type(
+                    file.to_string(),
+                    k,
+                    "{W}value {v}{D} for key {M}{k}{D} is not a {W}string{D} or {W}table{D}"
+                        .to_string(),
+                    "the {W}value{D} should either be:
 	- a {V}string{D} that represent the path of the actual dotfile
-	- a {V}table{D} that represent a list of symlink".to_string(),
-				))
+	- a {V}table{D} that represent a list of symlink"
+                        .to_string(),
+                ))
             }
         }
     }
