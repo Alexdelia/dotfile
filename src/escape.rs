@@ -20,13 +20,13 @@ pub const MAG: &str = MAGENTA;
 pub const CYAN: &str = "\x1b[36m";
 pub const CYA: &str = CYAN;
 
-// pub const ERROR: &str = "\x1b[31m";
-// pub const E: &str = ERROR;
-// pub const BERROR: &str = "\x1b[31;1m";
-// pub const BE: &str = BERROR;
+pub const ERROR: &str = "\x1b[31m";
+pub const E: &str = ERROR;
+pub const BERROR: &str = "\x1b[31;1m";
+pub const BE: &str = BERROR;
 
-// pub const WARNING: &str = "\x1b[33m";
-// pub const W: &str = WARNING;
+pub const WARNING: &str = "\x1b[33m";
+pub const W: &str = WARNING;
 pub const BWARNING: &str = "\x1b[33;1m";
 pub const BW: &str = BWARNING;
 

@@ -23,8 +23,35 @@ pub type Env = Vec<EnvType>;
 
 #[derive(Debug)] // TODO: remove
 pub enum EnvType {
-    Grouped((String, Vec<Symlink>)),
+    Grouped(Grouped),
     Alone(Symlink),
+}
+
+#[derive(Debug)] // TODO: remove
+pub struct Grouped {
+    pub title: String,
+    pub update: Option<String>,
+    pub symlink: Vec<Symlink>,
+}
+
+pub enum Update {
+    Always,
+    Never,
+    Optional,
+    Specific(Vec<String>),
+}
+
+impl TryInto<Update> for &str {
+    type Error = String;
+
+    fn try_into(self) -> std::result::Result<Update, Self::Error> {
+        match self {
+            "always" => Ok(Update::Always),
+            "never" => Ok(Update::Never),
+            "optional" => Ok(Update::Optional),
+            _ => Err(format!("{} is not a valid update value", self)),
+        }
+    }
 }
 
 #[derive(Debug)] // TODO: remove
