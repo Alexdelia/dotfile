@@ -16,6 +16,7 @@
 use std::fs;
 use std::io::Result;
 use std::path::{Path, PathBuf};
+use std::str::FromStr;
 
 pub const DEFAULT_SYMLINK_FILE: &str = "symlink.toml";
 
@@ -30,10 +31,11 @@ pub enum EnvType {
 #[derive(Debug)] // TODO: remove
 pub struct Grouped {
     pub title: String,
-    pub update: Option<String>,
+    pub update: Update,
     pub symlink: Vec<Symlink>,
 }
 
+#[derive(Debug)] // TODO: remove
 pub enum Update {
     Always,
     Never,
@@ -41,15 +43,15 @@ pub enum Update {
     Specific(Vec<String>),
 }
 
-impl TryInto<Update> for &str {
-    type Error = String;
+impl FromStr for Update {
+    type Err = String;
 
-    fn try_into(self) -> std::result::Result<Update, Self::Error> {
-        match self {
+    fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
+        match s {
             "always" => Ok(Update::Always),
             "never" => Ok(Update::Never),
             "optional" => Ok(Update::Optional),
-            _ => Err(format!("{} is not a valid update value", self)),
+            _ => Err(format!("{} is not a valid update value", s)),
         }
     }
 }

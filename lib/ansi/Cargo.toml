@@ -1,13 +1,10 @@
 [package]
-name = "dotfile"
+name = "ansi"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-ansi = {path = "lib/ansi"}
+gen = { path = "src/gen" }
 const_format = "0.2.30"
-miette = { version = "5.5.0", features = ["fancy"] }
-thiserror = "1.0.38"
-toml = "0.7.2"

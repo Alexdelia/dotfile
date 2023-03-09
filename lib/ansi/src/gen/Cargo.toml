@@ -1,0 +1,16 @@
+[package]
+name = "gen"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+proc-macro = true
+
+# [dev-dependencies]
+# trybuild = { version = "1.0.79", features = ["diff"] }
+
+[dependencies]
+syn = { version = "1.0.109", features = ["full"] }
+quote = "1.0.23"

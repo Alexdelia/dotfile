@@ -1,10 +1,12 @@
-use crate::escape::{B, BE, BLU, BW, C, D, E, EHE, EHS, F, H, M, V, W, YEL};
+use crate::ansi::{BE, BW, C, E, EHE, EHS, H, M, V, W};
 use crate::io::URL;
-use crate::symlink::{Env, EnvType, Grouped, Symlink, DEFAULT_SYMLINK_FILE};
+use crate::symlink::{Env, EnvType, Grouped, Symlink, Update, DEFAULT_SYMLINK_FILE};
+use ansi::abbrev::{B, BLU, D, F, YEL};
 use const_format::formatcp;
 use miette::{Diagnostic, SourceSpan};
 use std::fs;
 use std::path::{Path, PathBuf};
+use std::str::FromStr;
 use thiserror::Error;
 
 const HELP_EXAMPLE: &str = formatcp!("you can check the example file {V}{DEFAULT_SYMLINK_FILE}{D} {EHS}{URL}{DEFAULT_SYMLINK_FILE}{EHE}");
@@ -81,6 +83,28 @@ the file {M}{file_name}{D} should be a {V}valid toml{D} that define the {V}symli
 
         reason: String,
         advice: String,
+    },
+
+    #[error("{E}value {BE}{value}{D} for {W}key {BW}update{D} does not represent a {BW}valid update frequency{D}")]
+    #[diagnostic(
+		code(parse::to_update),
+		url("{}{}", URL, file!()),
+        help("the {E}value{D} should represent a {V}valid update frequency{D}
+
+'always' | 'never' | 'optional' | [ 'ListOfComputerNameToAlwaysUpdate', 'OtherComputerName' ]
+default: 'always'
+
+{HELP_EXAMPLE}")
+	)]
+    ParseUpdate {
+        file_name: String,
+        #[source_code]
+        file: String,
+        #[label]
+        wrong_bit: SourceSpan,
+
+        value: String,
+        title: String,
     },
 }
 
@@ -165,9 +189,11 @@ fn toml_to_env(file: &str, toml: toml::Value) -> Result<Env, ParseError> {
 
 fn table_to_grouped(file: &str, title: String, table: toml::Table) -> Result<Grouped, ParseError> {
     let mut symlink: Vec<Symlink> = Vec::new();
+    let mut update = Update::Always;
 
     for (k, v) in table {
         if k == "update" {
+            update = to_update(file, v)?;
             continue;
         }
 
@@ -188,11 +214,62 @@ fn table_to_grouped(file: &str, title: String, table: toml::Table) -> Result<Gro
             }
         }
     }
+
+    Ok(Grouped {
+        title,
+        symlink,
+        update: Update::Always,
+    })
 }
 
-// return Err(ParseError::wrong_type(
-// 	file.to_string(),
-// 	k.as_str(),
-// 	format!("{E}value {BE}{v}{D} for {W}key {BW}{k}{D} is not a {BW}string{D}"),
-// 	format!("the {E}value{D} should be a {V}string{D} that represent the path to the actual dotfile")
-// ))
+fn to_update(file: &str, value: toml::Value) -> Result<Update, ParseError> {
+    const ADVICE: String = format!(
+        "the {E}value{D} should represent a {V}valid update frequency{D}
+'always' | 'never' | 'optional' | [ 'ListOfComputerNameToAlwaysUpdate', 'OtherComputerName' ]
+default: 'always'
+{HELP_EXAMPLE}"
+    );
+
+    match value {
+		toml::Value::String(string) => match Update::from_str(string.as_str()) {
+			Ok(update) => Ok(update),
+			Err(_) => Err(ParseError::wrong_type(
+				file.to_string(),
+				string.as_str(),
+				format!(
+					"{E}value {BE}{string}{D} for {W}key {BW}update{D} is not a {BW}string{D} that represent a {BW}valid update frequency{D}"
+				),
+				ADVICE,
+			))
+		},
+		toml::Value::Array(array) => {
+			let mut name = Vec::new();
+
+			for value in array {
+				match value {
+					toml::Value::String(string) => name.push(string),
+					_ => {
+						return Err(ParseError::wrong_type(
+							file.to_string(),
+							string.as_str(),
+							format!(
+								"{E}value {BE}{string}{D} for {W}key {BW}update{D} is not a {BW}string{D} that represent a {BW}valid update frequency{D}"
+							),
+							ADVICE,
+						))
+					}
+				}
+			}
+		}
+		_ => {
+			return Err(ParseError::wrong_type(
+				file.to_string(),
+				string.as_str(),
+				format!(
+					"{E}value {BE}{string}{D} for {W}key {BW}update{D} is not a {BW}string{D} that represent a {BW}valid update frequency{D}"
+				),
+				ADVICE,
+			))
+		}
+	}
+}

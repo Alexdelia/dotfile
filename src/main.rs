@@ -1,4 +1,4 @@
-mod escape;
+mod ansi;
 mod io;
 mod symlink;
 
