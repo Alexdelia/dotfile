@@ -4,20 +4,26 @@ mod symlink;
 
 use miette::Result;
 
+use clap::Parser;
+
+#[derive(Debug, Parser)]
+#[clap()]
+struct Opts {
+    /// file that define the symlinks
+    #[clap(default_value = symlink::DEFAULT_SYMLINK_FILE)]
+    file: String,
+}
+
 fn main() -> Result<()> {
     println!("Hello, world!");
 
-    if std::env::args().len() > 2 {
-        eprintln!("usage: symlink [file]");
-        std::process::exit(1);
-    }
+    let opts: Opts = Opts::parse();
+    dbg!(opts);
 
-    // if 1 arg
-    let file = if let Some(file) = std::env::args().next() {
-        file
-    } else {
-        symlink::DEFAULT_SYMLINK_FILE.to_string()
-    };
+    // if std::env::args().len() > 2 {
+    //     eprintln!("usage: symlink [file]");
+    //     std::process::exit(1);
+    // }
 
     dbg!(io::parse::parse("symlink.toml")?);
     dbg!(io::parse::parse("some.toml")?);

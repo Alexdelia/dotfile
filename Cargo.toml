@@ -11,3 +11,4 @@ const_format = "0.2.30"
 miette = { version = "5.5.0", features = ["fancy"] }
 thiserror = "1.0.38"
 toml = "0.7.2"
+clap = { version = "4.1.8", features = ["derive"] }
