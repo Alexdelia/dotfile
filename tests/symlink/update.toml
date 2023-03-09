@@ -1,0 +1,5 @@
+[good]
+update = 'never'
+
+[bad]
+update = 'wrong'

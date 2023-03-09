@@ -85,7 +85,7 @@ the file {M}{file_name}{D} should be a {V}valid toml{D} that define the {V}symli
         advice: String,
     },
 
-    #[error("{E}value {BE}{value}{D} for {W}key {BW}update{D} does not represent a {BW}valid update frequency{D}")]
+    #[error("in {M}{title}{D}, {E}value {BE}{value}{D} for {W}key {BW}update{D} does not represent a {BW}valid update frequency{D}")]
     #[diagnostic(
 		code(parse::to_update),
 		url("{}{}", URL, file!()),
@@ -100,22 +100,35 @@ default: 'always'
         file_name: String,
         #[source_code]
         file: String,
-        #[label]
-        wrong_bit: SourceSpan,
+        #[label("in this table")]
+        table_bit: SourceSpan,
+        #[label("wrong update")]
+        update_bit: SourceSpan,
 
-        value: String,
         title: String,
+        value: String,
     },
 }
 
 impl ParseError {
-    pub fn wrong_type(file: String, key: &str, reason: String, advice: String) -> Self {
+    pub fn wrong_type(
+        file: String,
+        title: Option<&str>,
+        key: &str,
+        reason: String,
+        advice: String,
+    ) -> Self {
         let content =
             fs::read_to_string(&file).unwrap_or_else(|_| String::from("ENABLE TO READ FILE\n"));
 
         // will not work if the key is repeated in the file
         // and the first one is not the one that cause the error
-        let s = content.find(key).unwrap_or(0);
+        let s = if let Some(t) = title {
+            content.find(t).unwrap_or(0)
+        } else {
+            0
+        };
+        let s = content[s..].find(key).unwrap_or(content.len() - s) + s;
         let e = content[s..].find('\n').unwrap_or(content.len() - s) + s;
 
         Self::ParseSymlinkWrongType {
@@ -124,6 +137,28 @@ impl ParseError {
             wrong_bit: (s..e).into(),
             reason,
             advice,
+        }
+    }
+
+    pub fn update(file: String, title: String, value: String) -> Self {
+        let content =
+            fs::read_to_string(&file).unwrap_or_else(|_| String::from("ENABLE TO READ FILE\n"));
+
+        let ts = content.find(&title).unwrap_or(0);
+        let te = content[ts..]
+            .find(|c: char| c.is_whitespace() || c == ']')
+            .unwrap_or(content.len() - ts)
+            + ts;
+        let us = content[ts..].find("update").unwrap_or(0) + ts;
+        let ue = content[us..].find('\n').unwrap_or(content.len() - us) + us;
+
+        Self::ParseUpdate {
+            file_name: file,
+            file: content,
+            table_bit: (ts..te).into(),
+            update_bit: (us..ue).into(),
+            title,
+            value,
         }
     }
 }
@@ -170,6 +205,7 @@ fn toml_to_env(file: &str, toml: toml::Value) -> Result<Env, ParseError> {
             _ => {
                 return Err(ParseError::wrong_type(
                     file.to_string(),
+					None,
                     k,
                     format!(
                         "{E}value {BE}{v}{D} for {W}key {BW}{k}{D} is not a {BW}string{D} or {BW}table{D}"
@@ -193,7 +229,7 @@ fn table_to_grouped(file: &str, title: String, table: toml::Table) -> Result<Gro
 
     for (k, v) in table {
         if k == "update" {
-            update = to_update(file, v)?;
+            update = to_update(file, &title, v)?;
             continue;
         }
 
@@ -205,7 +241,8 @@ fn table_to_grouped(file: &str, title: String, table: toml::Table) -> Result<Gro
             _ => {
                 return Err(ParseError::wrong_type(
                     file.to_string(),
-                    k,
+                    Some(&title),
+                    &k,
                     format!("{E}value {BE}{v}{D} for {W}key {BW}{k}{D} is not a {BW}string{D}"),
                     format!(
 						"the {E}value{D} should be a {V}string{D} that represent the path to the actual dotfile"
@@ -218,58 +255,42 @@ fn table_to_grouped(file: &str, title: String, table: toml::Table) -> Result<Gro
     Ok(Grouped {
         title,
         symlink,
-        update: Update::Always,
+        update,
     })
 }
 
-fn to_update(file: &str, value: toml::Value) -> Result<Update, ParseError> {
-    const ADVICE: String = format!(
-        "the {E}value{D} should represent a {V}valid update frequency{D}
-'always' | 'never' | 'optional' | [ 'ListOfComputerNameToAlwaysUpdate', 'OtherComputerName' ]
-default: 'always'
-{HELP_EXAMPLE}"
-    );
-
+fn to_update(file: &str, title: &str, value: toml::Value) -> Result<Update, ParseError> {
     match value {
-		toml::Value::String(string) => match Update::from_str(string.as_str()) {
-			Ok(update) => Ok(update),
-			Err(_) => Err(ParseError::wrong_type(
-				file.to_string(),
-				string.as_str(),
-				format!(
-					"{E}value {BE}{string}{D} for {W}key {BW}update{D} is not a {BW}string{D} that represent a {BW}valid update frequency{D}"
-				),
-				ADVICE,
-			))
-		},
-		toml::Value::Array(array) => {
-			let mut name = Vec::new();
+        toml::Value::String(string) => match Update::from_str(string.as_str()) {
+            Ok(update) => Ok(update),
+            Err(_) => Err(ParseError::update(
+                file.to_string(),
+                title.to_string(),
+                string,
+            )),
+        },
+        toml::Value::Array(array) => {
+            let mut name = Vec::new();
 
-			for value in array {
-				match value {
-					toml::Value::String(string) => name.push(string),
-					_ => {
-						return Err(ParseError::wrong_type(
-							file.to_string(),
-							string.as_str(),
-							format!(
-								"{E}value {BE}{string}{D} for {W}key {BW}update{D} is not a {BW}string{D} that represent a {BW}valid update frequency{D}"
-							),
-							ADVICE,
-						))
-					}
-				}
-			}
-		}
-		_ => {
-			return Err(ParseError::wrong_type(
-				file.to_string(),
-				string.as_str(),
-				format!(
-					"{E}value {BE}{string}{D} for {W}key {BW}update{D} is not a {BW}string{D} that represent a {BW}valid update frequency{D}"
-				),
-				ADVICE,
-			))
-		}
-	}
+            for value in array {
+                match value {
+                    toml::Value::String(string) => name.push(string),
+                    _ => {
+                        return Err(ParseError::update(
+                            file.to_string(),
+                            title.to_string(),
+                            format!("{:?}", value),
+                        ))
+                    }
+                }
+            }
+
+            Ok(Update::Specific(name))
+        }
+        _ => Err(ParseError::update(
+            file.to_string(),
+            title.to_string(),
+            format!("{:?}", value),
+        )),
+    }
 }

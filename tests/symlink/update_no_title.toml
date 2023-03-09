@@ -1,0 +1,7 @@
+"~/.config/yapf/style" = 'yapf'
+
+update = 'never'
+
+[good]
+update = 'never'
+"~/.zshrc" = 'zsh/zshrc'
