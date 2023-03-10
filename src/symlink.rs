@@ -80,18 +80,15 @@ pub fn symlink(symlink: Symlink) -> Result<()> {
 }
 
 fn exist(path: &Path) -> bool {
-    match fs::symlink_metadata(path) {
-        Ok(_) => true,
-        Err(_) => false,
-    }
+    fs::symlink_metadata(path).is_ok()
 }
 
 fn to_absolute(path: &str) -> Result<PathBuf> {
     let mut path = path.to_string();
 
-    if path.starts_with("~") {
+    if path.starts_with('~') {
         let home = std::env::var("HOME").unwrap();
-        path = path.replacen("~", &home, 1);
+        path = path.replacen('~', &home, 1);
     }
 
     let path = Path::new(&path);

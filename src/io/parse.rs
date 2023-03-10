@@ -91,8 +91,8 @@ the file {M}{file_name}{D} should be a {V}valid toml{D} that define the {V}symli
 		url("{}{}", URL, file!()),
         help("the {E}value{D} should represent a {V}valid update frequency{D}
 
-'always' | 'never' | 'optional' | [ 'ListOfComputerNameToAlwaysUpdate', 'OtherComputerName' ]
-default: 'always'
+{H}possible update frequency are:{D} 'always' | 'never' | 'optional' | [ 'ListOfComputerNameToAlwaysUpdate', 'OtherComputerName' ]
+{H}default:{D} 'always'
 
 {HELP_EXAMPLE}")
 	)]
@@ -176,16 +176,14 @@ fn read<P>(file: P) -> Result<toml::Value, ParseError>
 where
     P: AsRef<Path> + std::fmt::Display,
 {
-    Ok(
-        toml::from_str(&fs::read_to_string(&file).map_err(|e| ParseError::Read {
-            source: e,
-            file: file.to_string(),
-        })?)
-        .map_err(|e| ParseError::ParseStrToTOML {
-            source: e,
-            file: file.to_string(),
-        })?,
-    )
+    toml::from_str(&fs::read_to_string(&file).map_err(|e| ParseError::Read {
+        source: e,
+        file: file.to_string(),
+    })?)
+    .map_err(|e| ParseError::ParseStrToTOML {
+        source: e,
+        file: file.to_string(),
+    })
 }
 
 fn toml_to_env(file: &str, toml: toml::Value) -> Result<Env, ParseError> {

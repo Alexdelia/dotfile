@@ -8,7 +8,7 @@ use clap::Parser;
 
 #[derive(Debug, Parser)]
 #[clap()]
-struct Opts {
+struct Arg {
     /// file that define the symlinks
     #[clap(default_value = symlink::DEFAULT_SYMLINK_FILE)]
     file: String,
@@ -17,15 +17,9 @@ struct Opts {
 fn main() -> Result<()> {
     println!("Hello, world!");
 
-    let opts: Opts = Opts::parse();
-    dbg!(opts);
+    let Arg { file } = Arg::parse();
 
-    // if std::env::args().len() > 2 {
-    //     eprintln!("usage: symlink [file]");
-    //     std::process::exit(1);
-    // }
+    dbg!(io::parse::parse(file)?);
 
-    dbg!(io::parse::parse("symlink.toml")?);
-    dbg!(io::parse::parse("some.toml")?);
     Ok(())
 }
