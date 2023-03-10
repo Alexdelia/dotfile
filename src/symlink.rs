@@ -59,7 +59,21 @@ impl FromStr for Update {
 #[derive(Debug)] // TODO: remove
 pub struct Symlink {
     pub path: PathBuf,
-    pub target: PathBuf,
+    pub target: Target,
+}
+
+#[derive(Debug)] // TODO: remove
+pub struct Target {
+    pub path: PathBuf,
+    pub exist: SymlinkExist,
+}
+
+#[derive(Debug)] // TODO: remove
+pub enum SymlinkExist {
+    FileExist,
+    FileNotExist,
+    SymlinkExist,
+    SymlinkNotExist,
 }
 
 pub fn symlink(symlink: Symlink) -> Result<()> {
