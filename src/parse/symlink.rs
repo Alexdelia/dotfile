@@ -1,17 +1,39 @@
 // use super::error::ParseError;
-use crate::symlink::{Env, EnvType, SymlinkExist, Target};
+use crate::symlink::{Env, EnvType, Symlink, SymlinkExist, Target};
 use miette::{Diagnostic, Result};
 use std::path::{Path, PathBuf};
 use thiserror::Error;
 
 pub fn process(env: &Env) -> Result<()> {
-	for e in env {
+    for e in env {
+        match e {
+            EnvType::Grouped(grouped) => {
+                for symlink in &grouped.symlink {
+                    sub_process(symlink, Some(grouped.title))?;
+                }
+            }
+            EnvType::Alone(symlink) => {
+                sub_process(symlink, None)?;
+            }
+        }
+    }
 
+    Ok(())
+}
+
+fn sub_process(symlink: &Symlink, title: Option<String>) -> Result<()> {
+    symlink.path = to_absolute(&symlink.path)?;
+    symlink.target.path = to_absolute(&symlink.target.path)?;
+
+    exist(&symlink.path, title)?;
+    symlink.target.exist = find_exist_type(&symlink.target.path)?;
+
+    Ok(())
 }
 
 #[derive(Error, Diagnostic, Debug)]
 // #[error("could not {BW}read {M}{file}{D}")]
-#[error("could not read {file}")]
+#[error("could not read {path}")]
 #[diagnostic(
     code(parse::read),
     // url("{}{}", URL, file!()),
@@ -20,6 +42,7 @@ pub fn process(env: &Env) -> Result<()> {
 struct ParseSymlinkError {
     #[source]
     source: std::io::Error,
+    title: Option<String>, // search doing it with a wrap or context
     path: String,
 }
 
@@ -42,7 +65,7 @@ pub fn validate(env: &Env) -> Result<()> {
     Ok(())
 }
 
-fn exist(path: &Path) -> Result<()> {
+fn exist(path: &Path, title: Option<String>) -> Result<()> {
     if !path.try_exists().map_err(|e| ParseSymlinkError {
         source: e,
         path: path.to_string_lossy().to_string(),
@@ -57,8 +80,8 @@ fn exist(path: &Path) -> Result<()> {
     Ok(())
 }
 
-fn to_absolute(path: impl Into<String>) -> Result<PathBuf> {
-    let mut path: String = path.into();
+fn to_absolute(path: &PathBuf) -> Result<PathBuf> {
+    let mut path = path.to_string_lossy().to_string();
 
     if path.starts_with('~') {
         let home = std::env::var("HOME").unwrap();
