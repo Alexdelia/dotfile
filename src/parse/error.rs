@@ -2,7 +2,7 @@ use crate::ansi::{BE, BW, C, E, EHE, EHS, H, M, V, W};
 use crate::symlink::DEFAULT_SYMLINK_FILE;
 use ansi::abbrev::{B, BLU, D, F, YEL};
 use const_format::formatcp;
-use miette::{Diagnostic, SourceSpan};
+use miette::{Diagnostic, IntoDiagnostic, NamedSource, SourceSpan};
 use std::fs;
 use thiserror::Error;
 
@@ -10,10 +10,73 @@ const URL: &str = "https://github.com/Alexdelia/dotfile/tree/main/";
 const HELP_EXAMPLE: &str = formatcp!("you can check the example file {V}{DEFAULT_SYMLINK_FILE}{D} {EHS}{URL}{DEFAULT_SYMLINK_FILE}{EHE}");
 
 #[derive(Error, Diagnostic, Debug)]
+#[error("{error}")]
+#[diagnostic(code(parse::ParseTomlError), url("{}{origin_file}", URL))]
+pub struct ParseTomlError {
+    #[related]
+    related: Vec<miette::Error>,
+
+    #[source_code]
+    file: NamedSource,
+    #[label("in this table")]
+    table_bit: Option<SourceSpan>,
+    #[label]
+    line_bit: SourceSpan,
+
+    error: String,
+    #[help]
+    help: String,
+    origin_file: String,
+}
+
+impl ParseTomlError {
+    pub fn new(
+        file: String,
+        title: Option<String>,
+        key: String,
+        error: Option<String>,
+        help: Option<String>,
+        origin_file: String,
+        related: Vec<miette::Error>,
+    ) -> Self {
+        Self {
+            related: vec![],
+            file,
+            table_bit,
+            line_bit,
+            error,
+            help,
+            origin_file,
+        }
+    }
+}
+
+#[derive(Error, Diagnostic, Debug)]
+#[error("oops, oh no")]
+pub struct SErrR {
+    #[source]
+    pub source: std::io::Error,
+}
+
+#[derive(Error, Diagnostic, Debug)]
+#[error("oops")]
+pub struct SErr {
+    #[related]
+    pub related: Vec<SErrR>,
+}
+
+fn fn_name<F>(_: F) -> &'static str
+where
+    F: Fn(),
+{
+    std::any::type_name::<F>()
+}
+
+#[derive(Error, Diagnostic, Debug)]
 pub enum ParseError {
     #[error("could not {BW}read {M}{file}{D}")]
     #[diagnostic(
-        code(parse::read),
+        code("{SOME}"),
         url("{}{}", URL, file!()),
         help("the file {M}{file}{D} is the file that define symlink")
     )]
@@ -25,7 +88,7 @@ pub enum ParseError {
 
     #[error("could not {BW}parse {M}{file}{D} to {BW}toml{D}")]
     #[diagnostic(
-        code(parse::read),
+        code("{SOME}"),
         url("{}{}", URL, file!()),
         help("the file {M}{file}{D} should be a {V}valid toml{D} file
 {HELP_EXAMPLE}

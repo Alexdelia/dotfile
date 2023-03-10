@@ -4,19 +4,20 @@ use error::ParseError;
 mod toml_to_env;
 use toml_to_env::toml_to_env;
 
-mod symlink;
+// mod symlink;
 
 use crate::symlink::Env;
 use std::fs;
 use std::path::Path;
 
-pub fn parse<P>(file: P) -> Result<Env, ParseError>
+// pub fn parse<P>(file: P) -> Result<Env, ParseError>
+pub fn parse<P>(file: P) -> miette::Result<Env>
 where
     P: AsRef<Path> + std::fmt::Display,
 {
     let env = toml_to_env(file.to_string().as_str(), read(file)?)?;
 
-    symlink::validate(&env)?;
+    // symlink::validate(&env)?;
 
     Ok(env)
 }
