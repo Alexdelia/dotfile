@@ -1,8 +1,13 @@
 // use super::error::ParseError;
 use crate::symlink::{Env, EnvType, SymlinkExist, Target};
 use miette::{Diagnostic, Result};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use thiserror::Error;
+
+pub fn process(env: &Env) -> Result<()> {
+	for e in env {
+
+}
 
 #[derive(Error, Diagnostic, Debug)]
 // #[error("could not {BW}read {M}{file}{D}")]
@@ -52,23 +57,26 @@ fn exist(path: &Path) -> Result<()> {
     Ok(())
 }
 
-// to update arg and return value
-fn to_absolute(path: &str) -> Result<PathBuf> {
-    let mut path = path.to_string();
+fn to_absolute(path: impl Into<String>) -> Result<PathBuf> {
+    let mut path: String = path.into();
 
     if path.starts_with('~') {
         let home = std::env::var("HOME").unwrap();
         path = path.replacen('~', &home, 1);
     }
 
-    let path = Path::new(&path);
+    let path = PathBuf::from(path);
     if path.is_absolute() {
-        Ok(path.to_path_buf())
+        Ok(path)
     } else {
-        Err(std::io::Error::new(
-            std::io::ErrorKind::Other,
-            "did not manage to convert to absolute path",
-        ))
+        Err(ParseSymlinkError {
+            source: std::io::Error::new(
+                std::io::ErrorKind::Other,
+                "did not manage to convert to absolute path",
+            ),
+            path: path.to_string_lossy().to_string(),
+        }
+        .into())
     }
 }
 
