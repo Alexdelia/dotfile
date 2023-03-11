@@ -4,6 +4,7 @@ SRC_PATH="$HOME/.config/zsh/config.d/"
 
 src+="main.zsh"
 src+="alias.zsh"
+src+="functions.zsh"
 src+="export.zsh"
 src+="autojump.zsh"
 src+="conda.zsh"
