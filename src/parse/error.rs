@@ -34,7 +34,7 @@ impl ParseTomlError {
         file: String,
         title: Option<String>,
         key: String,
-        error: Option<String>,
+        er	ror: Option<String>,
         help: Option<String>,
         origin_file: String,
         related: Vec<miette::Error>,

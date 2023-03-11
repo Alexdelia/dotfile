@@ -8,7 +8,7 @@ function gy() {
     git add --all
     git status --short
     git commit --message "$1"
-    git push
+    git push --quiet
 }
 
 function gpn() {
@@ -25,6 +25,6 @@ function gpn() {
         commit+="\`$file\` "
     done
     
-    git commit -m "$commit"
-    git push
+    git commit --message "$commit"
+    git push --quiet
 }
