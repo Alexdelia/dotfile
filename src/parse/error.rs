@@ -19,13 +19,13 @@ pub struct ParseTomlError {
     #[source_code]
     file: NamedSource,
     #[label("in this table")]
-    table_bit: Option<SourceSpan>,
+    table_bit: Option<(usize, usize)>,
     #[label]
     line_bit: SourceSpan,
 
     error: String,
     #[help]
-    help: String,
+    help: Option<String>,
     origin_file: String,
 }
 
@@ -34,17 +34,36 @@ impl ParseTomlError {
         file: String,
         title: Option<String>,
         key: String,
-        er	ror: Option<String>,
+        error: Option<String>,
         help: Option<String>,
         origin_file: String,
         related: Vec<miette::Error>,
     ) -> Self {
+        let content =
+            fs::read_to_string(&file).unwrap_or_else(|_| String::from("ENABLE TO READ FILE\n"));
+
+        let mut t: Option<(usize, usize)> = None;
+
+        if let Some(title) = title {
+            let ts = content.find(&title).unwrap_or(0);
+            let te = content[ts..]
+                .find(|c: char| c.is_whitespace() || c == ']')
+                .unwrap_or(content.len() - ts)
+                + ts;
+
+            t = Some((ts, te));
+        }
+
+        let ts = t.unwrap_or((0, 0)).1;
+        let ks = content[ts..].find(&key).unwrap_or(0) + ts;
+        let ke = content[ks..].find('\n').unwrap_or(content.len() - ks) + ks;
+
         Self {
-            related: vec![],
-            file,
-            table_bit,
-            line_bit,
-            error,
+            related,
+            file: NamedSource::new(file, content),
+            table_bit: t,
+            line_bit: (ks, ke).into(),
+            error: error.unwrap_or_else(|| format!("{BE}418{D} {B}I'm a teapot{D}")),
             help,
             origin_file,
         }
