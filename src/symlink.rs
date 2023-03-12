@@ -65,15 +65,15 @@ pub struct Symlink {
 #[derive(Debug)] // TODO: remove
 pub struct Target {
     pub path: PathBuf,
-    pub exist: SymlinkExist,
+    pub exist: Exist,
 }
 
 #[derive(Debug)] // TODO: remove
-pub enum SymlinkExist {
-    FileExist,
-    FileNotExist,
-    SymlinkExist,
-    SymlinkNotExist,
+pub enum Exist {
+    File,
+    Not,
+    Symlink,
+    NotTarget,
 }
 
 pub fn symlink(symlink: Symlink) -> Result<()> {

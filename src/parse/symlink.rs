@@ -1,5 +1,5 @@
 // use super::error::ParseError;
-use crate::symlink::{Env, EnvType, Symlink, SymlinkExist, Target};
+use crate::symlink::{Env, EnvType, Exist, Symlink, Target};
 use miette::{Diagnostic, Result};
 use std::path::{Path, PathBuf};
 use thiserror::Error;
