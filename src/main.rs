@@ -19,8 +19,9 @@ fn main() -> Result<()> {
 
     let Arg { file } = Arg::parse();
 
-    let p = parse::parse(file)?;
-    dbg!(p);
+    let p = parse::parse(file);
+    dbg!(&p);
+    let s = p?;
 
     Ok(())
 }

@@ -3,3 +3,6 @@ update = 'never'
 
 [bad]
 update = 'wrong'
+
+[other]
+update = 'never'

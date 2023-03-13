@@ -11,7 +11,25 @@ const HELP_EXAMPLE: &str = formatcp!("you can check the example file {V}{DEFAULT
 
 #[derive(Error, Diagnostic, Debug)]
 #[error("{error}")]
-#[diagnostic(code(parse::ParseTomlError), url("{}{origin_file}", URL))]
+#[diagnostic(
+	code(parse::ParseTomlError),
+    url("{URL}{origin_file}"),
+    help("{advice}
+
+{H}example:{D}
+{F}```toml{D}
+{C}# optional title{D}
+{B}{YEL}[title]{D}
+{C}# optional update frequency (default: 'always'){D}
+{C}# key (string) = value ('always' | 'never' | 'optional' | [ 'ListOfComputerNameToAlwaysUpdate', 'OtherComputerName' ]){D}
+{BLU}update{D} = 'always'
+{C}# symlink list{D}
+{C}# key (string) = value (string){D}
+\"~/path/to/dotfile/where/symlink/will/be\" = \"path/of/actual/dotfile/stored/in/data/directory\"
+{F}```{D}
+	
+{HELP_EXAMPLE}")
+)]
 pub struct ParseTomlError {
     #[related]
     related: Vec<miette::Error>,
@@ -20,24 +38,23 @@ pub struct ParseTomlError {
     file: NamedSource,
     #[label("in this table")]
     table_bit: Option<(usize, usize)>,
-    #[label]
+    #[label("wrong line")]
     line_bit: SourceSpan,
 
     error: String,
-    #[help]
-    help: Option<String>,
+    advice: String,
     origin_file: String,
 }
 
 impl ParseTomlError {
     pub fn new(
         file: String,
-        title: Option<String>,
-        key: String,
-        error: Option<String>,
-        help: Option<String>,
+        title: Option<&str>,
+        key: &str,
+        error: String,
+        advice: String,
         origin_file: String,
-        related: Vec<miette::Error>,
+        related: Option<Vec<miette::Error>>,
     ) -> Self {
         let content =
             fs::read_to_string(&file).unwrap_or_else(|_| String::from("ENABLE TO READ FILE\n"));
@@ -48,86 +65,76 @@ impl ParseTomlError {
             let ts = content.find(&title).unwrap_or(0);
             let te = content[ts..]
                 .find(|c: char| c.is_whitespace() || c == ']')
-                .unwrap_or(content.len() - ts)
-                + ts;
+                .unwrap_or(content.len() - ts);
 
             t = Some((ts, te));
         }
 
-        let ts = t.unwrap_or((0, 0)).1;
-        let ks = content[ts..].find(&key).unwrap_or(0) + ts;
-        let ke = content[ks..].find('\n').unwrap_or(content.len() - ks) + ks;
+        let te = t.map(|(ts, te)| ts + te).unwrap_or(0);
+        let ks = content[te..].find(key).unwrap_or(0) + te;
+        let ke = content[ks..].find('\n').unwrap_or(content.len() - ks);
 
         Self {
-            related,
+            related: related.unwrap_or_else(Vec::new),
             file: NamedSource::new(file, content),
             table_bit: t,
             line_bit: (ks, ke).into(),
-            error: error.unwrap_or_else(|| format!("{BE}418{D} {B}I'm a teapot{D}")),
-            help,
+            error,
+            advice,
             origin_file,
         }
     }
 }
 
 #[derive(Error, Diagnostic, Debug)]
-#[error("oops, oh no")]
-pub struct SErrR {
+#[error("could not {BW}read {M}{file}{D}")]
+#[diagnostic(
+    code(parse::read),
+    url("{URL}{origin_file}"),
+    help("the file {M}{file}{D} is the file that define symlink")
+)]
+pub struct ReadError {
     #[source]
     pub source: std::io::Error,
+    pub file: String,
+    pub origin_file: String,
 }
 
 #[derive(Error, Diagnostic, Debug)]
-#[error("oops")]
-pub struct SErr {
-    #[related]
-    pub related: Vec<SErrR>,
+#[error("could not {BW}parse {M}{file}{D} to {BW}toml{D}")]
+#[diagnostic(
+    code(parse::str_to_toml),
+    url("{URL}{origin_file}"),
+    help(
+        "the file {M}{file}{D} should be a {V}valid toml{D} file
+{HELP_EXAMPLE}
+or the {V}toml{D} documentation {EHS}{URL}{DEFAULT_SYMLINK_FILE}{EHE}"
+    )
+)]
+pub struct ParseStrToTOMLError {
+    #[source]
+    pub source: toml::de::Error,
+    pub file: String,
+    pub origin_file: String,
 }
 
-fn fn_name<F>(_: F) -> &'static str
-where
-    F: Fn(),
-{
-    std::any::type_name::<F>()
+#[derive(Error, Diagnostic, Debug)]
+#[error("could not {BW}parse {M}{file}{D} to a valid list of {BW}symlink{D}")]
+#[diagnostic(
+    code(parse::toml_to_env),
+    url("{URL}{origin_file}"),
+    help(
+        "the file {M}{file}{D} should be a {V}valid toml{D} that define the {V}symlink{D}s
+{HELP_EXAMPLE}"
+    )
+)]
+pub struct ParseTOMLToEnvError {
+    pub file: String,
+    pub origin_file: String,
 }
 
 #[derive(Error, Diagnostic, Debug)]
 pub enum ParseError {
-    #[error("could not {BW}read {M}{file}{D}")]
-    #[diagnostic(
-        code("{SOME}"),
-        url("{}{}", URL, file!()),
-        help("the file {M}{file}{D} is the file that define symlink")
-    )]
-    Read {
-        #[source]
-        source: std::io::Error,
-        file: String,
-    },
-
-    #[error("could not {BW}parse {M}{file}{D} to {BW}toml{D}")]
-    #[diagnostic(
-        code("{SOME}"),
-        url("{}{}", URL, file!()),
-        help("the file {M}{file}{D} should be a {V}valid toml{D} file
-{HELP_EXAMPLE}
-or the {V}toml{D} documentation {EHS}{URL}{DEFAULT_SYMLINK_FILE}{EHE}")
-    )]
-    ParseStrToTOML {
-        #[source]
-        source: toml::de::Error,
-        file: String,
-    },
-
-    #[error("could not {BW}parse {M}{file}{D} to valid list of {BW}symlink{D}")]
-    #[diagnostic(
-		code(parse::toml_to_env),
-		url("{}{}", URL, file!()),
-		help("the file {M}{file}{D} should be a {V}valid toml{D} that define the {V}symlink{D}s
-{HELP_EXAMPLE}")
-	)]
-    ParseTOMLToEnv { file: String },
-
     #[error(
         "{reason}
 

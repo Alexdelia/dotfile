@@ -51,7 +51,7 @@ impl FromStr for Update {
             "always" => Ok(Update::Always),
             "never" => Ok(Update::Never),
             "optional" => Ok(Update::Optional),
-            _ => Err(format!("{} is not a valid update value", s)),
+            _ => Err(format!("{s} is not a valid update value")),
         }
     }
 }
