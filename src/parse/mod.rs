@@ -9,10 +9,9 @@ use crate::symlink::Env;
 use std::fs;
 use std::path::Path;
 
-// use miette::Result;
+use miette::Result;
 
-// pub fn parse<P>(file: P) -> Result<Env, ParseError>
-pub fn parse<P>(file: P) -> Result<Env, error::ParseTomlError>
+pub fn parse<P>(file: P) -> Result<Env>
 where
     P: AsRef<Path> + std::fmt::Display,
 {

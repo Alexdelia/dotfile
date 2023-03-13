@@ -3,16 +3,15 @@ use super::error::{ParseTOMLToEnvError, ParseTomlError};
 use crate::ansi::{BE, BW, E, M, V, W};
 use crate::symlink::{Env, EnvType, Exist, Grouped, Symlink, Target, Update};
 use ansi::abbrev::D;
-// use miette::Result;
+use miette::Result;
 use std::path::PathBuf;
 use std::str::FromStr;
 
-pub fn toml_to_env(file: &str, toml: toml::Value) -> Result<Env, ParseTomlError> {
-    let table = toml.as_table().unwrap();
-    // .ok_or_else(|| ParseTOMLToEnvError {
-    //     file: file.to_string(),
-    //     origin_file: file!().to_string(),
-    // })?;
+pub fn toml_to_env(file: &str, toml: toml::Value) -> Result<Env> {
+    let table = toml.as_table().ok_or_else(|| ParseTOMLToEnvError {
+        file: file.to_string(),
+        origin_file: file!().to_string(),
+    })?;
 
     let mut env = Env::new();
 
@@ -54,11 +53,7 @@ pub fn toml_to_env(file: &str, toml: toml::Value) -> Result<Env, ParseTomlError>
     Ok(env)
 }
 
-fn table_to_grouped(
-    file: &str,
-    title: String,
-    table: toml::Table,
-) -> Result<Grouped, ParseTomlError> {
+fn table_to_grouped(file: &str, title: String, table: toml::Table) -> Result<Grouped> {
     let mut symlink: Vec<Symlink> = Vec::new();
     let mut update = Update::Always;
 
@@ -100,7 +95,7 @@ fn table_to_grouped(
     })
 }
 
-fn to_update(file: &str, title: &str, value: toml::Value) -> Result<Update, ParseTomlError> {
+fn to_update(file: &str, title: &str, value: toml::Value) -> Result<Update> {
     let u = match value {
 		toml::Value::String(ref string) => Update::from_str(string.as_str()).map_err(|_| ()),
         toml::Value::Array(ref array) => {
@@ -111,13 +106,6 @@ fn to_update(file: &str, title: &str, value: toml::Value) -> Result<Update, Pars
                 match value {
                     toml::Value::String(string) => name.push(string.to_owned()),
 					_ => err = true,
-                    // _ => {
-                    //     return Err(ParseError::update(
-                    //         file.to_string(),
-                    //         title.to_string(),
-                    //         format!("{:?}", value),
-                    //     ))
-                    // }
                 }
             }
 
@@ -129,11 +117,6 @@ fn to_update(file: &str, title: &str, value: toml::Value) -> Result<Update, Pars
 			}
         }
         _ => Err(()),
-		// Err(ParseError::update(
-        //     file.to_string(),
-        //     title.to_string(),
-        //     format!("{:?}", value),
-        // )),
     }.map_err(|()| ParseTomlError::new(
 		file.to_string(),
 		Some(title),
