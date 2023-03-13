@@ -3,7 +3,7 @@ mod error;
 mod toml_to_env;
 use toml_to_env::toml_to_env;
 
-// mod symlink;
+mod symlink;
 
 use crate::symlink::Env;
 use std::fs;
@@ -15,9 +15,10 @@ pub fn parse<P>(file: P) -> Result<Env>
 where
     P: AsRef<Path> + std::fmt::Display,
 {
-    let env = toml_to_env(file.to_string().as_str(), read(file).unwrap())?;
+    let name = file.to_string();
+    let env = toml_to_env(&name, read(file).unwrap())?;
 
-    // symlink::validate(&env)?;
+    symlink::end_build(name, &env)?;
 
     Ok(env)
 }

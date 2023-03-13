@@ -1,19 +1,44 @@
-// use super::error::ParseError;
+use super::error::ParseTomlError;
+use crate::ansi::{BE, BW};
 use crate::symlink::{Env, EnvType, Exist, Symlink, Target};
+use ansi::abbrev::D;
 use miette::{Diagnostic, Result};
+use std::fs;
 use std::path::{Path, PathBuf};
 use thiserror::Error;
 
-pub fn process(env: &Env) -> Result<()> {
+pub fn end_build(file: String, env: &Env) -> Result<()> {
     for e in env {
         match e {
-            EnvType::Grouped(grouped) => {
-                for symlink in &grouped.symlink {
-                    sub_process(symlink, Some(grouped.title))?;
+            EnvType::Grouped(mut grouped) => {
+                for symlink in &mut grouped.symlink {
+                    if let Err(e) = process(symlink) {
+                        return Err(ParseTomlError::new(
+                            file,
+                            Some(&grouped.title),
+                            symlink.path.to_string_lossy().to_string().as_str(),
+                            e.to_string(),
+                            String::new(),
+                            file!().to_string(),
+                            Some(vec![e]),
+                        )
+                        .into());
+                    }
                 }
             }
             EnvType::Alone(symlink) => {
-                sub_process(symlink, None)?;
+                if let Err(e) = process(&mut symlink) {
+                    return Err(ParseTomlError::new(
+                        file,
+                        None,
+                        symlink.path.to_string_lossy().to_string().as_str(),
+                        e.to_string(),
+                        String::new(),
+                        file!().to_string(),
+                        Some(vec![e]),
+                    )
+                    .into());
+                }
             }
         }
     }
@@ -21,61 +46,51 @@ pub fn process(env: &Env) -> Result<()> {
     Ok(())
 }
 
-fn sub_process(symlink: &Symlink, title: Option<String>) -> Result<()> {
+fn process(symlink: &mut Symlink) -> Result<()> {
+    check_path_pattern(symlink)?;
     symlink.path = to_absolute(&symlink.path)?;
     symlink.target.path = to_absolute(&symlink.target.path)?;
 
-    exist(&symlink.path, title)?;
+    exist(&symlink.path)?;
     symlink.target.exist = find_exist_type(&symlink.target.path)?;
 
     Ok(())
 }
 
+fn check_path_pattern(symlink: &Symlink) -> Result<()> {
+    todo!();
+
+    // check if can append current dir data to target path
+}
+
 #[derive(Error, Diagnostic, Debug)]
-// #[error("could not {BW}read {M}{file}{D}")]
-#[error("could not read {path}")]
-#[diagnostic(
-    code(parse::read),
-    // url("{}{}", URL, file!()),
-    // help("the file {M}{file}{D} is the file that define symlink")
-)]
+#[error("could not {BW}read {BE}{path}{D}")]
+#[diagnostic(code(parse::symlink))]
 struct ParseSymlinkError {
     #[source]
     source: std::io::Error,
-    title: Option<String>, // search doing it with a wrap or context
     path: String,
 }
 
-pub fn validate(env: &Env) -> Result<()> {
-    for e in env {
-        match e {
-            EnvType::Grouped(grouped) => {
-                for symlink in &grouped.symlink {
-                    exist(&symlink.path)?;
-                    symlink.target.exist = find_exist_type(&symlink.target.path)?;
+fn exist(path: &Path) -> Result<()> {
+    let e = match path.try_exists() {
+        Ok(e) => {
+            if !e {
+                ParseSymlinkError {
+                    source: std::io::Error::new(std::io::ErrorKind::NotFound, "file not found"),
+                    path: path.to_string_lossy().to_string(),
                 }
-            }
-            EnvType::Alone(symlink) => {
-                exist(&symlink.path)?;
-                symlink.target.exist = find_exist_type(&symlink.target.path)?;
+            } else {
+                return Ok(());
             }
         }
-    }
-
-    Ok(())
-}
-
-fn exist(path: &Path, title: Option<String>) -> Result<()> {
-    if !path.try_exists().map_err(|e| ParseSymlinkError {
-        source: e,
-        path: path.to_string_lossy().to_string(),
-    })? {
-        return Err(ParseSymlinkError {
-            source: std::io::Error::new(std::io::ErrorKind::NotFound, "file not found"),
+        Err(e) => ParseSymlinkError {
+            source: e,
             path: path.to_string_lossy().to_string(),
-        }
-        .into());
-    }
+        },
+    };
+
+    // Err(ParseTomlError::new(
 
     Ok(())
 }
@@ -103,19 +118,21 @@ fn to_absolute(path: &PathBuf) -> Result<PathBuf> {
     }
 }
 
-fn find_exist_type(path: &Path) -> Result<SymlinkExist> {
-    dbg!(std::env::current_dir());
+fn find_exist_type(path: &Path) -> Result<Exist> {
+    todo!();
 
-    let l = vec!["noexist", "exist", "sml_exist", "sml_noexist"];
-    for p in l {
-        dbg!(p);
-        let p = to_absolute(format!("~/goinfre/{}", p).as_str());
-        dbg!(&p);
-        if p.is_ok() {
-            dbg!(
-                fs::symlink_metadata(p.as_ref().unwrap()),
-                p.unwrap().exists()
-            );
-        }
-    }
+    // dbg!(std::env::current_dir());
+
+    // let l = vec!["noexist", "exist", "sml_exist", "sml_noexist"];
+    // for p in l {
+    //     dbg!(p);
+    //     let p = to_absolute(format!("~/goinfre/{}", p).as_str());
+    //     dbg!(&p);
+    //     if p.is_ok() {
+    //         dbg!(
+    //             fs::symlink_metadata(p.as_ref().unwrap()),
+    //             p.unwrap().exists()
+    //         );
+    //     }
+    // }
 }
