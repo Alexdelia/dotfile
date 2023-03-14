@@ -52,7 +52,7 @@ fn process(symlink: &mut Symlink) -> Result<()> {
     symlink.target = to_absolute(&symlink.target)?;
 
     exist(&symlink.target)?;
-    symlink.exist = find_exist_type(&symlink.path)?;
+    symlink.exist = find_exist_type(&symlink.path, &symlink.target)?;
 
     Ok(())
 }
@@ -146,13 +146,13 @@ fn to_absolute(path: &Path) -> Result<PathBuf> {
     }
 }
 
-fn find_exist_type(path: &Path) -> Result<Exist> {
+fn find_exist_type(path: &Path, expected_target: &Path) -> Result<Exist> {
     let Ok(md) = fs::symlink_metadata(path) else {
 		return Ok(Exist::No);
 	};
 
     if md.is_symlink() {
-        if path.exists() {
+        if std::fs::read_link(path).into_diagnostic()? == expected_target {
             Ok(Exist::Yes(FileType::Symlink(true)))
         } else {
             Ok(Exist::Yes(FileType::Symlink(false)))
