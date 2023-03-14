@@ -1,16 +1,16 @@
 use super::error::ParseTomlError;
-use crate::ansi::{BE, BW};
+use crate::ansi::{BE, BW, W};
 use crate::symlink::{Env, EnvType, Exist, Symlink, Target};
-use ansi::abbrev::D;
-use miette::{Diagnostic, Result};
+use ansi::abbrev::{B, D};
+use miette::{Diagnostic, IntoDiagnostic, Result};
 use std::fs;
 use std::path::{Path, PathBuf};
 use thiserror::Error;
 
-pub fn end_build(file: String, env: &Env) -> Result<()> {
+pub fn end_build(file: String, env: &mut Env) -> Result<()> {
     for e in env {
         match e {
-            EnvType::Grouped(mut grouped) => {
+            EnvType::Grouped(grouped) => {
                 for symlink in &mut grouped.symlink {
                     if let Err(e) = process(symlink) {
                         return Err(ParseTomlError::new(
@@ -27,7 +27,7 @@ pub fn end_build(file: String, env: &Env) -> Result<()> {
                 }
             }
             EnvType::Alone(symlink) => {
-                if let Err(e) = process(&mut symlink) {
+                if let Err(e) = process(symlink) {
                     return Err(ParseTomlError::new(
                         file,
                         None,
@@ -47,7 +47,7 @@ pub fn end_build(file: String, env: &Env) -> Result<()> {
 }
 
 fn process(symlink: &mut Symlink) -> Result<()> {
-    check_path_pattern(symlink)?;
+    path_pattern(symlink)?;
     symlink.path = to_absolute(&symlink.path)?;
     symlink.target.path = to_absolute(&symlink.target.path)?;
 
@@ -57,10 +57,36 @@ fn process(symlink: &mut Symlink) -> Result<()> {
     Ok(())
 }
 
-fn check_path_pattern(symlink: &Symlink) -> Result<()> {
-    todo!();
+fn path_pattern(symlink: &mut Symlink) -> Result<()> {
+    if symlink.path.ends_with("*") || symlink.target.path.ends_with("*") {
+        eprintln!(
+            "{W}wildcard ({D}{B}*{D}{W}) is not supported yet{D}\t({} = {})",
+            symlink.path.to_string_lossy(),
+            symlink.target.path.to_string_lossy()
+        );
+    }
 
-    // check if can append current dir data to target path
+    dbg!("yo");
+    let s = symlink.target.path.to_string_lossy();
+    dbg!(&s);
+    if !s.starts_with('/') && !s.starts_with('~') {
+        dbg!("HEY");
+        let root = PathBuf::from(format!(
+            "{}/data/",
+            std::env::current_dir().into_diagnostic()?.to_string_lossy()
+        ));
+
+        assert!(
+            root.is_absolute() && root.exists(),
+            "{} should exist and have accessible permissions, it is supposed to contain the dotfile",
+            root.to_string_lossy()
+        );
+
+        symlink.target.path = root.join(&symlink.target.path);
+        dbg!(&symlink.target.path);
+    }
+
+    Ok(())
 }
 
 #[derive(Error, Diagnostic, Debug)]
@@ -104,6 +130,7 @@ fn to_absolute(path: &PathBuf) -> Result<PathBuf> {
     }
 
     let path = PathBuf::from(path);
+
     if path.is_absolute() {
         Ok(path)
     } else {

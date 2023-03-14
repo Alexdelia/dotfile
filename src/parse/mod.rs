@@ -16,9 +16,9 @@ where
     P: AsRef<Path> + std::fmt::Display,
 {
     let name = file.to_string();
-    let env = toml_to_env(&name, read(file).unwrap())?;
+    let mut env = toml_to_env(&name, read(file).unwrap())?;
 
-    symlink::end_build(name, &env)?;
+    symlink::end_build(name, &mut env)?;
 
     Ok(env)
 }

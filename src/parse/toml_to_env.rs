@@ -23,9 +23,9 @@ pub fn toml_to_env(file: &str, toml: toml::Value) -> Result<Env> {
                 table.to_owned(),
             )?)),
             toml::Value::String(string) => env.push(EnvType::Alone(Symlink {
-                path: PathBuf::from(string),
+                path: PathBuf::from(k),
                 target: Target {
-                    path: PathBuf::from(k),
+                    path: PathBuf::from(string),
                     exist: Exist::Not,
                 },
             })),
@@ -65,9 +65,9 @@ fn table_to_grouped(file: &str, title: String, table: toml::Table) -> Result<Gro
 
         match v {
             toml::Value::String(string) => symlink.push(Symlink {
-                path: PathBuf::from(string),
+                path: PathBuf::from(k),
                 target: Target {
-                    path: PathBuf::from(k),
+                    path: PathBuf::from(string),
                     exist: Exist::Not,
                 },
             }),
