@@ -28,7 +28,7 @@ fn main() -> Result<()> {
 
     let Arg { file, yes } = Arg::parse();
 
-    process::process(parse::parse(file, yes)?, yes).into_diagnostic()?;
+    process::process(parse::parse(file, yes)?, !yes).into_diagnostic()?;
 
     Ok(())
 }
