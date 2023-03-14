@@ -5,11 +5,11 @@ use toml_to_env::toml_to_env;
 
 mod symlink;
 
-use crate::symlink::Env;
-use std::fs;
-use std::path::Path;
+use crate::env::Env;
 
 use miette::Result;
+use std::fs;
+use std::path::Path;
 
 pub fn parse<P>(file: P) -> Result<Env>
 where
@@ -19,8 +19,6 @@ where
     let mut env = toml_to_env(&name, read(file).unwrap())?;
 
     symlink::end_build(name, &mut env)?;
-
-    todo!();
 
     Ok(env)
 }

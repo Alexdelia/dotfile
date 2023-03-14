@@ -1,6 +1,6 @@
 use super::error::ParseTomlError;
 use crate::ansi::{BE, W};
-use crate::symlink::{Env, EnvType, Exist, FileType, Symlink};
+use crate::env::{Env, EnvType, Exist, FileType, Symlink};
 use ansi::abbrev::{B, D};
 use miette::{Diagnostic, IntoDiagnostic, Result};
 use std::fs;
@@ -121,7 +121,7 @@ fn exist(path: &Path) -> Result<()> {
     }
 }
 
-fn to_absolute(path: &PathBuf) -> Result<PathBuf> {
+fn to_absolute(path: &Path) -> Result<PathBuf> {
     let mut path = path.to_string_lossy().to_string();
 
     if path.starts_with('~') {

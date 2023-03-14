@@ -1,5 +1,5 @@
 use crate::ansi::{BW, C, EHE, EHS, H, M, V};
-use crate::symlink::DEFAULT_SYMLINK_FILE;
+use crate::DEFAULT_SYMLINK_FILE;
 use ansi::abbrev::{B, BLU, D, F, YEL};
 use const_format::formatcp;
 use miette::{Diagnostic, NamedSource, SourceSpan};
