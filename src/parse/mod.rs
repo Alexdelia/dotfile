@@ -11,14 +11,14 @@ use miette::Result;
 use std::fs;
 use std::path::Path;
 
-pub fn parse<P>(file: P) -> Result<Env>
+pub fn parse<P>(file: P, no_warning: bool) -> Result<Env>
 where
     P: AsRef<Path> + std::fmt::Display,
 {
     let name = file.to_string();
     let mut env = toml_to_env(&name, read(file).unwrap())?;
 
-    symlink::end_build(name, &mut env)?;
+    symlink::end_build(name, &mut env, no_warning)?;
 
     Ok(env)
 }

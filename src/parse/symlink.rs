@@ -7,12 +7,12 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use thiserror::Error;
 
-pub fn end_build(file: String, env: &mut Env) -> Result<()> {
+pub fn end_build(file: String, env: &mut Env, no_warning: bool) -> Result<()> {
     for e in env {
         match e {
             EnvType::Grouped(grouped) => {
                 for symlink in &mut grouped.symlink {
-                    if let Err(e) = process(symlink) {
+                    if let Err(e) = process(symlink, no_warning) {
                         return Err(ParseTomlError::new(
                             file,
                             Some(&grouped.title),
@@ -27,7 +27,7 @@ pub fn end_build(file: String, env: &mut Env) -> Result<()> {
                 }
             }
             EnvType::Alone(symlink) => {
-                if let Err(e) = process(symlink) {
+                if let Err(e) = process(symlink, no_warning) {
                     return Err(ParseTomlError::new(
                         file,
                         None,
@@ -46,8 +46,8 @@ pub fn end_build(file: String, env: &mut Env) -> Result<()> {
     Ok(())
 }
 
-fn process(symlink: &mut Symlink) -> Result<()> {
-    path_pattern(symlink)?;
+fn process(symlink: &mut Symlink, no_warning: bool) -> Result<()> {
+    path_pattern(symlink, no_warning)?;
     symlink.path = to_absolute(&symlink.path)?;
     symlink.target = to_absolute(&symlink.target)?;
 
@@ -57,14 +57,8 @@ fn process(symlink: &mut Symlink) -> Result<()> {
     Ok(())
 }
 
-fn path_pattern(symlink: &mut Symlink) -> Result<()> {
-    if symlink.path.ends_with("*") || symlink.target.ends_with("*") {
-        eprintln!(
-            "{W}wildcard ({D}{B}*{D}{W}) is not supported yet{D}\t({} = {})",
-            symlink.path.to_string_lossy(),
-            symlink.target.to_string_lossy()
-        );
-    }
+fn path_pattern(symlink: &mut Symlink, no_warning: bool) -> Result<()> {
+    wildcard(symlink, no_warning);
 
     let s = symlink.target.to_string_lossy();
     if !s.starts_with('/') && !s.starts_with('~') {
@@ -83,6 +77,26 @@ fn path_pattern(symlink: &mut Symlink) -> Result<()> {
     }
 
     Ok(())
+}
+
+fn wildcard(symlink: &mut Symlink, no_warning: bool) {
+    let p = symlink.path.ends_with("*");
+    let t = symlink.target.ends_with("*");
+
+    if (p || t) && !no_warning {
+        eprintln!(
+            "{W}wildcard ({D}{B}*{D}{W}) is not supported yet{D}\t({} = {})",
+            symlink.path.to_string_lossy(),
+            symlink.target.to_string_lossy()
+        );
+    }
+
+    if p {
+        symlink.path.pop();
+    }
+    if t {
+        symlink.target.pop();
+    }
 }
 
 #[derive(Error, Diagnostic, Debug)]

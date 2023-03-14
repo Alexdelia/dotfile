@@ -15,14 +15,20 @@ struct Arg {
     /// file that define the symlinks
     #[clap(default_value = DEFAULT_SYMLINK_FILE)]
     file: String,
+
+    /// answer yes to all questions (automatic symlink creation and update)
+    /// if yes, will only update the update the symlink with update frequency of 'always' and of the current computer name
+    /// will also supress all warnings
+    #[clap(short, default_value = "false")]
+    yes: bool,
 }
 
 fn main() -> Result<()> {
     println!("Hello, world!");
 
-    let Arg { file } = Arg::parse();
+    let Arg { file, yes } = Arg::parse();
 
-    process::process(parse::parse(file)?).into_diagnostic()?;
+    process::process(parse::parse(file, yes)?, yes).into_diagnostic()?;
 
     Ok(())
 }
