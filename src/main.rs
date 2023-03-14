@@ -1,7 +1,7 @@
 mod ansi;
 mod env;
 mod parse;
-mod symlink;
+mod process;
 
 use miette::Result;
 
@@ -22,8 +22,7 @@ fn main() -> Result<()> {
 
     let Arg { file } = Arg::parse();
 
-    let p = parse::parse(file)?;
-    dbg!(&p);
+    process::process(parse::parse(file)?);
 
     Ok(())
 }
