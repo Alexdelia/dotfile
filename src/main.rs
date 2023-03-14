@@ -3,7 +3,7 @@ mod env;
 mod parse;
 mod process;
 
-use miette::Result;
+use miette::{IntoDiagnostic, Result};
 
 use clap::Parser;
 
@@ -22,7 +22,7 @@ fn main() -> Result<()> {
 
     let Arg { file } = Arg::parse();
 
-    process::process(parse::parse(file)?);
+    process::process(parse::parse(file)?).into_diagnostic()?;
 
     Ok(())
 }

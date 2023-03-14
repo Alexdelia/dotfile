@@ -1,3 +1,4 @@
+use crate::ansi::VALID;
 use ansi::abbrev::{B, C, D};
 use std::path::PathBuf;
 use std::str::FromStr;
@@ -58,21 +59,27 @@ impl std::fmt::Display for Symlink {
 
 impl Symlink {
     pub fn create(&self) -> std::io::Result<()> {
-        std::os::unix::fs::symlink(&self.target, &self.path)
+        std::os::unix::fs::symlink(&self.target, &self.path)?;
+        self.print_action("created", Some(VALID));
+        Ok(())
     }
 
-    pub fn print_action(&self, action: &str) {
+    pub fn print_action(&self, action: &str, color: Option<&str>) {
         let termsize::Size { cols, .. } =
             termsize::get().unwrap_or(termsize::Size { cols: 0, rows: 0 });
 
-        let f = format!("{self}");
-        let w: u16 = if f.len() + action.len() > cols as usize {
-            0
-        } else {
-            cols - f.len() as u16 - action.len() as u16
-        };
+        let color = color.unwrap_or("");
 
-        println!("{f}{ 
+        let f = format!("{self}");
+
+        if f.len() + action.len() >= cols as usize {
+            println!("{f}\n{color}{action}{D}");
+        } else {
+            println!(
+                "{f} {color}{action:>w$}{D}",
+                w = cols as usize - 1 - f.len()
+            );
+        };
     }
 }
 
