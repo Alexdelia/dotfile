@@ -1,6 +1,6 @@
 use super::error::ParseTomlError;
-use crate::ansi::{BE, BW, W};
-use crate::symlink::{Env, EnvType, Exist, Symlink, Target};
+use crate::ansi::{BE, W};
+use crate::symlink::{Env, EnvType, Exist, FileType, Symlink};
 use ansi::abbrev::{B, D};
 use miette::{Diagnostic, IntoDiagnostic, Result};
 use std::fs;
@@ -49,28 +49,25 @@ pub fn end_build(file: String, env: &mut Env) -> Result<()> {
 fn process(symlink: &mut Symlink) -> Result<()> {
     path_pattern(symlink)?;
     symlink.path = to_absolute(&symlink.path)?;
-    symlink.target.path = to_absolute(&symlink.target.path)?;
+    symlink.target = to_absolute(&symlink.target)?;
 
-    exist(&symlink.path)?;
-    symlink.target.exist = find_exist_type(&symlink.target.path)?;
+    exist(&symlink.target)?;
+    symlink.exist = find_exist_type(&symlink.path)?;
 
     Ok(())
 }
 
 fn path_pattern(symlink: &mut Symlink) -> Result<()> {
-    if symlink.path.ends_with("*") || symlink.target.path.ends_with("*") {
+    if symlink.path.ends_with("*") || symlink.target.ends_with("*") {
         eprintln!(
             "{W}wildcard ({D}{B}*{D}{W}) is not supported yet{D}\t({} = {})",
             symlink.path.to_string_lossy(),
-            symlink.target.path.to_string_lossy()
+            symlink.target.to_string_lossy()
         );
     }
 
-    dbg!("yo");
-    let s = symlink.target.path.to_string_lossy();
-    dbg!(&s);
+    let s = symlink.target.to_string_lossy();
     if !s.starts_with('/') && !s.starts_with('~') {
-        dbg!("HEY");
         let root = PathBuf::from(format!(
             "{}/data/",
             std::env::current_dir().into_diagnostic()?.to_string_lossy()
@@ -82,43 +79,46 @@ fn path_pattern(symlink: &mut Symlink) -> Result<()> {
             root.to_string_lossy()
         );
 
-        symlink.target.path = root.join(&symlink.target.path);
-        dbg!(&symlink.target.path);
+        symlink.target = root.join(&symlink.target);
     }
 
     Ok(())
 }
 
 #[derive(Error, Diagnostic, Debug)]
-#[error("could not {BW}read {BE}{path}{D}")]
+#[error("error with {BE}{path}{D}")]
 #[diagnostic(code(parse::symlink))]
 struct ParseSymlinkError {
     #[source]
     source: std::io::Error,
+
     path: String,
+
+    #[help]
+    help: Option<String>,
 }
 
 fn exist(path: &Path) -> Result<()> {
-    let e = match path.try_exists() {
+    match path.try_exists() {
         Ok(e) => {
             if !e {
-                ParseSymlinkError {
+                Err(ParseSymlinkError {
                     source: std::io::Error::new(std::io::ErrorKind::NotFound, "file not found"),
                     path: path.to_string_lossy().to_string(),
+                    help: None,
                 }
+                .into())
             } else {
-                return Ok(());
+                Ok(())
             }
         }
-        Err(e) => ParseSymlinkError {
+        Err(e) => Err(ParseSymlinkError {
             source: e,
             path: path.to_string_lossy().to_string(),
-        },
-    };
-
-    // Err(ParseTomlError::new(
-
-    Ok(())
+            help: None,
+        }
+        .into()),
+    }
 }
 
 fn to_absolute(path: &PathBuf) -> Result<PathBuf> {
@@ -140,26 +140,36 @@ fn to_absolute(path: &PathBuf) -> Result<PathBuf> {
                 "did not manage to convert to absolute path",
             ),
             path: path.to_string_lossy().to_string(),
+            help: None,
         }
         .into())
     }
 }
 
 fn find_exist_type(path: &Path) -> Result<Exist> {
-    todo!();
+    let Ok(md) = fs::symlink_metadata(path) else {
+		return Ok(Exist::No);
+	};
 
-    // dbg!(std::env::current_dir());
-
-    // let l = vec!["noexist", "exist", "sml_exist", "sml_noexist"];
-    // for p in l {
-    //     dbg!(p);
-    //     let p = to_absolute(format!("~/goinfre/{}", p).as_str());
-    //     dbg!(&p);
-    //     if p.is_ok() {
-    //         dbg!(
-    //             fs::symlink_metadata(p.as_ref().unwrap()),
-    //             p.unwrap().exists()
-    //         );
-    //     }
-    // }
+    if md.is_symlink() {
+        if path.exists() {
+            Ok(Exist::Yes(FileType::Symlink(true)))
+        } else {
+            Ok(Exist::Yes(FileType::Symlink(false)))
+        }
+    } else if md.is_file() {
+        Ok(Exist::Yes(FileType::File))
+    } else if md.is_dir() {
+        Ok(Exist::Yes(FileType::Dir))
+    } else {
+        Err(ParseSymlinkError {
+            source: std::io::Error::new(
+                std::io::ErrorKind::Other,
+                "did not manage to determine the type of the file",
+            ),
+            path: path.to_string_lossy().to_string(),
+            help: Some(format!("metadata:\n{:?}", md)),
+        }
+        .into())
+    }
 }

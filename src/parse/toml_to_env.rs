@@ -1,7 +1,7 @@
 use super::error::{ParseTOMLToEnvError, ParseTomlError};
 
 use crate::ansi::{BE, BW, E, M, V, W};
-use crate::symlink::{Env, EnvType, Exist, Grouped, Symlink, Target, Update};
+use crate::symlink::{Env, EnvType, Exist, Grouped, Symlink, Update};
 use ansi::abbrev::D;
 use miette::Result;
 use std::path::PathBuf;
@@ -24,10 +24,8 @@ pub fn toml_to_env(file: &str, toml: toml::Value) -> Result<Env> {
             )?)),
             toml::Value::String(string) => env.push(EnvType::Alone(Symlink {
                 path: PathBuf::from(k),
-                target: Target {
-                    path: PathBuf::from(string),
-                    exist: Exist::Not,
-                },
+                target: PathBuf::from(string),
+                exist: Exist::No,
             })),
             _ => {
                 return Err(ParseTomlError::new(
@@ -66,10 +64,8 @@ fn table_to_grouped(file: &str, title: String, table: toml::Table) -> Result<Gro
         match v {
             toml::Value::String(string) => symlink.push(Symlink {
                 path: PathBuf::from(k),
-                target: Target {
-                    path: PathBuf::from(string),
-                    exist: Exist::Not,
-                },
+                target: PathBuf::from(string),
+                exist: Exist::No,
             }),
             _ => {
                 return Err(ParseTomlError::new(
