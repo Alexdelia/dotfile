@@ -1,7 +1,9 @@
-use crate::ansi::{M, VALID};
-use crate::env::{Env, EnvType, Exist, FileType, Symlink, Update};
+use crate::ansi::{BW, M, VALID};
+use crate::env::{Env, EnvType, Update};
+use crate::unix::{Exist, FileType, Symlink};
 use ansi::abbrev::{B, D, G, I, N_C, R};
-use std::io::{Read, Write};
+use std::io::Write;
+use std::path::PathBuf;
 
 pub fn process(env: Env, interactive: bool) -> Result<(), std::io::Error> {
     for e in env {
@@ -47,8 +49,10 @@ fn ask(action: &str) -> bool {
         let c = g.getch().expect("getch failed") as char;
 
         if c == 'y' || c == 'Y' || c == '\n' {
+            println!();
             return true;
         } else if c == 'n' || c == 'N' {
+            println!();
             return false;
         }
 
@@ -60,7 +64,7 @@ fn ask(action: &str) -> bool {
 fn handle(symlink: &Symlink, interactive: bool) -> Result<(), std::io::Error> {
     match &symlink.exist {
         Exist::Yes(p) => match p {
-            FileType::Symlink(b) => handle_symlink(symlink, *b, interactive),
+            FileType::Symlink(target) => handle_symlink(symlink, target, interactive),
             FileType::File => handle_file(symlink),
             FileType::Dir => handle_dir(symlink),
         },
@@ -70,17 +74,38 @@ fn handle(symlink: &Symlink, interactive: bool) -> Result<(), std::io::Error> {
 
 fn handle_symlink(
     symlink: &Symlink,
-    same_target: bool,
+    target: &Result<(), PathBuf>,
     interactive: bool,
 ) -> Result<(), std::io::Error> {
-    todo!();
-    if same_target {
-        symlink.print_action("nothing to do", Some(VALID));
-        return Ok(());
-    }
+    match target {
+        Ok(_) => {
+            symlink.print_action("nothing to do", Some(VALID));
+            Ok(())
+        }
+        Err(target) => {
+            if interactive
+                && !ask(&format!(
+                    "found already existing symlink:
+\t{M}{0:?}{D} -> {BW}{target:?}{D}
+should it be replaced with:
+\t{M}{0:?}{D} -> {VALID}{1:?}{D}
+?",
+                    symlink.path, symlink.target,
+                ))
+            {
+                return Ok(());
+            }
 
-    // symlink target is not the same
-    todo!();
+            Symlink {
+                path: symlink.path.clone(),
+                exist: Exist::No,
+                target: target.clone(),
+            }
+            .remove()?;
+
+            symlink.create()
+        }
+    }
 }
 
 fn handle_file(symlink: &Symlink) -> Result<(), std::io::Error> {

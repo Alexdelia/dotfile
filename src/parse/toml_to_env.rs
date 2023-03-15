@@ -1,7 +1,8 @@
 use super::error::{ParseTOMLToEnvError, ParseTomlError};
 
 use crate::ansi::{BE, BW, E, M, V, W};
-use crate::env::{Env, EnvType, Exist, Grouped, Symlink, Update};
+use crate::env::{Env, EnvType, Grouped, Update};
+use crate::unix::{Exist, Symlink};
 use ansi::abbrev::D;
 use miette::Result;
 use std::path::PathBuf;

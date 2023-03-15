@@ -1,6 +1,7 @@
 use super::error::ParseTomlError;
 use crate::ansi::{BE, W};
-use crate::env::{Env, EnvType, Exist, FileType, Symlink};
+use crate::env::{Env, EnvType};
+use crate::unix::{Exist, FileType, Symlink};
 use ansi::abbrev::{B, D};
 use miette::{Diagnostic, IntoDiagnostic, Result};
 use std::fs;
@@ -166,10 +167,11 @@ fn find_exist_type(path: &Path, expected_target: &Path) -> Result<Exist> {
 	};
 
     if md.is_symlink() {
-        if std::fs::read_link(path).into_diagnostic()? == expected_target {
-            Ok(Exist::Yes(FileType::Symlink(true)))
+        let s = std::fs::read_link(path).into_diagnostic()?;
+        if s == expected_target {
+            Ok(Exist::Yes(FileType::Symlink(Ok(()))))
         } else {
-            Ok(Exist::Yes(FileType::Symlink(false)))
+            Ok(Exist::Yes(FileType::Symlink(Err(s))))
         }
     } else if md.is_file() {
         Ok(Exist::Yes(FileType::File))
