@@ -1,21 +1,18 @@
-use crate::ansi::VALID;
+use crate::ansi::{ORANGE, VALID};
 use ansi::abbrev::{B, BLU, CYA, D};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
-#[derive(Debug)] // TODO: remove
 pub struct Symlink {
     pub path: PathBuf,
     pub exist: Exist,
     pub target: PathBuf,
 }
 
-#[derive(Debug)] // TODO: remove
 pub enum Exist {
     Yes(FileType),
     No,
 }
 
-#[derive(Debug)] // TODO: remove
 pub enum FileType {
     File,
     Dir,
@@ -42,13 +39,33 @@ impl Symlink {
 
     pub fn remove(&self) -> std::io::Result<()> {
         std::fs::remove_file(&self.path)?;
-        self.print_action("removed", Some(BLU));
+        self.print_action("removed", Some(ORANGE));
         Ok(())
     }
 
     pub fn print_action(&self, action: &str, color: Option<&str>) {
         print_action(&format!("{self}"), action, color);
     }
+}
+
+pub fn remove_file(path: &Path) -> std::io::Result<()> {
+    std::fs::remove_file(path)?;
+    print_action(
+        &format!("{B}{path}{D}", path = path.display()),
+        "removed",
+        Some(ORANGE),
+    );
+    Ok(())
+}
+
+pub fn remove_dir(path: &Path) -> std::io::Result<()> {
+    std::fs::remove_dir(path)?;
+    print_action(
+        &format!("{B}{BLU}{path}{D}", path = path.display()),
+        "removed",
+        Some(ORANGE),
+    );
+    Ok(())
 }
 
 fn print_action(start: &str, end: &str, color: Option<&str>) {

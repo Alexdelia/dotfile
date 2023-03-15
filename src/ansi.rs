@@ -20,6 +20,9 @@ pub const H: &str = HELP;
 pub const COMMENT: &str = "\x1b[32;2;3m";
 pub const C: &str = COMMENT;
 
+pub const ORANGE: &str = "\x1b[38;2;239;130;13m";
+// pub const O: &str = ORANGE;
+
 // pub const LINK: &str = "\x1b[36;1;4m";
 // pub const L: &str = LINK;
 

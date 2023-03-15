@@ -3,20 +3,17 @@ use std::str::FromStr;
 
 pub type Env = Vec<EnvType>;
 
-#[derive(Debug)] // TODO: remove
 pub enum EnvType {
     Grouped(Grouped),
     Alone(Symlink),
 }
 
-#[derive(Debug)] // TODO: remove
 pub struct Grouped {
     pub title: String,
     pub update: Update,
     pub symlink: Vec<Symlink>,
 }
 
-#[derive(Debug)] // TODO: remove
 pub enum Update {
     Always,
     Never,

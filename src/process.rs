@@ -1,6 +1,6 @@
 use crate::ansi::{BW, M, VALID};
 use crate::env::{Env, EnvType, Update};
-use crate::unix::{Exist, FileType, Symlink};
+use crate::unix::{remove_dir, remove_file, Exist, FileType, Symlink};
 use ansi::abbrev::{B, D, G, I, N_C, R};
 use std::io::Write;
 use std::path::PathBuf;
@@ -65,8 +65,8 @@ fn handle(symlink: &Symlink, interactive: bool) -> Result<(), std::io::Error> {
     match &symlink.exist {
         Exist::Yes(p) => match p {
             FileType::Symlink(target) => handle_symlink(symlink, target, interactive),
-            FileType::File => handle_file(symlink),
-            FileType::Dir => handle_dir(symlink),
+            FileType::File => handle_file(symlink, interactive),
+            FileType::Dir => handle_dir(symlink, interactive),
         },
         Exist::No => symlink.create(),
     }
@@ -86,11 +86,13 @@ fn handle_symlink(
             if interactive
                 && !ask(&format!(
                     "found already existing symlink:
-\t{M}{0:?}{D} -> {BW}{target:?}{D}
+\t{M}{path}{D} -> {BW}{wrong_target}{D}
 should it be replaced with:
-\t{M}{0:?}{D} -> {VALID}{1:?}{D}
+\t{M}{path}{D} -> {VALID}{target}{D}
 ?",
-                    symlink.path, symlink.target,
+                    path = symlink.path.display(),
+                    target = symlink.target.display(),
+                    wrong_target = target.display(),
                 ))
             {
                 return Ok(());
@@ -108,10 +110,40 @@ should it be replaced with:
     }
 }
 
-fn handle_file(symlink: &Symlink) -> Result<(), std::io::Error> {
-    todo!();
+fn handle_file(symlink: &Symlink, interactive: bool) -> Result<(), std::io::Error> {
+    if interactive
+        && !ask(&format!(
+            "found already existing file:
+\t{M}{path}{D}
+should it be replaced with the symlink:
+\t{M}{path}{D} -> {VALID}{target}{D}
+?",
+            path = symlink.path.display(),
+            target = symlink.target.display(),
+        ))
+    {
+        return Ok(());
+    }
+
+    remove_file(&symlink.path)?;
+    symlink.create()
 }
 
-fn handle_dir(symlink: &Symlink) -> Result<(), std::io::Error> {
-    todo!();
+fn handle_dir(symlink: &Symlink, interactive: bool) -> Result<(), std::io::Error> {
+    if interactive
+        && !ask(&format!(
+            "found already existing directory:
+\t{M}{path}{D}
+should it be replaced with the symlink:
+\t{M}{path}{D} -> {VALID}{target}{D}
+?",
+            path = symlink.path.display(),
+            target = symlink.target.display(),
+        ))
+    {
+        return Ok(());
+    }
+
+    remove_dir(&symlink.path)?;
+    symlink.create()
 }
