@@ -17,7 +17,12 @@ pub fn process(env: Env, interactive: bool) -> Result<(), std::io::Error> {
                                 grouped.title
                             ))
                     }
-                    Update::Specific(_) => todo!(),
+                    Update::Specific(name) => name.contains(
+                        &hostname::get()
+                            .expect("get hostname failed")
+                            .into_string()
+                            .expect("hostname to str failed"),
+                    ),
                 } {
                     for symlink in grouped.symlink {
                         handle(&symlink, interactive)?;
