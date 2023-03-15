@@ -1,7 +1,7 @@
 use crate::ansi::{M, VALID};
 use crate::env::{Env, EnvType, Exist, FileType, Symlink, Update};
-use ansi::abbrev::D;
-use std::io::Read;
+use ansi::abbrev::{B, D, G, I, N_C, R};
+use std::io::{Read, Write};
 
 pub fn process(env: Env, interactive: bool) -> Result<(), std::io::Error> {
     for e in env {
@@ -13,7 +13,7 @@ pub fn process(env: Env, interactive: bool) -> Result<(), std::io::Error> {
                     Update::Optional => {
                         interactive
                             && ask(&format!(
-                                "should {M}{}{D} be updated?\t(update = 'optional')",
+                                "should {M}{}{D} be updated?\t{I}(update = 'optional'){D}",
                                 grouped.title
                             ))
                     }
@@ -34,21 +34,21 @@ pub fn process(env: Env, interactive: bool) -> Result<(), std::io::Error> {
 }
 
 fn ask(action: &str) -> bool {
-    print!("{} [y/n] ", action);
+    print!("{} {B}[{G}y{N_C}/{R}n{N_C}]{D} ", action);
+    std::io::stdout().flush().expect("flush failed");
+    let g = getch::Getch::new();
 
-    let mut buf = [0u8; 1];
     loop {
-        std::io::stdin().read_exact(&mut buf).unwrap();
+        let c = g.getch().expect("getch failed") as char;
 
-        if buf[0] == b'y' || buf[0] == b'Y' {
-            println!();
+        if c == 'y' || c == 'Y' || c == '\n' {
             return true;
-        } else if buf[0] == b'n' || buf[0] == b'N' {
-            println!();
+        } else if c == 'n' || c == 'N' {
             return false;
         }
 
-        print!("\nwaiting for 'y' (yes) or 'n' (no), not '{}' ", buf[0]);
+        print!("\nwaiting for '{G}y{D}' ({G}yes{D}) or '{R}n{D}' ({R}no{D}), not '{M}{c}{D}' ",);
+        std::io::stdout().flush().expect("flush failed");
     }
 }
 
