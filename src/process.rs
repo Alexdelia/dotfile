@@ -1,9 +1,9 @@
 use crate::ansi::{BW, M, VALID};
 use crate::env::{Env, EnvType, Update};
 use crate::unix::{remove_dir, remove_file, Exist, FileType, Symlink};
-use ansi::abbrev::{B, D, G, I, N_C, R};
-use std::io::Write;
+use ansi::abbrev::{D, I};
 use std::path::PathBuf;
+use ux::ask_yn;
 
 pub fn process(env: Env, interactive: bool) -> Result<(), std::io::Error> {
     for e in env {
@@ -14,10 +14,14 @@ pub fn process(env: Env, interactive: bool) -> Result<(), std::io::Error> {
                     Update::Never => false,
                     Update::Optional => {
                         interactive
-                            && ask(&format!(
-                                "should {M}{}{D} be updated?\t{I}(update = 'optional'){D}",
-                                grouped.title
-                            ))
+                            && ask_yn(
+                                &format!(
+                                    "should {M}{}{D} be updated?\t{I}(update = 'optional'){D}",
+                                    grouped.title
+                                ),
+                                true,
+                            )
+                            .unwrap()
                     }
                     Update::Specific(name) => name.contains(
                         &hostname::get()
@@ -38,27 +42,6 @@ pub fn process(env: Env, interactive: bool) -> Result<(), std::io::Error> {
     }
 
     Ok(())
-}
-
-fn ask(action: &str) -> bool {
-    print!("{} {B}[{G}y{N_C}/{R}n{N_C}]{D} ", action);
-    std::io::stdout().flush().expect("flush failed");
-    let g = getch::Getch::new();
-
-    loop {
-        let c = g.getch().expect("getch failed") as char;
-
-        if c == 'y' || c == 'Y' || c == '\n' {
-            println!();
-            return true;
-        } else if c == 'n' || c == 'N' {
-            println!();
-            return false;
-        }
-
-        print!("\nwaiting for '{G}y{D}' ({G}yes{D}) or '{R}n{D}' ({R}no{D}), not '{M}{c}{D}' ",);
-        std::io::stdout().flush().expect("flush failed");
-    }
 }
 
 fn handle(symlink: &Symlink, interactive: bool) -> Result<(), std::io::Error> {
@@ -84,16 +67,20 @@ fn handle_symlink(
         }
         Err(target) => {
             if interactive
-                && !ask(&format!(
-                    "found already existing symlink:
+                && !ask_yn(
+                    &format!(
+                        "found already existing symlink:
 \t{M}{path}{D} -> {BW}{wrong_target}{D}
 should it be replaced with:
 \t{M}{path}{D} -> {VALID}{target}{D}
 ?",
-                    path = symlink.path.display(),
-                    target = symlink.target.display(),
-                    wrong_target = target.display(),
-                ))
+                        path = symlink.path.display(),
+                        target = symlink.target.display(),
+                        wrong_target = target.display(),
+                    ),
+                    true,
+                )
+                .unwrap()
             {
                 return Ok(());
             }
@@ -112,15 +99,19 @@ should it be replaced with:
 
 fn handle_file(symlink: &Symlink, interactive: bool) -> Result<(), std::io::Error> {
     if interactive
-        && !ask(&format!(
-            "found already existing file:
+        && !ask_yn(
+            &format!(
+                "found already existing file:
 \t{M}{path}{D}
 should it be replaced with the symlink:
 \t{M}{path}{D} -> {VALID}{target}{D}
 ?",
-            path = symlink.path.display(),
-            target = symlink.target.display(),
-        ))
+                path = symlink.path.display(),
+                target = symlink.target.display(),
+            ),
+            true,
+        )
+        .unwrap()
     {
         return Ok(());
     }
@@ -131,15 +122,19 @@ should it be replaced with the symlink:
 
 fn handle_dir(symlink: &Symlink, interactive: bool) -> Result<(), std::io::Error> {
     if interactive
-        && !ask(&format!(
-            "found already existing directory:
+        && !ask_yn(
+            &format!(
+                "found already existing directory:
 \t{M}{path}{D}
 should it be replaced with the symlink:
 \t{M}{path}{D} -> {VALID}{target}{D}
 ?",
-            path = symlink.path.display(),
-            target = symlink.target.display(),
-        ))
+                path = symlink.path.display(),
+                target = symlink.target.display(),
+            ),
+            true,
+        )
+        .unwrap()
     {
         return Ok(());
     }

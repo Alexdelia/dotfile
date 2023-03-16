@@ -1,6 +1,8 @@
 use crate::ansi::{ORANGE, VALID};
 use ansi::abbrev::{B, BLU, CYA, D};
 use std::path::{Path, PathBuf};
+use thiserror::__private::DisplayAsDisplay;
+use ux::print::start_end;
 
 pub struct Symlink {
     pub path: PathBuf,
@@ -44,7 +46,7 @@ impl Symlink {
     }
 
     pub fn print_action(&self, action: &str, color: Option<&str>) {
-        print_action(&format!("{self}"), action, color);
+        start_end(, action, color);
     }
 }
 
@@ -66,20 +68,4 @@ pub fn remove_dir(path: &Path) -> std::io::Result<()> {
         Some(ORANGE),
     );
     Ok(())
-}
-
-fn print_action(start: &str, end: &str, color: Option<&str>) {
-    let termsize::Size { cols, .. } =
-        termsize::get().unwrap_or(termsize::Size { cols: 0, rows: 0 });
-
-    let color = color.unwrap_or("");
-
-    if start.len() + end.len() >= cols as usize {
-        println!("{start}\n{color}{end}{D}");
-    } else {
-        println!(
-            "{start} {color}{end:>w$}{D}",
-            w = cols as usize - 1 - start.len()
-        );
-    };
 }
