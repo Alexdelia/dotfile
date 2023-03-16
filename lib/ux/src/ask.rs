@@ -60,6 +60,17 @@ impl Display for AskKey {
     }
 }
 
+pub fn ask_yn(question: &str, enter_is: bool) -> std::io::Result<bool> {
+    let key = [
+        AskKey::new('y', Some("yes"), true, Some("\x1b[32;1m")),
+        AskKey::new('n', Some("no"), true, Some("\x1b[31;1m")),
+    ];
+
+    let answer = ask(question, &key, if enter_is { Some('y') } else { Some('n') })?;
+
+    Ok(answer == 'y' || answer == 'Y')
+}
+
 pub fn ask(question: &str, key: &[AskKey], enter_redirect: Option<char>) -> std::io::Result<char> {
     let key_set = ask_question(question, key, enter_redirect)?;
 
@@ -72,6 +83,11 @@ pub fn ask(question: &str, key: &[AskKey], enter_redirect: Option<char>) -> std:
         }
 
         if key_set.contains(&c) {
+            if let Some(redirect) = enter_redirect {
+                if c == '\n' {
+                    return Ok(redirect);
+                }
+            }
             return Ok(c);
         }
 
