@@ -1,7 +1,9 @@
 mod ansi;
 mod env;
 mod parse;
+use parse::parse;
 mod process;
+use process::process;
 mod unix;
 
 use miette::{IntoDiagnostic, Result};
@@ -27,7 +29,7 @@ struct Arg {
 fn main() -> Result<()> {
     let Arg { file, yes } = Arg::parse();
 
-    process::process(parse::parse(file, yes)?, !yes).into_diagnostic()?;
+    process(parse(file, yes)?, !yes).into_diagnostic()?;
 
     Ok(())
 }

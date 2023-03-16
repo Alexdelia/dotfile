@@ -14,3 +14,4 @@ thiserror = "1.0.38"
 toml = "0.7.2"
 clap = { version = "4.1.8", features = ["derive"] }
 hostname = "0.3.1"
+diffy = "0.3.0"
