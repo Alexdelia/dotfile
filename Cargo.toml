@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 ansi = {path = "lib/ansi"}
+ux = {path = "lib/ux"}
 const_format = "0.2.30"
 miette = { version = "5.5.0", features = ["fancy"] }
 thiserror = "1.0.38"
