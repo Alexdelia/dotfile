@@ -11,7 +11,7 @@ pub fn handle_file(symlink: &Symlink, interactive: bool) -> std::io::Result<()> 
         path = symlink.path.display()
     );
 
-    if !diff(&symlink, interactive)? {
+    if !diff(symlink, interactive)? {
         return Ok(());
     }
 
