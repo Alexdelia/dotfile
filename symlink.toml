@@ -3,6 +3,7 @@ update = [ 'Decim' ]
 "~/.zshrc" = 'zsh/zshrc'
 "~/.config/zsh/config.d/main.zsh" = 'zsh/main.zsh'
 "~/.config/zsh/config.d/alias.zsh" = 'zsh/alias.zsh'
+"~/.config/zsh/config.d/function.zsh" = 'zsh/function.zsh'
 "~/.config/zsh/config.d/export.zsh" = 'zsh/export.zsh'
 "~/.config/zsh/config.d/conda.zsh" = 'zsh/conda.zsh'
 

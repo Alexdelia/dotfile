@@ -4,9 +4,8 @@ SRC_PATH="$HOME/.config/zsh/config.d/"
 
 src+="main.zsh"
 src+="alias.zsh"
-src+="functions.zsh"
+src+="function.zsh"
 src+="export.zsh"
-src+="autojump.zsh"
 src+="conda.zsh"
 
 for file in $src[@]; do

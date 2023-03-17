@@ -10,6 +10,8 @@ pub fn process(env: Env, interactive: bool) -> std::io::Result<()> {
     for e in env {
         match e {
             EnvType::Grouped(grouped) => {
+                println!("[{M}{}{D}]", grouped.title);
+
                 if match grouped.update {
                     Update::Always => true,
                     Update::Never => false,
@@ -40,6 +42,7 @@ pub fn process(env: Env, interactive: bool) -> std::io::Result<()> {
                 handle(&symlink, interactive)?;
             }
         }
+        println!()
     }
 
     Ok(())

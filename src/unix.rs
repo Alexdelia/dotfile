@@ -33,6 +33,9 @@ impl std::fmt::Display for Symlink {
 
 impl Symlink {
     pub fn create(&self) -> std::io::Result<()> {
+        if let Some(parent) = self.path.parent() {
+            std::fs::create_dir_all(parent)?;
+        }
         std::os::unix::fs::symlink(&self.target, &self.path)?;
         self.print_action("created", Some(VALID));
         Ok(())
