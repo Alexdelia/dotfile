@@ -8,7 +8,7 @@ pub fn start_end(start: impl Display, end: impl Display) {
     let e = format!("{end}");
 
     if s.len() + e.len() >= cols as usize {
-        print!("\r{s}\n{e:>w$}", w = cols as usize);
+        println!("\r{s}\n{e:>w$}", w = cols as usize);
     } else {
         println!("\r{e:>w$}\r{s}", w = cols as usize);
     }

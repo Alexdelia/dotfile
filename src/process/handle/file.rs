@@ -48,15 +48,15 @@ fn diff(symlink: &Symlink, interactive: bool) -> std::io::Result<bool> {
     } else {
         println!(
             "diff:\n--- {B_RED}{system}{D}\n+++ {B_BLUE}{data}{D}\n{patch}\n",
-            system = symlink.target.display(),
-            data = symlink.path.display()
+            data = symlink.target.display(),
+            system = symlink.path.display()
         );
 
         ask(
             &format!(
                 "what should be done on {M}{path}{D}:
 \t{B_BLUE}K{D}eep file in data
-\t{B_RED}R{D}eplace file in data with the already existing file in the system",
+\t{B_RED}R{D}eplace file in data with the already existing file in the system\n",
                 path = symlink.path.display(),
             ),
             &[
