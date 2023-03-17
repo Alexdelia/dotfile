@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::HashMap;
 use std::fmt::Display;
 use std::io::Write;
 
@@ -72,7 +72,7 @@ pub fn ask_yn(question: &str, enter_is: bool) -> std::io::Result<bool> {
 }
 
 pub fn ask(question: &str, key: &[AskKey], enter_redirect: Option<char>) -> std::io::Result<char> {
-    let key_set = ask_question(question, key, enter_redirect)?;
+    let key_map = ask_question(question, key, enter_redirect)?;
 
     let g = getch::Getch::new();
 
@@ -82,13 +82,8 @@ pub fn ask(question: &str, key: &[AskKey], enter_redirect: Option<char>) -> std:
             println!();
         }
 
-        if key_set.contains(&c) {
-            if let Some(redirect) = enter_redirect {
-                if c == '\n' {
-                    return Ok(redirect);
-                }
-            }
-            return Ok(c);
+        if let Some(key) = key_map.get(&c) {
+            return Ok(*key);
         }
 
         ask_keys(c, key)?;
@@ -99,10 +94,10 @@ fn ask_question(
     question: &str,
     key: &[AskKey],
     enter_redirect: Option<char>,
-) -> std::io::Result<HashSet<char>> {
-    let mut key_set: HashSet<char> = HashSet::new();
-    if enter_redirect.is_some() {
-        key_set.insert('\n');
+) -> std::io::Result<HashMap<char, char>> {
+    let mut key_map: HashMap<char, char> = HashMap::new();
+    if let Some(redirect) = enter_redirect {
+        key_map.insert('\n', redirect);
     }
 
     let b = String::from("\x1b[1m");
@@ -115,17 +110,17 @@ fn ask_question(
         s.push_str(format!("{color}{key}\x1b[0m/", color = color.as_ref().unwrap_or(&b)).as_str());
 
         if !*alt {
-            key_set.insert(*key);
+            key_map.insert(*key, *key);
         } else {
-            key_set.insert(key.to_ascii_lowercase());
-            key_set.insert(key.to_ascii_uppercase());
+            key_map.insert(key.to_ascii_lowercase(), *key);
+            key_map.insert(key.to_ascii_uppercase(), *key);
         }
     }
     s.pop();
     print!("{s}] ");
     std::io::stdout().flush()?;
 
-    Ok(key_set)
+    Ok(key_map)
 }
 
 fn ask_keys(ch: char, key: &[AskKey]) -> std::io::Result<()> {
