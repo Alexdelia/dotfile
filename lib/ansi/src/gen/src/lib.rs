@@ -61,7 +61,7 @@ pub fn c8bit(input: TokenStream) -> TokenStream {
         .unwrap()
         .base10_parse::<u8>()
         .unwrap();
-    quote!({ ansi::__format!("\x1b[38;5;{}m", #n) }).into()
+    quote!({ ansi::__formatcp!("\x1b[38;5;{}m", #n) }).into()
 }
 
 #[proc_macro]
@@ -71,7 +71,7 @@ pub fn c8bit_bg(input: TokenStream) -> TokenStream {
         .unwrap()
         .base10_parse::<u8>()
         .unwrap();
-    quote!({ ansi::__format!("\x1b[48;5;{}m", #n) }).into()
+    quote!({ ansi::__formatcp!("\x1b[48;5;{}m", #n) }).into()
 }
 
 struct HexInput {

@@ -1,6 +1,13 @@
 pub use ::const_format::formatcp as __formatcp;
 pub use gen::{c8bit, c8bit_bg, hex, hex_bg, rgb, rgb_bg};
 
+use ansi_regex::ansi_regex;
+use std::borrow::Cow;
+
+pub fn remove<'t>(s: &'t str) -> Cow<'t, str> {
+    ansi_regex().replace_all(s, "")
+}
+
 pub const RESET: &str = "\x1b[0m";
 
 pub const CLEAR: &str = "\x1b[H\x1b[2J";
