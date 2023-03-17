@@ -3,7 +3,7 @@ use crate::unix::{remove_dir, Symlink};
 use ansi::abbrev::D;
 use ux::ask_yn;
 
-pub fn handle_dir(symlink: &Symlink, interactive: bool) -> Result<(), std::io::Error> {
+pub fn handle_dir(symlink: &Symlink, interactive: bool) -> std::io::Result<()> {
     if interactive
         && !ask_yn(
             &format!(

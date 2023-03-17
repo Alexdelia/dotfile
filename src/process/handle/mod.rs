@@ -7,7 +7,7 @@ use symlink::handle_symlink;
 
 use crate::unix::{Exist, FileType, Symlink};
 
-pub fn handle(symlink: &Symlink, interactive: bool) -> Result<(), std::io::Error> {
+pub fn handle(symlink: &Symlink, interactive: bool) -> std::io::Result<()> {
     match &symlink.exist {
         Exist::Yes(p) => match p {
             FileType::Symlink(target) => handle_symlink(symlink, target, interactive),

@@ -6,7 +6,7 @@ use crate::env::{Env, EnvType, Update};
 use ansi::abbrev::{D, I};
 use ux::ask_yn;
 
-pub fn process(env: Env, interactive: bool) -> Result<(), std::io::Error> {
+pub fn process(env: Env, interactive: bool) -> std::io::Result<()> {
     for e in env {
         match e {
             EnvType::Grouped(grouped) => {

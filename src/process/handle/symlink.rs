@@ -8,7 +8,7 @@ pub fn handle_symlink(
     symlink: &Symlink,
     target: &Result<(), PathBuf>,
     interactive: bool,
-) -> Result<(), std::io::Error> {
+) -> std::io::Result<()> {
     match target {
         Ok(_) => {
             symlink.print_action("nothing to do", Some(VALID));
