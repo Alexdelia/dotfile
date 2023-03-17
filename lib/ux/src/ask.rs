@@ -68,7 +68,7 @@ pub fn ask_yn(question: &str, enter_is: bool) -> std::io::Result<bool> {
 
     let answer = ask(question, &key, if enter_is { Some('y') } else { Some('n') })?;
 
-    Ok(answer == 'y' || answer == 'Y')
+    Ok(answer == 'y')
 }
 
 pub fn ask(question: &str, key: &[AskKey], enter_redirect: Option<char>) -> std::io::Result<char> {
