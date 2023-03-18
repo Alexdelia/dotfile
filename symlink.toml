@@ -1,11 +1,18 @@
 [zsh]
-update = [ 'Decim' ]
+update = 'always'
 "~/.zshrc" = 'zsh/zshrc'
 "~/.config/zsh/config.d/main.zsh" = 'zsh/main.zsh'
 "~/.config/zsh/config.d/alias.zsh" = 'zsh/alias.zsh'
 "~/.config/zsh/config.d/function.zsh" = 'zsh/function.zsh'
 "~/.config/zsh/config.d/export.zsh" = 'zsh/export.zsh'
-"~/.config/zsh/config.d/conda.zsh" = 'zsh/conda.zsh'
+
+[zsh-Decim]
+update = [ 'Decim' ]
+"~/.config/zsh/config.d/conda.zsh" = 'zsh/Decim/conda.zsh'
+
+[zsh-Nona]
+update = [ 'Nona' ]
+"~/.config/zsh/config.d/conda.zsh" = 'zsh/Nona/conda.zsh'
 
 [vscode]
 update = [ 'Decim' ]

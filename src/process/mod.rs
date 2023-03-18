@@ -10,8 +10,6 @@ pub fn process(env: Env, interactive: bool) -> std::io::Result<()> {
     for e in env {
         match e {
             EnvType::Grouped(grouped) => {
-                println!("[{M}{}{D}]", grouped.title);
-
                 if match grouped.update {
                     Update::Always => true,
                     Update::Never => false,
@@ -33,6 +31,8 @@ pub fn process(env: Env, interactive: bool) -> std::io::Result<()> {
                             .expect("hostname to str failed"),
                     ),
                 } {
+                    println!("[{M}{}{D}]", grouped.title);
+
                     for symlink in grouped.symlink {
                         handle(&symlink, interactive)?;
                     }
