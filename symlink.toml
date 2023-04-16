@@ -31,7 +31,7 @@ update = 'always'
 [neofetch]
 update = 'optional'
 "~/.config/neofetch/config.conf" = 'neofetch/config.conf'
-"~/.config/neofetch/img.conf" = 'neofetch/img.png'
+"~/.config/neofetch/img.png" = 'neofetch/img.png'
 
 [yapf]
 update = 'always'
