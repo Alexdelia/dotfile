@@ -14,7 +14,7 @@ for file in $zsh_src[@]; do
     if [[ -a "$ZSH_SRC_PATH$file" ]]; then
         source "$ZSH_SRC_PATH$file"
     else
-        echo -e "\033[33;1mWARNING\t\033[35;1m$file\033[0m not found"
+        echo -e "\033[33;1mWARNING\033[39m:\t\033[35;1m$file\033[0m \033[31;1mnot found\033[0m"
     fi
 done
 
@@ -22,10 +22,12 @@ unset ZSH_SRC_PATH
 unset zsh_src
 
 zsh_end="$(date -u +%s.%N)"
+zsh_elapsed="$((zsh_end-zsh_start))"
 
-if [[ "$(($zsh_end-$zsh_start))" -gt 1 ]]; then
-    echo -e "\033[33;1mWARNING\t\033[35;1mzshrc took \033[31m$(bc <<<"$zsh_end-$zsh_start")\033[35m seconds\033[0m"
+if [[ zsh_elapsed -gt 0.3 ]]; then
+    printf "\033[33;1mWARNING\033[39m:\t\033[33mzshrc\033[0m took \033[31;1m%.3f\033[0m \033[31msecond\033[0m\n" "$zsh_elapsed"
 fi
 
 unset zsh_start
 unset zsh_end
+unset zsh_elapsed
