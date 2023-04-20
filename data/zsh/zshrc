@@ -1,3 +1,5 @@
+start="$(date -u +%s.%N)"
+
 typeset -a src
 
 SRC_PATH="$HOME/.config/zsh/config.d/"
@@ -18,3 +20,9 @@ done
 
 unset SRC_PATH
 unset src
+
+end="$(date -u +%s.%N)"
+
+if [[ "$(($end-$start))" -gt 1 ]]; then
+    echo -e "\033[33;1mWARNING\t\033[35;1mzshrc took \033[31m$(bc <<<"$end-$start")\033[35m seconds\033[0m"
+fi
