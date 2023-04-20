@@ -1,28 +1,31 @@
-start="$(date -u +%s.%N)"
+zsh_start="$(date -u +%s.%N)"
 
-typeset -a src
+typeset -a zsh_src
 
-SRC_PATH="$HOME/.config/zsh/config.d/"
+ZSH_SRC_PATH="$HOME/.config/zsh/config.d/"
 
-src+="main.zsh"
-src+="alias.zsh"
-src+="function.zsh"
-src+="export.zsh"
-src+="conda.zsh"
+zsh_src+="main.zsh"
+zsh_src+="alias.zsh"
+zsh_src+="function.zsh"
+zsh_src+="export.zsh"
+zsh_src+="conda.zsh"
 
-for file in $src[@]; do
-    if [[ -a "$SRC_PATH$file" ]]; then
-        source "$SRC_PATH$file"
+for file in $zsh_src[@]; do
+    if [[ -a "$ZSH_SRC_PATH$file" ]]; then
+        source "$ZSH_SRC_PATH$file"
     else
         echo -e "\033[33;1mWARNING\t\033[35;1m$file\033[0m not found"
     fi
 done
 
-unset SRC_PATH
-unset src
+unset ZSH_SRC_PATH
+unset zsh_src
 
-end="$(date -u +%s.%N)"
+zsh_end="$(date -u +%s.%N)"
 
-if [[ "$(($end-$start))" -gt 1 ]]; then
-    echo -e "\033[33;1mWARNING\t\033[35;1mzshrc took \033[31m$(bc <<<"$end-$start")\033[35m seconds\033[0m"
+if [[ "$(($zsh_end-$zsh_start))" -gt 1 ]]; then
+    echo -e "\033[33;1mWARNING\t\033[35;1mzshrc took \033[31m$(bc <<<"$zsh_end-$zsh_start")\033[35m seconds\033[0m"
 fi
+
+unset zsh_start
+unset zsh_end
