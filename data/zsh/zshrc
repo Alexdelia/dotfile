@@ -24,7 +24,7 @@ unset zsh_src
 zsh_end="$(date -u +%s.%N)"
 zsh_elapsed="$((zsh_end-zsh_start))"
 
-if [[ zsh_elapsed -gt 0.3 ]]; then
+if [[ zsh_elapsed -gt 0.5 ]]; then
     printf "\033[33;1mWARNING\033[39m:\t\033[33mzshrc\033[0m took \033[31;1m%.3f\033[0m \033[31msecond\033[0m\n" "$zsh_elapsed"
 fi
 
