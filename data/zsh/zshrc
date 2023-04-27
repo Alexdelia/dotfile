@@ -12,20 +12,20 @@ __zsh_src+="export.zsh"
 __zsh_src+="conda.zsh"
 
 for __file in $__zsh_src[@]; do
-    if [[ -a "$ZSH_SRC_PATH$__file" ]]; then
-        __zsh_in_start="$(date -u +%s.%N)"
-        
-        source "$ZSH_SRC_PATH$__file"
-        
-        __zsh_in_end="$(date -u +%s.%N)"
-        __zsh_in_elapsed="$((__zsh_in_end-__zsh_in_start))"
-        
-        if [[ __zsh_in_elapsed -gt 0.5 ]]; then
-            printf "\033[33;1mWARNING\033[39m:\t\033[33m$__file\033[0m took \033[31;1m%.3f\033[0m \033[31msecond\033[0m\n" "$__zsh_in_elapsed"
-        fi
-    else
-        printf "\033[33;1mWARNING\033[39m:\t\033[35;1m$__file\033[0m \033[31;1mnot found\033[0m"
-    fi
+	if [[ -e "$ZSH_SRC_PATH$__file" ]]; then
+		__zsh_in_start="$(date -u +%s.%N)"
+
+		source "$ZSH_SRC_PATH$__file"
+
+		__zsh_in_end="$(date -u +%s.%N)"
+		__zsh_in_elapsed="$((__zsh_in_end - __zsh_in_start))"
+
+		if [[ __zsh_in_elapsed -gt 0.5 ]]; then
+			printf "\033[33;1mWARNING\033[39m:\t\033[33m$__file\033[0m took \033[31;1m%.3f\033[0m \033[31msecond\033[0m\n" "$__zsh_in_elapsed"
+		fi
+	else
+		printf "\033[33;1mWARNING\033[39m:\t\033[35;1m$__file\033[0m \033[31;1mnot found\033[0m\n"
+	fi
 done
 
 unset __zsh_SRC_PATH
@@ -36,10 +36,10 @@ unset __zsh_in_end
 unset __zsh_in_elapsed
 
 __zsh_end="$(date -u +%s.%N)"
-__zsh_elapsed="$((__zsh_end-__zsh_start))"
+__zsh_elapsed="$((__zsh_end - __zsh_start))"
 
 if [[ __zsh_elapsed -gt 0.5 ]]; then
-    printf "\033[33;1mWARNING\033[39m:\t\033[33mzshrc\033[0m took \033[31;1m%.3f\033[0m \033[31msecond\033[0m\n" "$__zsh_elapsed"
+	printf "\033[33;1mWARNING\033[39m:\t\033[33mzshrc\033[0m took \033[31;1m%.3f\033[0m \033[31msecond\033[0m\n" "$__zsh_elapsed"
 fi
 
 unset __zsh_start
