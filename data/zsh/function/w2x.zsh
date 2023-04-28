@@ -39,27 +39,26 @@ function w2x() {
 		fi
 	done
 
-	local param=""
-	if [[ $noise -gt 0 && $scale -gt 0 ]]; then
-		param="-mnoise_scale"
-
-		if [[ $scale -eq 4 ]]; then
-			param+="4x"
-		fi
-
-		# param+=" -n $noise"
+	local param=("--method")
+	if [[ $noise -gt 0 && $scale -eq 4 ]]; then
+		param+="noise_scale4x"
+	elif [[ $noise -gt 0 && $scale -eq 2 ]]; then
+		param+="noise_scale"
 	elif [[ $noise -gt 0 ]]; then
-		param="--method noise --noise-level $noise"
-	elif [[ $scale -gt 0 ]]; then
-		param="--method scale"
-
-		if [[ $scale -eq 4 ]]; then
-			param+="4x"
-		fi
+		param+="noise"
+	elif [[ $scale -eq 4 ]]; then
+		param+="scale4x"
+	elif [[ $scale -eq 2 ]]; then
+		param+="scale"
 	else
 		echo -e "\033[1;33mnothing to do\033[0m"
 		echo -e $HELP
 		return 1
+	fi
+
+	if [[ $noise -gt 0 ]]; then
+		param+="--noise-level"
+		param+="$noise"
 	fi
 
 	pwd=$(pwd)
@@ -73,11 +72,11 @@ function w2x() {
 			continue
 		fi
 
-		local out="$pwd/${f}_w2x.png"
+		local out="$pwd/${f%.*}_w2x.png"
 
 		echo -e "\033[32mprocessing \033[1m$f\033[0m"
-		printf "python -m $P_WAIFU2X/waifu2x.cli $param -i \"$pwd/$f\" -o \"$out\"\n"
 		python -m waifu2x.cli $param -i "$pwd/$f" -o "$out"
+		file "${out%\/*}" | awk '{print $1,"\033[1;31m",$5,$6,$7,"\033[0m\n"}' | tr ',' ' '
 	done
 	deactivate
 
@@ -107,6 +106,16 @@ function w2x_install() {
 	fi
 
 	source "$P_WAIFU2X/.venv/bin/activate"
-	pip install -r "$P_WAIFU2X/requirements.txt"
+
+	printf "\033[32minstalling \033[1mpip dependencies\033[0m\n"
+	pip3 install torch torchvision torchaudio torchtext
+	pip3 install -r "$P_WAIFU2X/requirements.txt"
+
+	local pwd=$(pwd)
+	cd "$P_WAIFU2X"
+	printf "\033[32mdownloading \033[1mmodels\033[0m\n"
+	python -m waifu2x.download_models
+	cd "$pwd"
+
 	deactivate
 }

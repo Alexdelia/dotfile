@@ -20,7 +20,7 @@ function install_pkg() {
 	for pkg in "$@"; do
 		if ! is_pkg_installed "$pkg"; then
 			printf "\033[32minstalling \033[1m%s\033[0m\n" "$pkg"
-			s apt install "$pkg" || return 1
+			s apt install "$pkg" -y || return 1
 		fi
 	done
 }
