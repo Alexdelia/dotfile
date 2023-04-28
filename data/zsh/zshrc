@@ -1,5 +1,8 @@
 __zsh_start="$(date -u +%s.%N)"
 
+ZSH_WARN="\033[1;33mWARNING\033[39m:\033[0m\t"
+ZSH_ERR="\033[1;31mERROR\033[39m:\033[0m\t"
+
 typeset -a __zsh_src
 
 ZSH_SRC_PATH="$HOME/.config/zsh/config.d/"
@@ -7,8 +10,8 @@ ZSH_SRC_PATH="$HOME/.config/zsh/config.d/"
 __zsh_src+="main.zsh"
 __zsh_src+="path.zsh"
 __zsh_src+="alias.zsh"
-__zsh_src+="function.zsh"
 __zsh_src+="export.zsh"
+__zsh_src+="function/main.zsh"
 __zsh_src+="conda.zsh"
 
 for __file in $__zsh_src[@]; do
@@ -21,12 +24,13 @@ for __file in $__zsh_src[@]; do
 		__zsh_in_elapsed="$((__zsh_in_end - __zsh_in_start))"
 
 		if [[ __zsh_in_elapsed -gt 0.5 ]]; then
-			printf "\033[33;1mWARNING\033[39m:\t\033[33m$__file\033[0m took \033[31;1m%.3f\033[0m \033[31msecond\033[0m\n" "$__zsh_in_elapsed"
+			printf "$ZSH_WARN\033[1;33m$__file\033[0m took \033[31;1m%.3f\033[0m \033[31msecond\033[0m\n" "$__zsh_in_elapsed"
 		fi
 	else
-		printf "\033[33;1mWARNING\033[39m:\t\033[35;1m$__file\033[0m \033[31;1mnot found\033[0m\n"
+		printf "$ZSH_WARN\033[1;35m$__file\033[0m \033[1;33mnot found\033[0m\n"
 	fi
 done
+unset __file
 
 unset __zsh_SRC_PATH
 unset __zsh_src
@@ -39,7 +43,7 @@ __zsh_end="$(date -u +%s.%N)"
 __zsh_elapsed="$((__zsh_end - __zsh_start))"
 
 if [[ __zsh_elapsed -gt 0.5 ]]; then
-	printf "\033[33;1mWARNING\033[39m:\t\033[33mzshrc\033[0m took \033[31;1m%.3f\033[0m \033[31msecond\033[0m\n" "$__zsh_elapsed"
+	printf "$ZSH_WARN\033[1;33mzshrc\033[0m took \033[1;31m%.3f\033[0m \033[31msecond\033[0m\n" "$__zsh_elapsed"
 fi
 
 unset __zsh_start

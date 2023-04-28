@@ -2,9 +2,12 @@
 update = 'always'
 "~/.zshrc" = 'zsh/zshrc'
 "~/.config/zsh/config.d/main.zsh" = 'zsh/main.zsh'
-"~/.config/zsh/config.d/alias.zsh" = 'zsh/alias.zsh'
-"~/.config/zsh/config.d/function.zsh" = 'zsh/function.zsh'
 "~/.config/zsh/config.d/export.zsh" = 'zsh/export.zsh'
+"~/.config/zsh/config.d/alias.zsh" = 'zsh/alias.zsh'
+"~/.config/zsh/config.d/function/main.zsh" = 'zsh/function/main.zsh'
+"~/.config/zsh/config.d/function/git.zsh" = 'zsh/function/git.zsh'
+"~/.config/zsh/config.d/function/sh.zsh" = 'zsh/function/sh.zsh'
+"~/.config/zsh/config.d/function/w2x.zsh" = 'zsh/function/w2x.zsh'
 
 [zsh-Decim]
 update = [ 'Decim' ]

@@ -1,6 +1,6 @@
-export	PATH=/home/alex/p/bin:$PATH
-export	PATH=/home/alex/p/bin/utility:$PATH
-export	PATH=/home/alex/.local/bin:$PATH
-export	PATH=/home/alex/Ware:$PATH
+if [[ ! -z "$P_WARE" ]]; then
+	export PATH="$P_WARE:$PATH"
+	export PATH="$P_WARE/utility:$PATH"
+fi
 
 export ANDROID_NDK=/home/alex/Android/Sdk/ndk
