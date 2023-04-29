@@ -41,6 +41,27 @@ function install_pkg() {
 	done
 }
 
+function gen_text() {
+	if [[ $# -gt 2 ]]; then
+		echo -e "usage: \033[1m$0 \033[35m[len] [line]\033[0m
+	default \033[1;35mlen\033[0m = 1000, \033[1;35mline\033[0m = 10000
+generate random alphanumeric text with \033[1;35mlen\033[0m length per line and \033[1;35mline\033[0m lines"
+		return 1
+	fi
+
+	local len=1000
+	local line=10000
+
+	if [[ $# -gt 0 ]]; then
+		line=$1
+	fi
+	if [[ $# -gt 1 ]]; then
+		len=$2
+	fi
+
+	cat /dev/urandom | tr -dc '[:alnum:]' | fold -w "${1:-$len}" | head -n "$line"
+}
+
 function rmbk() {
 	local CMD='find . -type d \( -name ".git*" -o -path "./target" -o -name "node_modules" \) -prune -o -type f -name "*~"'
 
