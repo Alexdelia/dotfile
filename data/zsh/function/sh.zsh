@@ -1,3 +1,19 @@
+function chrono() {
+	if [[ $# -eq 1 ]]; then
+		printf $(($(date -u +%s.%N) - $1))
+	elif [[ $# -eq 2 ]]; then
+		printf $(($2 - $1))
+	elif [[ $# -eq 0 ]]; then
+		printf $(date -u +%s.%N)
+	else
+		echo -e "usage: \033[1m$0\033[0m              \treturn current UTC time
+       \033[1m$0 \033[35m<start>\033[0m      \treturn elapsed time since \033[1;35m<start>\033[0m
+       \033[1m$0 \033[35m<start> <end>\033[0m\treturn elapsed time between \033[1;35m<start>\033[0m and \033[1;35m<end>\033[0m"
+		return 1
+	fi
+	return 0
+}
+
 function is_pkg_installed() {
 	if [[ $# -lt 1 ]]; then
 		echo -e "usage: \033[1m$0 \033[35m<package>\033[0m"
@@ -29,12 +45,11 @@ function rmbk() {
 	local CMD='find . -type d \( -name ".git*" -o -path "./target" -o -name "node_modules" \) -prune -o -type f -name "*~"'
 
 	if [[ $# -lt 1 ]]; then
-		local start="$(date -u +%s.%N)"
+		local start="$(chrono)"
 
 		local n="$(eval $CMD -print -exec rm -f {} + | wc -l)"
 
-		local end="$(date -u +%s.%N)"
-		local elapsed="$((end - start))"
+		local elapsed="$(chrono "$start")"
 
 		printf "\033[1;32m$n\033[0m in \033[1;32m%.0f\033[0m \033[32mms\033[0m\n" "$((elapsed * 1000))"
 
