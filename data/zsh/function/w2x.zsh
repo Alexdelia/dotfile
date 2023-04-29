@@ -14,7 +14,14 @@ function __check_set_path() {
 function w2x() {
 	__check_set_path || return 1
 
-	local HELP="usage: \033[1m$0 \033[35m[option]\033[0m"
+	local HELP="usage: \033[1m$0 \033[35m[option]\033[0m
+option:
+	\033[1m-h, --help\033[0m\tshow this help message and exit
+	\033[1m-n\033[35mX\033[39m, --noise\033[35mX\033[0m\treduce noise by \033[1;35mX\033[0m level
+		(\033[1;35mX\033[0m == \033[1;35m0\033[0m | \033[1;35m1\033[0m | \033[1;35m2\033[0m | \033[1;35m3\033[0m)  (default: \033[1;35m2\033[0m)
+	\033[1m-s\033[35mX\033[39m, --scale\033[35mX\033[0m\tupscale by \033[1;35mX\033[0m times
+		(\033[1;35mX\033[0m == \033[1;35m0\033[0m | \033[1;35m2\033[0m | \033[1;35m4\033[0m)      (default: \033[1;35m2\033[0m)"
+
 	local noise=2
 	local scale=2
 	local file=()
@@ -23,12 +30,27 @@ function w2x() {
 	for arg in "$@"; do
 		# check if start with -
 		if [[ $arg =~ ^- ]]; then
+			if [[ $arg == "-h" || $arg == "--help" ]]; then
+				echo -e $HELP
+				return 0
 			# check -nX or --noiseX (X == 0 | 1 | 2 | 3)
-			if [[ $arg =~ ^(-n|--noise)([0-3])$ ]]; then
-				noise="${BASH_REMATCH[2]}"
+			elif [[ $arg =~ ^(-n|--noise)(.*)$ ]]; then
+				if [[ ! ${match[2]} =~ ^[0-3]$ ]]; then
+					echo -e "\033[1;33minvalid noise level \033[31m${match[2]}\033[0m
+\033[1;33mnoise level\033[0m must be \033[1;35m0\033[0m, \033[1;35m1\033[0m, \033[1;35m2\033[0m or \033[1;35m3\033[0m"
+					echo -e $HELP
+					return 1
+				fi
+				noise="${match[2]}"
 			# check -sX or --scaleX (X == 0 | 2 | 4)
-			elif [[ $arg =~ ^(-s|--scale)([024])$ ]]; then
-				scale="${BASH_REMATCH[2]}"
+			elif [[ $arg =~ ^(-s|--scale)(.*)$ ]]; then
+				if [[ ! ${match[2]} =~ ^[024]$ ]]; then
+					echo -e "\033[1;33minvalid scale \033[31m${match[2]}\033[0m
+\033[1;33mscale\033[0m must be \033[1;35m0\033[0m, \033[1;35m2\033[0m or \033[1;35m4\033[0m"
+					echo -e $HELP
+					return 1
+				fi
+				scale="${match[2]}"
 			else
 				echo -e "unknown option:\t\033[1;33m$arg\033[0m"
 				echo -e $HELP
@@ -72,11 +94,25 @@ function w2x() {
 			continue
 		fi
 
-		local out="$pwd/${f%.*}_w2x.png"
+		local out="$pwd/${f%.*}_w2.png"
 
-		echo -e "\033[32mprocessing \033[1m$f\033[0m"
+		printf "\033[32mprocessing \033[1m$f\033[0m"
+		local start="$(date -u +%s.%N)"
 		python -m waifu2x.cli $param -i "$pwd/$f" -o "$out"
-		file "${out%\/*}" | awk '{print $1,"\033[1;31m",$5,$6,$7,"\033[0m\n"}' | tr ',' ' '
+		local end="$(date -u +%s.%N)"
+		local elapsed="$((end - start))"
+
+		local size=$(identify -format '%w %h' "$out" 2>/dev/null)
+		if [ -z "$size" ]; then
+			echo -e "\t\033[1;31merror\033[0m"
+			continue
+		fi
+
+		local w="${size%% *}"
+		local h="${size##* }"
+		local col="$(tput cols)"
+
+		printf "\033[1K\r\033[1;34m%*.3f\033[0m\033[34ms\r\033[1;35m%*s\033[0m\033[35mx\033[1m$h\r\033[1;32m$(basename $out)\n" "$(($col - 5))" "${elapsed}" "$(($col - 22))" "$w"
 	done
 	deactivate
 
