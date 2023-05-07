@@ -32,6 +32,18 @@ function gy() {
 	git push --quiet
 }
 
+function gt() {
+	if [[ $# -ne 1 ]]; then
+		echo -e "usage: \033[1m$0 \033[35m<commit_message>\033[0m"
+		return 1
+	fi
+
+	git status --short
+	git add --all
+	git status --short
+	git commit --message "$1"
+}
+
 function gpn() {
 	if [[ $# -lt 1 ]]; then
 		echo -e "usage: \033[1m$0 \033[35m<file1> <file2> <...>\033[0m"
