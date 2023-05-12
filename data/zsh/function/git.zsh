@@ -51,6 +51,7 @@ function gfrm() {
 	fi
 
 	local arg=()
+
 	local path
 	for path in "$@"; do
 		arg+=("--path" "$path")
