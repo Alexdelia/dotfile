@@ -12,8 +12,7 @@ __zsh_src+="path.zsh"
 __zsh_src+="alias.zsh"
 __zsh_src+="export.zsh"
 __zsh_src+="function/main.zsh"
-__zsh_src+="conda.zsh"
-__zsh_src+="nvm.zsh"
+# __zsh_src+="conda.zsh"
 
 for __file in $__zsh_src[@]; do
 	if [[ -e "$ZSH_SRC_PATH$__file" ]]; then

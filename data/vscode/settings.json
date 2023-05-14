@@ -109,5 +109,6 @@
 		"editor.semanticHighlighting.enabled": false
 	},
 	"window.zoomLevel": 2,
-	"git.openRepositoryInParentFolders": "never"
+	"git.openRepositoryInParentFolders": "never",
+	"workbench.colorTheme": "vity"
 }
