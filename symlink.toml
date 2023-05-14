@@ -11,13 +11,15 @@ update = 'always'
 
 [zsh-Decim]
 update = [ 'Decim' ]
-"~/.config/zsh/config.d/conda.zsh" = 'zsh/Decim/conda.zsh'
 "~/.config/zsh/config.d/path.zsh" = 'zsh/Decim/path.zsh'
+"~/.config/zsh/config.d/conda.zsh" = 'zsh/Decim/conda.zsh'
+"~/.config/zsh/config.d/nvm.zsh" = 'zsh/Decim/nvm.zsh'
 
 [zsh-Nona]
 update = [ 'Nona' ]
-"~/.config/zsh/config.d/conda.zsh" = 'zsh/Nona/conda.zsh'
 "~/.config/zsh/config.d/path.zsh" = 'zsh/Nona/path.zsh'
+"~/.config/zsh/config.d/conda.zsh" = 'zsh/Nona/conda.zsh'
+"~/.config/zsh/config.d/nvm.zsh" = 'zsh/Nona/nvm.zsh'
 
 [vscode]
 update = 'always'
