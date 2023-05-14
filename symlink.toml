@@ -20,7 +20,7 @@ update = [ 'Nona' ]
 "~/.config/zsh/config.d/path.zsh" = 'zsh/Nona/path.zsh'
 
 [vscode]
-update = [ 'Decim' ]
+update = 'always'
 "~/.config/Code/User/settings.json" = 'vscode/settings.json'
 
 [grub]
