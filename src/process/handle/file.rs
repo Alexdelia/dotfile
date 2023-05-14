@@ -111,7 +111,7 @@ fn diff(symlink: &Symlink, interactive: bool) -> std::io::Result<bool> {
             return Ok(false);
         }
         'r' => {
-            std::fs::copy(&symlink.target, &symlink.path)?;
+            std::fs::copy(&symlink.path, &symlink.target)?;
             symlink.print_action("replaced", Some(B_RED));
         }
         _ => unreachable!("diff() should find char: k, r or I"),
