@@ -1,6 +1,6 @@
 local src=(
-	"git.zsh"
 	"sh.zsh"
+	"git.zsh"
 	"w2x.zsh"
 )
 

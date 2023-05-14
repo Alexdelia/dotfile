@@ -97,10 +97,8 @@ option:
 		local out="$pwd/${f%.*}_w2.png"
 
 		printf "\033[32mprocessing \033[1m$f\033[0m"
-		local start="$(date -u +%s.%N)"
+		local start="$(chrono)"
 		python -m waifu2x.cli $param -i "$pwd/$f" -o "$out"
-		local end="$(date -u +%s.%N)"
-		local elapsed="$((end - start))"
 
 		local size=$(identify -format '%w %h' "$out" 2>/dev/null)
 		if [ -z "$size" ]; then
@@ -108,6 +106,7 @@ option:
 			continue
 		fi
 
+		local elapsed="$(chrono "$start")"
 		local w="${size%% *}"
 		local h="${size##* }"
 		local col="$(tput cols)"
@@ -117,6 +116,28 @@ option:
 	deactivate
 
 	cd "$pwd"
+}
+
+function aw2x() {
+	__check_set_path || return 1
+
+	local start="$(chrono)"
+
+	local BACKUP_DIR="$HOME/Pictures/.w2x_backup"
+
+	mkdir -p "$BACKUP_DIR"
+
+	local file=$(find . -maxdepth 1 -type f -not -name '*_w2.png' -and -not -name '*_w2x.png' -exec file {} \; | grep -i 'image data' | cut -d: -f1)
+	local i=0
+	local f
+	for f in $file; do
+		w2x "$f" -n2 -s2 || continue
+		cp "$f" "$BACKUP_DIR"
+		rm "$f"
+		i=$((i + 1))
+	done
+
+	printf "\033[32;1m$i\033[0m in \033[1;32m%.3f\033[0m\033[32ms\n" "$(chrono "$start")"
 }
 
 function w2x_install() {

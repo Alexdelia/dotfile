@@ -3,9 +3,9 @@ __zsh_start="$(date -u +%s.%N)"
 ZSH_WARN="\033[1;33mWARNING\033[39m:\033[0m\t"
 ZSH_ERR="\033[1;31mERROR\033[39m:\033[0m\t"
 
-typeset -a __zsh_src
-
 ZSH_SRC_PATH="$HOME/.config/zsh/config.d/"
+
+typeset -a __zsh_src
 
 __zsh_src+="main.zsh"
 __zsh_src+="path.zsh"
