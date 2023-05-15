@@ -26,17 +26,21 @@ function is_pkg_installed() {
 
 function install_pkg() {
 	if [[ $# -lt 1 ]]; then
-		echo -e "usage: \033[1m$0 \033[35m<package0> <package1> <package2> ...\033[0m"
+		echo -e "usage: \033[1m$0 \033[34m[OPTION] \033[35m<package0> <package1> <package2> ...\033[0m
+
+option:
+	\033[1m-h\033[0m, \033[1m--help\033[0m\tshow this help message and exit
+	\033[1m-u\033[0m, \033[1m--no-update\033[0m\tdo not update package list"
 		return 1
 	fi
 
-	s apt update || return 1
+	sudo apt update || return 1
 
 	local pkg
 	for pkg in "$@"; do
 		if ! is_pkg_installed "$pkg"; then
 			printf "\033[32minstalling \033[1m%s\033[0m\n" "$pkg"
-			s apt install "$pkg" -y || return 1
+			sudo apt install "$pkg" -y || return 1
 		fi
 	done
 }
@@ -79,9 +83,9 @@ function rmbk() {
 
 	local HELP="usage: \033[1m$0 \033[35m[option]\033[0m
 option:
-	\033[1m-h, --help\033[0m\tshow this help message and exit
-	\033[1m-p, --print\033[0m\tprint found files
-	\033[1m-s, --show\033[0m\tdelete found files and print them"
+	\033[1m-h\033[0m, \033[1m--help\033[0m\tshow this help message and exit
+	\033[1m-p\033[0m, \033[1m--print\033[0m\tprint found files
+	\033[1m-s\033[0m, \033[1m--show\033[0m\tdelete found files and print them"
 
 	if [[ $1 == "-h" || $1 == "--help" ]]; then
 		echo -e $HELP
