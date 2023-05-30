@@ -44,22 +44,6 @@ function gt() {
 	git commit --message "$1"
 }
 
-function gfrm() {
-	if [[ $# -lt 1 ]]; then
-		echo -e "usage: \033[1m$0 \033[35m<path1> <path2> <...>\033[0m"
-		return 1
-	fi
-
-	local arg=()
-
-	local path
-	for path in "$@"; do
-		arg+=("--path" "$path")
-	done
-
-	git filter-repo --invert-paths "${arg[@]}"
-}
-
 function gpn() {
 	if [[ $# -lt 1 ]]; then
 		echo -e "usage: \033[1m$0 \033[35m<file1> <file2> <...>\033[0m"
