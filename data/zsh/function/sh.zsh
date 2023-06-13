@@ -14,6 +14,23 @@ function chrono() {
 	return 0
 }
 
+function gimme() {
+	if [[ $# -lt 1 ]]; then
+		echo -e "usage: \033[1m$0 \033[35m<package0> <package1> <package2> ...\033[0m"
+		return 1
+	fi
+
+	if "$(which apt)" &>/dev/null; then
+		sudo apt update || return 1
+		sudo apt install "$@" -y || return 1
+	elif "$(which pacman)" &>/dev/null; then
+		sudo pacman -Sy "$@" || return 1
+	else
+		echo -e "\033[1;31merror:\033[0m un-supported package manager"
+		return 1
+	fi
+}
+
 function is_pkg_installed() {
 	if [[ $# -lt 1 ]]; then
 		echo -e "usage: \033[1m$0 \033[35m<package>\033[0m"
