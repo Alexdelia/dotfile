@@ -20,15 +20,19 @@ function gimme() {
 		return 1
 	fi
 
-	if "$(which apt)" &>/dev/null; then
+	case "$(uname -n)" in
+	"Decim" | "Nona")
 		sudo apt update || return 1
 		sudo apt install "$@" -y || return 1
-	elif "$(which pacman)" &>/dev/null; then
-		sudo pacman -Sy "$@" || return 1
-	else
-		echo -e "\033[1;31merror:\033[0m un-supported package manager"
+		;;
+	"Oculus")
+		sudo pacman -S "$@" || return 1
+		;;
+	*)
+		echo -e "\033[1m;31munknown host\033[39m: \033[35m$(uname -n)\033[0m"
 		return 1
-	fi
+		;;
+	esac
 }
 
 function is_pkg_installed() {
