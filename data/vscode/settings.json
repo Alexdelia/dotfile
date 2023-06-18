@@ -110,6 +110,5 @@
 	},
 	"git.openRepositoryInParentFolders": "never",
 	"workbench.colorTheme": "vity",
-	"window.zoomLevel": 2,
 	"workbench.startupEditor": "none"
 }
