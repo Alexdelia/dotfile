@@ -122,44 +122,44 @@ option:
 	fi
 }
 
+function dstop() {
+	local d="$(docker ps -qa)"
+
+	if [[ -z "$d" ]]; then
+		echo -e "no \033[1;35mcontainer\033[0m to \033[1;34mstop\033[0m"
+		return 1
+	fi
+
+	docker stop $d
+}
+
 function drm() {
 	local HELP="usage: \033[1m$0 \033[35m<type1> <type2> ...\033[0m
 type:
-	\033[1mc\033[0m, \033[1mcontainer\033[0m\tstop and remove all containers
-	\033[1mi\033[0m, \033[1mimage\033[0m\tremove all images
-	\033[1mv\033[0m, \033[1mvolume\033[0m\tremove all volumes
-	\033[1mn\033[0m, \033[1mnetwork\033[0m\tremove all networks
-	\033[1ma\033[0m, \033[1mall\033[0m, \033[1my\033[0m, \033[1myes\033[0m\tremove all containers, images, volumes and networks"
+	\033[1ms\033[0m, \033[1mstop\033[0m\t\033[1;34mstop\033[0m all containers	
+	\033[1mc\033[0m, \033[1mcontainer\033[0m\t\033[1;33mprune\033[0m all containers
+	\033[1mi\033[0m, \033[1mimage\033[0m\t\033[1;33mprune\033[0m all images
+	\033[1mv\033[0m, \033[1mvolume\033[0m\t\033[1;33mprune\033[0m all volumes
+	\033[1mn\033[0m, \033[1mnetwork\033[0m\t\033[1;33mprune\033[0m all networks
+	\033[1ma\033[0m, \033[1mall\033[0m, \033[1my\033[0m, \033[1myes\033[0m\t\033[1;31mremove\033[0m all containers, images, volumes and networks
+	\033[1mp\033[0m, \033[1mprune\033[0m\t\033[1;33mprune\033[0m all containers, images, volumes and networks"
 
 	if [[ $# -lt 1 ]]; then
 		echo -e $HELP
 		return 1
 	fi
 
-	function _no_to_remove() {
-		echo -e "no \033[1;35m$1\033[0m to \033[1;34m$2\033[0m"
-	}
-
-	local d
-
 	local t
 	for t in "$@"; do
 		case "$t" in
+		"s" | "stop")
+			dstop
+			;;
 		"c" | "container")
-			d="$(docker ps -qa)"
-			if [[ -z "$d" ]]; then
-				_no_to_remove "container" "remove"
-				continue
-			fi
-			docker stop $d && docker rm $d
+			docker container prune -f
 			;;
 		"i" | "image")
-			d="$(docker images -qa)"
-			if [[ -z "$d" ]]; then
-				_no_to_remove "image" "remove"
-				continue
-			fi
-			docker rmi $d
+			docker image prune -af
 			;;
 		"v" | "volume")
 			docker volume prune -af
@@ -168,13 +168,13 @@ type:
 			docker network prune -f
 			;;
 		"a" | "all" | "y" | "yes")
-			d="$(docker ps -qa)"
-			if [[ -z "$d" ]]; then
-				_no_to_remove "container" "stop"
-			else
-				docker stop $d
-			fi
-			docker system prune -af
+			dstop
+			docker system prune -af --volumes
+			docker volume prune -af
+			;;
+		"p" | "prune")
+			docker system prune -af --volumes
+			docker volume prune -af
 			;;
 		*)
 			echo -e "unknown type:\t\033[1;33m$t\033[0m"
