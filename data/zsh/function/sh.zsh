@@ -162,12 +162,7 @@ type:
 			docker rmi $d
 			;;
 		"v" | "volume")
-			d="$(docker volume ls -q)"
-			if [[ -z "$d" ]]; then
-				_no_to_remove "volume" "remove"
-				continue
-			fi
-			docker volume rm $d
+			docker volume prune -af
 			;;
 		"n" | "network")
 			docker network prune -f
