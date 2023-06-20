@@ -123,14 +123,12 @@ option:
 }
 
 function dstop() {
-	local d="$(docker ps -qa)"
-
-	if [[ -z "$d" ]]; then
+	if [[ -z "$(docker ps -qa)" ]]; then
 		echo -e "no \033[1;35mcontainer\033[0m to \033[1;34mstop\033[0m"
 		return 1
 	fi
 
-	docker stop $d
+	docker stop $(docker ps -qa)
 }
 
 function drm() {
@@ -148,6 +146,8 @@ type:
 		echo -e $HELP
 		return 1
 	fi
+
+	local start="$(chrono)"
 
 	local t
 	for t in "$@"; do
@@ -183,6 +183,10 @@ type:
 			;;
 		esac
 	done
+
+	local elapsed="$(chrono "$start")"
+
+	printf "\033[1;32m%.0f\033[0m \033[32mms\033[0m\n" "$((elapsed * 1000))"
 }
 
 function dcsh() {
