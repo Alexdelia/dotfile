@@ -189,3 +189,12 @@ type:
 		esac
 	done
 }
+
+function dcsh() {
+	if [[ $# -lt 1 ]]; then
+		echo -e "usage: \033[1m$0 \033[35m<container>\033[0m"
+		return 1
+	fi
+
+	docker compose exec -it "$1" sh
+}
