@@ -121,3 +121,71 @@ option:
 		return 1
 	fi
 }
+
+function drm() {
+	local HELP="usage: \033[1m$0 \033[35m<type1> <type2> ...\033[0m
+type:
+	\033[1mc\033[0m, \033[1mcontainer\033[0m\tstop and remove all containers
+	\033[1mi\033[0m, \033[1mimage\033[0m\tremove all images
+	\033[1mv\033[0m, \033[1mvolume\033[0m\tremove all volumes
+	\033[1mn\033[0m, \033[1mnetwork\033[0m\tremove all networks
+	\033[1ma\033[0m, \033[1mall\033[0m, \033[1my\033[0m, \033[1myes\033[0m\tremove all containers, images, volumes and networks"
+
+	if [[ $# -lt 1 ]]; then
+		echo -e $HELP
+		return 1
+	fi
+
+	function _no_to_remove() {
+		echo -e "no \033[1;35m$1\033[0m to \033[1;34m$2\033[0m"
+	}
+
+	local d
+
+	local t
+	for t in "$@"; do
+		case "$t" in
+		"c" | "container")
+			d="$(docker ps -qa)"
+			if [[ -z "$d" ]]; then
+				_no_to_remove "container" "remove"
+				continue
+			fi
+			docker stop $d && docker rm $d
+			;;
+		"i" | "image")
+			d="$(docker images -qa)"
+			if [[ -z "$d" ]]; then
+				_no_to_remove "image" "remove"
+				continue
+			fi
+			docker rmi $d
+			;;
+		"v" | "volume")
+			d="$(docker volume ls -q)"
+			if [[ -z "$d" ]]; then
+				_no_to_remove "volume" "remove"
+				continue
+			fi
+			docker volume rm $d
+			;;
+		"n" | "network")
+			docker network prune -f
+			;;
+		"a" | "all" | "y" | "yes")
+			d="$(docker ps -qa)"
+			if [[ -z "$d" ]]; then
+				_no_to_remove "container" "stop"
+			else
+				docker stop $d
+			fi
+			docker system prune -af
+			;;
+		*)
+			echo -e "unknown type:\t\033[1;33m$t\033[0m"
+			echo -e $HELP
+			return 1
+			;;
+		esac
+	done
+}

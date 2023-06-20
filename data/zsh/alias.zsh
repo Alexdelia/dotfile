@@ -23,6 +23,7 @@ alias c="cargo"
 alias s="sudo"
 
 alias up="sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y"
+
 alias dlist="echo -e '\n\t\033[32;1mcontainer\033[0m' && \
 docker ps -a && \
 echo -e '\n\t\033[32;1mimage\033[0m' && \
@@ -32,6 +33,7 @@ docker network ls && \
 echo -e '\n\t\033[32;1mvolume\033[0m' && \
 docker volume ls && \
 echo"
+alias dcd="docker compose -f docker-compose.dev.yml"
 
 alias neo="neofetch"
 alias to="bashtop"
