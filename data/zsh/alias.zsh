@@ -11,9 +11,6 @@ alias gst="git status --short"
 alias gtree="git log --graph --oneline --decorate"
 
 alias ll="ls -lah"
-alias l="exa --long --all --no-permissions --no-filesize --no-user --no-time --git --icons 2>/dev/null || ls -lah"
-alias lr="exa --git-ignore --ignore-glob='.git' --recurse --group-directories-first --long --all --no-permissions --no-filesize --no-user --no-time --git --icons 2>/dev/null || ls -lahR"
-alias lt="exa --git-ignore --ignore-glob='.git' --tree --group-directories-first --long --all --no-permissions --no-filesize --no-user --no-time --git --icons 2>/dev/null || ls -lahR"
 
 alias sl="ls"
 alias mk="make"
