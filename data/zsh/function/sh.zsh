@@ -71,12 +71,10 @@ function l() {
 	exa --long --all --no-permissions --no-filesize --no-user --no-time --git --icons "$@" 2>/dev/null || ls -lah "$@"
 }
 
-unalias lr
 function lr() {
 	exa --git-ignore --ignore-glob='.git' --recurse --group-directories-first --long --all --no-permissions --no-filesize --no-user --no-time --git --icons "$@" 2>/dev/null || ls -lahR "$@"
 }
 
-unalias lt
 function lt() {
 	exa --git-ignore --ignore-glob='.git' --tree --group-directories-first --long --all --no-permissions --no-filesize --no-user --no-time --git --icons "$@" 2>/dev/null || ls -lahR "$@"
 }
