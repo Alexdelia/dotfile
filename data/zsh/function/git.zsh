@@ -61,3 +61,32 @@ function gpn() {
 	git commit --message "$commit"
 	git push --quiet
 }
+
+function gmc() {
+	if [[ $# -ne 1 ]]; then
+		echo -e "usage: \033[1m$0 \033[35m<branch>\033[0m"
+		return 1
+	fi
+
+	local start="$(chrono)"
+
+	local base_branch="$(git branch --show-current)"
+
+	local current=base_branch
+	local b
+	for b in "$@"; do
+		echo -e "\033[35m$b\033[0m"
+		git checkout "$b" --quiet || return 1
+		git pull --quiet || return 1
+		git merge "$current" --quiet || return 1
+		git push --quiet || return 1
+		current="$b"
+	done
+
+	git checkout "$base_branch" --quiet || return 1
+	git merge "$current" --quiet || return 1
+	git push --quiet || return 1
+
+	local elapsed="$(chrono "$start")"
+	printf "\033[1;32m%.3f\033[0m \033[32ms\033[0m\n" "$((elapsed))"
+}
