@@ -72,10 +72,10 @@ function gmc() {
 
 	local base_branch="$(git branch --show-current)"
 
-	local current=base_branch
+	local current="$base_branch"
 	local b
 	for b in "$@"; do
-		echo -e "\033[35m$b\033[0m"
+		echo -e "\033[1;35m$b\033[0m"
 		git checkout "$b" --quiet || return 1
 		git pull --quiet || return 1
 		git merge "$current" --quiet || return 1
