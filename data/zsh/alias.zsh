@@ -13,6 +13,7 @@ alias gtree="git log --graph --oneline --decorate"
 alias ll="ls -lah"
 
 alias sl="ls"
+alias nj="just"
 alias mk="make"
 alias amke="make"
 alias mkae="make"
