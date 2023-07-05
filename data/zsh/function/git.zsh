@@ -63,8 +63,8 @@ function gpn() {
 }
 
 function gmc() {
-	if [[ $# -ne 1 ]]; then
-		echo -e "usage: \033[1m$0 \033[35m<branch>\033[0m"
+	if [[ $# -lt 1 ]]; then
+		echo -e "usage: \033[1m$0 \033[35m<branch1> <branch2> <...>\033[0m"
 		return 1
 	fi
 
