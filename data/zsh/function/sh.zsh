@@ -79,6 +79,10 @@ function lt() {
 	exa --git-ignore --ignore-glob='.git' --tree --group-directories-first --long --all --no-permissions --no-filesize --no-user --no-time --git --icons "$@" 2>/dev/null || ls -lahR "$@"
 }
 
+function to() {
+	btm "$@" 2>/dev/null || bashtop "$@" 2>/dev/null || top "$@"
+}
+
 function gen_text() {
 	if [[ $# -gt 2 ]]; then
 		echo -e "usage: \033[1m$0 \033[35m[len] [line]\033[0m

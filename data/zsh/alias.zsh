@@ -39,6 +39,5 @@ echo"
 alias dcd="docker compose -f docker-compose.dev.yml"
 
 alias neo="neofetch"
-alias to="bashtop"
 alias poke="pokemon-colorscripts -r"
 alias cg="java -jar $P_CG_LOCAL"
