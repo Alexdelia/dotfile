@@ -34,6 +34,10 @@ function pretty_elapsed() {
 	local ela="$1"
 	ela="$(($ela * 1000))"
 
+	if [[ $ela -lt 100 ]]; then
+		return 0
+	fi
+
 	local PRE_N="\033[0m\033[1;38;2;255;183;227m"
 	local PRE_UNIT="\033[0m\033[38;2;107;77;96m"
 	local POST="\033[0m\n"
