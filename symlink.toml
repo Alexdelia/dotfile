@@ -2,6 +2,7 @@
 update = 'always'
 "~/.zshrc" = 'zsh/zshrc'
 "~/.config/zsh/config.d/main.zsh" = 'zsh/main.zsh'
+"~/.config/zsh/config.d/prompt.zsh" = 'zsh/prompt.zsh'
 "~/.config/zsh/config.d/export.zsh" = 'zsh/export.zsh'
 "~/.config/zsh/config.d/alias.zsh" = 'zsh/alias.zsh'
 "~/.config/zsh/config.d/function/main.zsh" = 'zsh/function/main.zsh'
@@ -10,12 +11,12 @@ update = 'always'
 "~/.config/zsh/config.d/function/w2x.zsh" = 'zsh/function/w2x.zsh'
 
 [zsh-Decim]
-update = [ 'Decim' ]
+update = ['Decim']
 "~/.config/zsh/config.d/path.zsh" = 'zsh/Decim/path.zsh'
 "~/.config/zsh/config.d/conda.zsh" = 'zsh/Decim/conda.zsh'
 
 [zsh-Nona]
-update = [ 'Nona' ]
+update = ['Nona']
 "~/.config/zsh/config.d/path.zsh" = 'zsh/Nona/path.zsh'
 "~/.config/zsh/config.d/conda.zsh" = 'zsh/Nona/conda.zsh'
 

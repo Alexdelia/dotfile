@@ -4,10 +4,12 @@ ZSH_WARN="\033[1;33mWARNING\033[39m:\033[0m\t"
 ZSH_ERR="\033[1;31mERROR\033[39m:\033[0m\t"
 
 ZSH_SRC_PATH="$HOME/.config/zsh/config.d/"
+ZSH="$HOME/.oh-my-zsh"
 
 typeset -a __zsh_src
 
 __zsh_src+="main.zsh"
+__zsh_src+="prompt.zsh"
 __zsh_src+="path.zsh"
 __zsh_src+="alias.zsh"
 __zsh_src+="export.zsh"
