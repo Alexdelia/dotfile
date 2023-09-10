@@ -5,4 +5,6 @@ fi
 
 export GIT_EDITOR="vim"
 
+export MAIL="adelille@student.42.fr"
+
 export ANDROID_NDK="/home/alex/Android/Sdk/ndk"
