@@ -72,9 +72,11 @@ plugins=(
 	git
 	autojump
 	rust
+	ripgrep
 	docker
 	docker-compose
 	extract
+	universalarchive
 	colored-man-pages
 	command-not-found
 )

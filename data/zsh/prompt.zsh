@@ -13,9 +13,15 @@ bindkey '^H' backward-kill-word
 bindkey '^[[1;5C' forward-word
 bindkey '^[[1;5D' backward-word
 # go to parent dir with alt + up
-bindkey '^[^[[A' cd ..
+function __cd_parent() {
+	cd ..
+}
+bindkey '^[^[[A' __cd_parent
 # go to previously visited dir with alt + left
-bindkey '^[^[[D' cd -
+function __cd_prev() {
+	cd -
+}
+bindkey '^[^[[D' __cd_prev
 
 function chrono() {
 	if [[ $# -eq 1 ]]; then
