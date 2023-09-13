@@ -69,9 +69,14 @@ export UPDATE_ZSH_DAYS=30
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-    git
-    autojump
-    rust
+	git
+	autojump
+	rust
+	docker
+	docker-compose
+	extract
+	colored-man-pages
+	command-not-found
 )
 
 source $ZSH/oh-my-zsh.sh

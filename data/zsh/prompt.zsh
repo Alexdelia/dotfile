@@ -12,6 +12,10 @@ bindkey '^H' backward-kill-word
 # be able to use ctrl + left / ctrl + right to move word by word
 bindkey '^[[1;5C' forward-word
 bindkey '^[[1;5D' backward-word
+# go to parent dir with alt + up
+bindkey '^[^[[A' cd ..
+# go to previously visited dir with alt + left
+bindkey '^[^[[D' cd -
 
 function chrono() {
 	if [[ $# -eq 1 ]]; then
@@ -19,7 +23,7 @@ function chrono() {
 	elif [[ $# -eq 2 ]]; then
 		printf $(($2 - $1))
 	elif [[ $# -eq 0 ]]; then
-		printf $(date -u %s)
+		printf $(date -u +%s.%N)
 	else
 		echo -e "usage: \033[1m$0\033[0m              \treturn current UTC time
 		\033[1m$0 \033[35m<start>\033[0m      \treturn elapsed time since \033[1;35m<start>\033[0m
