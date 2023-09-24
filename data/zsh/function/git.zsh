@@ -68,8 +68,6 @@ function gmc() {
 		return 1
 	fi
 
-	local start="$(chrono)"
-
 	local base_branch="$(git branch --show-current)"
 
 	local current="$base_branch"
@@ -86,7 +84,4 @@ function gmc() {
 	git checkout "$base_branch" --quiet || return 1
 	git merge "$current" --quiet || return 1
 	git push --quiet || return 1
-
-	local elapsed="$(chrono "$start")"
-	printf "\033[1;32m%.3f\033[0m \033[32ms\033[0m\n" "$((elapsed))"
 }

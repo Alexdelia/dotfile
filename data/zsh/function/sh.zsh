@@ -98,7 +98,7 @@ function rmbk() {
 
 		local elapsed="$(chrono "$start")"
 
-		printf "\033[1;32m$n\033[0m in \033[1;32m%.0f\033[0m \033[32mms\033[0m\n" "$((elapsed * 1000))"
+		printf "\033[1;32m$n\033[0m in \033[1;32m%.0f\033[0m\033[32mms\033[0m\n" "$((elapsed * 1000))"
 
 		return 0
 	fi
@@ -148,8 +148,6 @@ type:
 		return 1
 	fi
 
-	local start="$(chrono)"
-
 	local t
 	for t in "$@"; do
 		case "$t" in
@@ -184,10 +182,6 @@ type:
 			;;
 		esac
 	done
-
-	local elapsed="$(chrono "$start")"
-
-	printf "\033[1;32m%.0f\033[0m \033[32mms\033[0m\n" "$((elapsed * 1000))"
 }
 
 function dcsh() {
