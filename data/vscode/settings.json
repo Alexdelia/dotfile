@@ -29,7 +29,6 @@
 		"*": true,
 		"plaintext": true,
 		"markdown": true,
-		"scminput": false,
 		"yaml": true
 	},
 	"terminal.integrated.inheritEnv": false,
@@ -101,8 +100,7 @@
 	"[python]": {
 		"editor.insertSpaces": true,
 		"editor.formatOnSave": true,
-		"editor.formatOnType": true,
-		"editor.defaultFormatter": "eeyore.yapf"
+		"editor.formatOnType": true
 	},
 	"python.analysis.typeCheckingMode": "basic",
 	"python.linting.pylintEnabled": true,
@@ -118,7 +116,5 @@
 	"[rust]": {
 		"editor.defaultFormatter": "rust-lang.rust-analyzer",
 		"editor.semanticHighlighting.enabled": false
-	},
-	"rust-analyzer.showUnlinkedFileNotification": false,
-	"window.zoomLevel": 1
+	}
 }
