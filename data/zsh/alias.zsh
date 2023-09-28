@@ -5,6 +5,7 @@ alias nor="norminette"
 # alias	gcc="clang-9"
 # alias	clang="clang-9"
 alias clangW="clang -Wall -Werror -Wextra"
+alias cw="clang -Wall -Werror -Wextra"
 
 alias gc="git commit --message"
 alias gst="git status --short"
