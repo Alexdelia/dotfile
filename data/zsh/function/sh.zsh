@@ -132,6 +132,7 @@ function dstop() {
 	docker stop $(docker ps -qa)
 }
 
+unalias drm # remove docker plugin alias
 function drm() {
 	local HELP="usage: \033[1m$0 \033[35m<type1> <type2> ...\033[0m
 type:
