@@ -19,7 +19,8 @@
 	"editor.inlineSuggest.enabled": true,
 	"editor.codeActionsOnSave": {
 		"source.organizeImports": true,
-		"source.fixAll.eslint": true
+		"source.fixAll.eslint": true,
+		"source.sortPackageJson": true
 	},
 	"explorer.confirmDragAndDrop": false,
 	"problems.showCurrentInStatus": true,
@@ -56,7 +57,9 @@
 		"editorBracketHighlight.foreground6": "#ff009d90",
 		"statusBar.background": "#0C0E14",
 		"editorInlayHint.background": "#0000",
-		"editorInlayHint.foreground": "#ffffff64"
+		"editorInlayHint.foreground": "#ffffff64",
+		"statusBar.foreground": "#ffffff",
+		"statusBar.debuggingForeground": "#ffffff"
 	},
 	"editor.semanticTokenColorCustomizations": {
 		"rules": {
