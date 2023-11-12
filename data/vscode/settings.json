@@ -59,7 +59,29 @@
 		"editorInlayHint.background": "#0000",
 		"editorInlayHint.foreground": "#ffffff64",
 		"statusBar.foreground": "#ffffff",
-		"statusBar.debuggingForeground": "#ffffff"
+		"statusBar.debuggingForeground": "#ffffff",
+		"activityBar.activeBorder": "#a277ff",
+		"activityBar.foreground": "#61ffca",
+		"activityBar.inactiveForeground": "#525156",
+		"activityBarBadge.background": "#a277ff",
+		"activityBarBadge.foreground": "#15141b",
+		"badge.background": "#a277ff",
+		"badge.foreground": "#15141b",
+		"button.background": "#61ffca",
+		"button.foreground": "#15141b",
+		"button.hoverBackground": "#49c29a",
+		"diffEditor.insertedTextBackground": "#00d89023",
+		"diffEditor.removedTextBackground": "#ff474720",
+		"dropdown.background": "#15141b",
+		"dropdown.border": "#3b334b",
+		"dropdown.foreground": "#cdccce",
+		"editorGroup.border": "#000000",
+		"editorGroup.dropBackground": "#3d375e7f",
+		"editorGroupHeader.tabsBackground": "#15141b",
+		"editorGroupHeader.tabsBorder": "#000000",
+		"editorGutter.addedBackground": "#61ffca",
+		"editorGutter.deletedBackground": "#ff6767",
+		"editorGutter.modifiedBackground": "#ffca85"
 	},
 	"editor.semanticTokenColorCustomizations": {
 		"rules": {
@@ -157,5 +179,6 @@
 	"[rust]": {
 		"editor.defaultFormatter": "rust-lang.rust-analyzer",
 		"editor.semanticHighlighting.enabled": false
-	}
+	},
+	"window.zoomLevel": 1
 }
