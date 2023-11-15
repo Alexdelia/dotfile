@@ -35,12 +35,13 @@
 		"yaml": true
 	},
 	"terminal.integrated.inheritEnv": false,
-	"vim.statusBarColorControl": true,
+	"vim.statusBarColorControl": false,
 	"vim.statusBarColors.normal": "#0C0E14",
 	"vim.statusBarColors.insert": "#731bb360",
 	"vim.statusBarColors.visual": "#857a0030",
 	"vim.statusBarColors.visualblock": "#00b2c930",
 	"vim.statusBarColors.visualline": "#9c001d30",
+	"vim.autoindent": false,
 	"workbench.colorCustomizations": {
 		"editorLineNumber.activeForeground": "#DDDDDD",
 		"editorCursor.background": "#0D1117",
@@ -94,7 +95,7 @@
 		"statusBarItem.activeBackground": "#a277ff",
 		"tab.activeBorderTop": "#a277ff",
 		"tab.activeForeground": "#a277ff",
-		"statusBarItem.hoverForeground": "#61ffca",
+		"statusBarItem.hoverForeground": "#c9b0ff",
 		"statusBarItem.remoteBackground": "#00000000",
 		"statusBarItem.errorForeground": "#ff6767",
 		"statusBarItem.warningForeground": "#ffca85",
@@ -135,9 +136,6 @@
 	},
 	"[javascriptreact]": {
 		"editor.formatOnSave": false
-	},
-	"[vue]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 	"[json]": {
 		"editor.defaultFormatter": "vscode.json-language-features"
@@ -204,5 +202,6 @@
 	"[rust]": {
 		"editor.defaultFormatter": "rust-lang.rust-analyzer",
 		"editor.semanticHighlighting.enabled": false
-	}
+	},
+	"window.zoomLevel": 1
 }
