@@ -79,7 +79,6 @@ plugins=(
 	universalarchive
 	colored-man-pages
 	command-not-found
-	you-should-use
 )
 
 source $ZSH/oh-my-zsh.sh
