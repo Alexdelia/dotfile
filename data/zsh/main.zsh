@@ -75,6 +75,7 @@ plugins=(
 	ripgrep
 	docker
 	docker-compose
+	asdf
 	extract
 	universalarchive
 	colored-man-pages
