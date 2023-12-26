@@ -85,3 +85,19 @@ function gmc() {
 	git merge "$current" --quiet || return 1
 	git push --quiet || return 1
 }
+
+function gmcf() {
+	if [[ $# -lt 2 ]]; then
+		echo -e "usage: \033[1m$0 \033[35m<from_branch> <to_branch1> <to_branch2> <...>\033[0m"
+		return 1
+	fi
+
+	local original_branch="$(git branch --show-current)"
+
+	git checkout "$1" --quiet || return 1
+	git pull --quiet || return 1
+
+	gmc "${@:2}" || return 1
+
+	git checkout "$original_branch" --quiet || return 1
+}
