@@ -100,7 +100,7 @@ function gmcf() {
 
 	git --no-pager log -n1 \
 		--pretty="%C(magenta)╭╴%C(auto)%h%C(magenta)╶╴%C(bold green)%an%Creset%C(magenta)╶╴%C(green)%ae%C(magenta)╶╴%C(bold blue)%ch%Creset
-%C(magenta)│ %C(auto)%s%Creset"
+%C(magenta)╰╴%C(auto)%s%Creset"
 
 	gmc "${@:2}" || return 1
 
