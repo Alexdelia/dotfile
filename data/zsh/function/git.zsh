@@ -94,8 +94,13 @@ function gmcf() {
 
 	local original_branch="$(git branch --show-current)"
 
+	echo -e "\033[1;32m$1\033[0m"
 	git checkout "$1" --quiet || return 1
 	git pull --quiet || return 1
+
+	git --no-pager log -n1 \
+		--pretty="%C(magenta)╭╴%C(auto)%h%C(magenta)╶╴%C(bold green)%an%Creset%C(magenta)╶╴%C(green)%ae%C(magenta)╶╴%C(bold blue)%ch%Creset
+%C(magenta)│ %C(auto)%s%Creset"
 
 	gmc "${@:2}" || return 1
 
