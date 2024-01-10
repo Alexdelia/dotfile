@@ -1,5 +1,6 @@
 __zsh_start="$(date -u +%s.%N)"
 
+ZSH_INFO="\033[1;36mINFO\033[39m:\033[0m\t"
 ZSH_WARN="\033[1;33mWARNING\033[39m:\033[0m\t"
 ZSH_ERR="\033[1;31mERROR\033[39m:\033[0m\t"
 
@@ -8,12 +9,12 @@ ZSH="$HOME/.oh-my-zsh"
 
 typeset -a __zsh_src
 
+__zsh_src+="export.zsh"
 __zsh_src+="tool/main.zsh"
 __zsh_src+="main.zsh"
 __zsh_src+="prompt.zsh"
 __zsh_src+="path.zsh"
 __zsh_src+="alias.zsh"
-__zsh_src+="export.zsh"
 __zsh_src+="function/main.zsh"
 
 for __file in $__zsh_src[@]; do

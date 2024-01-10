@@ -2,6 +2,7 @@ export P_TOOL="$HOME/.w"
 
 local workdir="${ZSH_SRC_PATH}tool"
 local src=(
+	"autojump.zsh"
 	"asdf.zsh"
 	"bun.zsh"
 )
