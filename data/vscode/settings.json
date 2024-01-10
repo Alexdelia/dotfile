@@ -133,6 +133,7 @@
 	"typescript.inlayHints.functionLikeReturnTypes.enabled": "all",
 	"typescript.format.placeOpenBraceOnNewLineForControlBlocks": true,
 	"typescript.format.placeOpenBraceOnNewLineForFunctions": true,
+	"nodeTdd.glob": "{src,test,api}/**/*.{js,ts,jsx,tsx}",
 	"[typescriptreact]": {
 		"editor.defaultFormatter": "vscode.typescript-language-features"
 	},
@@ -207,5 +208,5 @@
 	"[rust]": {
 		"editor.defaultFormatter": "rust-lang.rust-analyzer",
 		"editor.semanticHighlighting.enabled": false
-	}
+	},
 }
