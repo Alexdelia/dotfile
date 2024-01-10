@@ -8,13 +8,13 @@ ZSH="$HOME/.oh-my-zsh"
 
 typeset -a __zsh_src
 
+__zsh_src+="tool/main.zsh"
 __zsh_src+="main.zsh"
 __zsh_src+="prompt.zsh"
 __zsh_src+="path.zsh"
 __zsh_src+="alias.zsh"
 __zsh_src+="export.zsh"
 __zsh_src+="function/main.zsh"
-# __zsh_src+="conda.zsh"
 
 for __file in $__zsh_src[@]; do
 	if [[ -e "$ZSH_SRC_PATH$__file" ]]; then
