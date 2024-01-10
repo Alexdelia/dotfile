@@ -1,8 +1,16 @@
-P_TOOL="$HOME/.w"
+export P_TOOL="$HOME/.w"
 
-# asdf
-ASDF_DATA_DIR="$P_TOOL/asdf"
-ASDF_DIR="$ASDF_DATA_DIR"
+local workdir="${ZSH_SRC_PATH}tool"
+local src=(
+	"asdf.zsh"
+	"bun.zsh"
+)
 
-# bun
-source "bun.zsh"
+local file
+for file in $src[@]; do
+	if [[ -e "$workdir/$file" ]]; then
+		source "$workdir/$file"
+	else
+		printf "$ZSH_WARN\033[1;35m$file\033[0m \033[1;33mnot found\033[0m\n"
+	fi
+done

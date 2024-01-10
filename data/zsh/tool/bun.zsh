@@ -1,4 +1,4 @@
-if ((!$ + commands[bun])); then
+if ((! $+commands[bun])); then
 	return
 fi
 
