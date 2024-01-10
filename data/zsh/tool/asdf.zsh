@@ -5,3 +5,8 @@ fi
 
 export ASDF_DATA_DIR="$P_TOOL/asdf"
 export ASDF_DIR="$ASDF_DATA_DIR"
+export ASDF_CONFIG_FILE="$ASDF_DATA_DIR/asdfrc"
+
+if [[ ! -f "$ASDF_CONFIG_FILE" ]]; then
+	printf "legacy_version_file = yes\n" >"$ASDF_CONFIG_FILE"
+fi
