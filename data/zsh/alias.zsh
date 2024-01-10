@@ -7,6 +7,9 @@ alias nor="norminette"
 alias clangW="clang -Wall -Werror -Wextra"
 alias cw="clang -Wall -Werror -Wextra"
 
+# here for now
+git config --global push.autoSetupRemote true
+
 alias gc="git commit --message"
 alias gst="git status --short"
 alias gtree="git log --graph --oneline --decorate"

@@ -12,6 +12,7 @@ export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 
 export ZSH_COMPDUMP="$ZSH/cache/zcompdump-$HOST-$ZSH_VERSION"
+export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
 export GIT_EDITOR="vim"
 
