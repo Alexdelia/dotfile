@@ -18,8 +18,10 @@ fi
 # install autojump
 printf "$ZSH_INFO\033[1;32minstalling \033[1;35mautojump\033[0m\n"
 
-git clone -q "https://github.com/wting/autojump.git" /tmp/autojump_repo
+local tmp_repo="/tmp/autojump_repo"
 
-/tmp/autojump_repo/install.py --destdir "$XDG_CONFIG_HOME/autojump"
+git clone -q "https://github.com/wting/autojump.git" "$tmp_repo"
+
+$tmp_repo/install.py --destdir "$XDG_CONFIG_HOME/autojump"
 
 printf "$ZSH_INFO\033[1;35mautojump \033[1;32minstalled\033[0m, \033[1;36myou only need to reload \033[1;35mzsh\033[0m\n"
