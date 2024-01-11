@@ -1,5 +1,7 @@
 export P_TOOL="$HOME/.w"
 
+mkdir -p "$P_TOOL"
+
 local workdir="${ZSH_SRC_PATH}tool"
 local src=(
 	"autojump.zsh"
