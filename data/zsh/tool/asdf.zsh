@@ -6,6 +6,8 @@ if [[ -d "$HOME/.asdf" ]]; then
 	printf "$ZSH_INFO\033[1;36mmoving \033[1;35masdf \033[1;36mfrom \033[1;33m~/.asdf \033[1;36mto \033[1;31m$ASDF_DATA_DIR\033[0m\n"
 
 	mv "$HOME/.asdf" "$ASDF_DATA_DIR"
+
+	asdf reshim
 fi
 
 if [[ ! -f "$ASDF_CONFIG_FILE" ]]; then
