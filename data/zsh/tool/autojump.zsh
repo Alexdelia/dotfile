@@ -22,8 +22,7 @@ local tmp_repo="/tmp/autojump_repo"
 
 rm -rf "$tmp_repo"
 
-git clone -q "https://github.com/wting/autojump.git" "$tmp_repo"
-
-$tmp_repo/install.py --destdir "$XDG_CONFIG_HOME/autojump" &&
+git clone -q "https://github.com/wting/autojump.git" "$tmp_repo" && cd $tmp_repo &&
+	./install.py --destdir "$XDG_CONFIG_HOME/autojump" &&
 	printf "$ZSH_INFO\033[1;35mautojump \033[1;32minstalled\033[0m, \033[1;36myou only need to reload \033[1;35mzsh\033[0m\n" ||
 	printf "$ZSH_ERR\033[1;35mautojump \033[1;31minstall failed\033[0m\n"
