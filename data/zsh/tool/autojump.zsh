@@ -10,7 +10,7 @@ printf "$ZSH_INFO\033[1;35mautojump \033[1;36mneed action\033[0m\n"
 
 # check if installed in ~/.autojump
 if [[ -d "$HOME/.autojump" ]]; then
-	printf "$ZSH_INFO\033[1;35mautojump \033[1;36mfound in \033[1;33m~/.autojump\033[0m, \033[1;36removing it\033[0m\n"
+	printf "$ZSH_INFO\033[1;35mautojump \033[1;36mfound in \033[1;33m~/.autojump\033[0m, \033[1;36mremoving it\033[0m\n"
 
 	rm -rf "$HOME/.autojump"
 fi

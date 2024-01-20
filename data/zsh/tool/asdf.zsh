@@ -10,6 +10,17 @@ if [[ -d "$HOME/.asdf" ]]; then
 	asdf reshim
 fi
 
+if [[ ! -d "$ASDF_DATA_DIR" ]]; then
+	printf "$ZSH_INFO\033[1;32minstalling \033[1;35masdf\033[0m\n"
+
+	git clone https://github.com/asdf-vm/asdf.git "$ASDF_DATA_DIR" &&
+		cd "$ASDF_DATA_DIR" &&
+		git checkout "$(git describe --abbrev=0 --tags)" &&
+		cd - &&
+		printf "$ZSH_INFO\033[1;35masdf \033[1;32minstalled\033[0m\n" ||
+		printf "$ZSH_ERR\033[1;35masdf \033[1;31minstall failed\033[0m\n"
+fi
+
 if [[ ! -f "$ASDF_CONFIG_FILE" ]]; then
 	printf "legacy_version_file = yes\n" >"$ASDF_CONFIG_FILE"
 fi
