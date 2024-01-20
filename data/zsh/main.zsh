@@ -74,12 +74,14 @@ plugins=(
 	ripgrep
 	docker
 	docker-compose
-	asdf
 	extract
 	universalarchive
 	colored-man-pages
 	command-not-found
 )
+
+[[ ASDF_INSTALLED ]] && plugins+=(asdf)
+[[ FLUTTER_INSTALLED ]] && plugins+=(flutter)
 
 source $ZSH/oh-my-zsh.sh
 

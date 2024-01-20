@@ -17,7 +17,7 @@ if [[ ! -d "$ASDF_DATA_DIR" ]]; then
 		cd "$ASDF_DATA_DIR" &&
 		git checkout "$(git describe --abbrev=0 --tags)" &&
 		cd - &&
-		printf "$ZSH_INFO\033[1;35masdf \033[1;32minstalled\033[0m\n" ||
+		printf "$ZSH_INFO\033[1;35masdf \033[1;32minstalled\033[0m\n" && export ASDF_INSTALLED=1 ||
 		printf "$ZSH_ERR\033[1;35masdf \033[1;31minstall failed\033[0m\n"
 fi
 
