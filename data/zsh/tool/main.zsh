@@ -5,6 +5,7 @@ mkdir -p "$P_TOOL"
 local workdir="${ZSH_SRC_PATH}tool"
 local src=(
 	"autojump.zsh"
+	"flutter.zsh"
 	"asdf.zsh"
 	"bun.zsh"
 )
