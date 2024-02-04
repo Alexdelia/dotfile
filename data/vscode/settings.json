@@ -209,4 +209,7 @@
 		"editor.defaultFormatter": "rust-lang.rust-analyzer",
 		"editor.semanticHighlighting.enabled": false
 	},
+	"[lua]": {
+		"editor.defaultFormatter": "notnoobmaster.lua-beautifier"
+	}
 }
