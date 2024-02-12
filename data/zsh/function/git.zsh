@@ -19,6 +19,10 @@ function grs() {
 	git status --short
 }
 
+function gops() {
+	git reset HEAD~1 --soft
+}
+
 function gy() {
 	if [[ $# -ne 1 ]]; then
 		echo -e "usage: \033[1m$0 \033[35m<commit_message>\033[0m"
