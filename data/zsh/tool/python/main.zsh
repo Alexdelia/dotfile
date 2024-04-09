@@ -1,14 +1,8 @@
-export P_TOOL="$HOME/.w"
-
-mkdir -p "$P_TOOL"
-
-local workdir="${ZSH_SRC_PATH}tool"
+local workdir="${ZSH_SRC_PATH}tool/python"
 local src=(
-	"python/main.zsh"
-	"autojump.zsh"
-	"flutter.zsh"
-	"asdf.zsh"
-	"bun.zsh"
+	"pipx.zsh"
+	"poetry.zsh"
+	"ruff.zsh"
 )
 
 local file

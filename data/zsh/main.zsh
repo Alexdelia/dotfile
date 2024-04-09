@@ -80,6 +80,7 @@ plugins=(
 	command-not-found
 )
 
+[[ POETRY_INSTALLED ]] && plugins+=(poetry)
 [[ ASDF_INSTALLED ]] && plugins+=(asdf)
 [[ FLUTTER_INSTALLED ]] && plugins+=(flutter)
 
