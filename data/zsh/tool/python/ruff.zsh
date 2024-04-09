@@ -1,4 +1,4 @@
-if (( $+commands[ruff])); then
+if (($+commands[ruff])); then
 	return
 fi
 
@@ -10,4 +10,4 @@ fi
 
 printf "$ZSH_INFO\033[1;32minstalling \033[1;35mruff\033[0m\n"
 
-pipx install poetry
+pipx install ruff
