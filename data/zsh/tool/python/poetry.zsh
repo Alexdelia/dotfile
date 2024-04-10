@@ -16,6 +16,3 @@ mkdir $ZSH_CUSTOM/plugins/poetry || return
 poetry completions zsh >$ZSH_CUSTOM/plugins/poetry/_poetry
 
 export POETRY_INSTALLED=1
-
-alias po="poetry"
-alias pr="poetry run"

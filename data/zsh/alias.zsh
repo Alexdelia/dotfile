@@ -26,8 +26,10 @@ alias ivm="vim"
 alias vmi="vim"
 alias gti="git"
 
-alias c="cargo"
 alias s="sudo"
+alias c="cargo"
+alias po="poetry"
+alias pr="poetry run"
 
 alias up="sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y"
 
