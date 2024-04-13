@@ -1,9 +1,11 @@
-PROMPT="%(?:%{$fg_bold[green]%}➜:%{$fg_bold[red]%}➜)  %(!:🫚 :)%{$fg_bold[magenta]%}%c%{$reset_color%}"
-PROMPT+=' $(git_prompt_info)'
+__NEWLINE=$'\n'
 
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}git:(%{$fg[red]%}"
+PROMPT="%(?::%{$fg_bold[red]%}%?${__NEWLINE}) %(!:🫚 :)%{$fg_bold[magenta]%}%c%{$reset_color%}"
+PROMPT+=' $(git_prompt_info) '
+
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}\ue725:(%{$fg[red]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[yellow]%}✗"
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[yellow]%}\uf47f"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
 
 # be able to use ctrl + backspace / crtl + delete to delete entire word
