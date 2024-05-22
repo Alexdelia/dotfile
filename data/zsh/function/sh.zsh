@@ -52,15 +52,15 @@ option:
 
 unalias l # remove zsh alias
 function l() {
-	exa --long --all --no-permissions --no-filesize --no-user --no-time --git --icons "$@" 2>/dev/null || ls -lah "$@"
+	eza --long --all --no-permissions --no-filesize --no-user --no-time --git --icons "$@" 2>/dev/null || ls -lah "$@"
 }
 
 function lr() {
-	exa --git-ignore --ignore-glob='.git' --recurse --group-directories-first --long --all --no-permissions --no-filesize --no-user --no-time --git --icons "$@" 2>/dev/null || ls -lahR "$@"
+	eza --git-ignore --ignore-glob='.git' --recurse --group-directories-first --long --all --no-permissions --no-filesize --no-user --no-time --git --icons "$@" 2>/dev/null || ls -lahR "$@"
 }
 
 function lt() {
-	exa --git-ignore --ignore-glob='.git' --tree --group-directories-first --long --all --no-permissions --no-filesize --no-user --no-time --git --icons "$@" 2>/dev/null || ls -lahR "$@"
+	eza --git-ignore --ignore-glob='.git' --tree --group-directories-first --long --all --no-permissions --no-filesize --no-user --no-time --git --icons "$@" 2>/dev/null || ls -lahR "$@"
 }
 
 function to() {
