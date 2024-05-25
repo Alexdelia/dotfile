@@ -27,7 +27,7 @@
       alex = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
-          ./home.nix
+          ./home-manager/home.nix
         ];
       };
     };
