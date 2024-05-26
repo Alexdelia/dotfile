@@ -30,7 +30,6 @@ home_manager_log="${log_folder}build.log"
 
 function process_log_line() {
 	while IFS= read -r line; do
-		# print with max size tput cols
 		printf "\r\033[K%.*s" "$(tput cols)" "$line"
 		printf "%s\n" "$line" >>"$home_manager_log"
 	done
