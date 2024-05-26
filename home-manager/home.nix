@@ -8,8 +8,10 @@
   home.stateVersion = "23.11";
 
   programs.home-manager.enable = true;
+  targets.genericLinux.enable = true;
 
   imports = [
+    ./pkg/git.nix
     ./pkg/bat.nix
     ./pkg/eza.nix
   ];
