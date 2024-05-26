@@ -11,10 +11,16 @@
 
   imports = [
     ./pkg/bat.nix
+    ./pkg/eza.nix
   ];
 
   home.packages = with pkgs; [
-    # neofetch
     uutils-coreutils
+    ripgrep
+
+    # neofetch
+
+    ## nix
+    alejandra
   ];
 }
