@@ -13,7 +13,6 @@
 
   outputs = {
     nixpkgs,
-
     home-manager,
     ...
   }: let
