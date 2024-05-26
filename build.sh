@@ -10,7 +10,7 @@ git add '*.nix'
 
 if git diff --staged --exit-code; then
 	printf "  \033[36m* no changes\033[0m\n"
-	# exit 0
+	exit 0
 fi
 
 if command -v home-manager &>/dev/null; then
