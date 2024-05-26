@@ -64,4 +64,6 @@ if [ -s "$pkg_diff_log" ]; then
 	msg="$msg\n\npackage changes:\n$(cat "$pkg_diff_log")"
 fi
 
-git commit -m "$msg"
+git commit -m "$msg" -q
+
+printf "  \033[32m* commit\033[0m"
