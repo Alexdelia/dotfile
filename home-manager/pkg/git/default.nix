@@ -17,8 +17,8 @@ in {
     extraConfig = {
       user.useConfigOnly = true;
 
-      user.self.name = "Alexdelia";
-      user.self.email = "alexandre.delille.57@gmail.com";
+      user.personal.name = "Alexdelia";
+      user.personal.email = "alexandre.delille.57@gmail.com";
 
       user.school.name = "adelille";
       user.school.email = "adelille@student.42.fr";
