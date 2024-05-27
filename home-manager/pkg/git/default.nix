@@ -14,6 +14,10 @@
     (symlinkJoin {
       name = "git-identity";
       paths = [./git-identity.sh];
+      buildInputs = [makeWrapper];
+      postBuild = ''
+        wrapProgram $out/bin/my-script.sh --prefix PATH : ${stdenv.shell}
+      '';
     })
   ];
 
