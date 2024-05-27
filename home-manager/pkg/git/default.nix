@@ -32,6 +32,8 @@ in {
     aliases = {
       identity = "! git-identity";
       id = "! git-identity";
+
+      vommit = "commit";
     };
   };
 }
