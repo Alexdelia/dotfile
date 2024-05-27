@@ -11,7 +11,7 @@
   targets.genericLinux.enable = true;
 
   imports = [
-    ./pkg/git.nix
+    ./pkg/git
     ./pkg/bat.nix
     ./pkg/eza.nix
   ];
