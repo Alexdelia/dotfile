@@ -1,7 +1,7 @@
 # todo
 
 - [ ] shell
-  - [ ] alias
+  - [ ] alias (show alias with `alias` command)
     - [ ] omz alias
     - [ ] `gh` -> `git checkout`
 - [ ] [git](https://mynixos.com/nixpkgs/options/programs.git)
