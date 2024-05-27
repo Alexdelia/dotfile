@@ -13,8 +13,11 @@ in {
 
   programs.git = {
     enable = true;
+
     extraConfig = {
       user.useConfigOnly = true;
+
+      user.name = "test";
 
       user.self.name = "Alexdelia";
       user.self.email = "alexandre.delille.57@gmail.com";
