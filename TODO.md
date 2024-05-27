@@ -4,11 +4,12 @@
   - [ ] alias (show alias with `alias` command)
     - [ ] omz alias
     - [ ] `gh` -> `git checkout`
-- [ ] [git](https://mynixos.com/nixpkgs/options/programs.git)
-  - [ ] [delta](https://mynixos.com/home-manager/options/programs.git.delta)
+- [x] [git](https://mynixos.com/nixpkgs/options/programs.git)
+  - [x] [delta](https://mynixos.com/home-manager/options/programs.git.delta)
     - [ ] [theme](https://github.com/dandavison/delta?tab=readme-ov-file#a-syntax-highlighting-pager-for-git-diff-and-grep-output)
-  - [ ] alias
-    - [ ] `git vommit` -> `git commit`
+    - [ ] check config
+  - [x] alias
+    - [x] `git vommit` -> `git commit`
 - [ ] replace with rust equivalent
   - [x] bat
     - [ ] batman with `alias man='batman'`
@@ -21,7 +22,7 @@
   - [ ] tokei
   - [ ] dust
   - [ ] zoxide (autojump)
-  - [ ] oxker (docker tui)
+  - [x] oxker (docker tui)
 - [ ] vscode
   - [ ] extension
   - [ ] theme
