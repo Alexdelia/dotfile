@@ -3,22 +3,12 @@
   lib,
   pkgs,
   ...
-}:
-# let
-#   gitIdentity =
-#     pkgs.writeShellScriptBin "git-identity" (builtins.readFile ./git-identity.sh);
-# in
-{
+}: let
+  gitIdentity =
+    pkgs.writeScriptBin "git-identity" (builtins.readFile ./git-identity.sh);
+in {
   home.packages = with pkgs; [
-    # gitIdentity
-    (symlinkJoin {
-      name = "git-identity";
-      paths = [./git-identity.sh];
-      buildInputs = [makeWrapper];
-      postBuild = ''
-        wrapProgram $out/bin/git-identify.sh --prefix PATH : ${stdenv.shell}
-      '';
-    })
+    gitIdentity
   ];
 
   programs.git = {
