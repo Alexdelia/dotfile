@@ -60,7 +60,9 @@ generation_id=$(home-manager generations | head -1 | cut -d' ' -f5)
 msg="home-manager generation id $generation_id"
 
 if [ -s "$pkg_diff_log" ]; then
-	msg="$msg\n\npackage changes:\n$(cat "$pkg_diff_log")"
+	msg="$msg
+package changes:
+$(cat $pkg_diff_log)"
 fi
 
 git commit -m "$msg" -q

@@ -17,8 +17,6 @@ in {
     extraConfig = {
       user.useConfigOnly = true;
 
-      user.name = "test";
-
       user.self.name = "Alexdelia";
       user.self.email = "alexandre.delille.57@gmail.com";
 
@@ -27,6 +25,8 @@ in {
 
       user.work.name = "Alexandre Delille";
       user.work.email = "alexandre@terros.io";
+
+      push.autoSetupRemote = true;
     };
 
     aliases = {

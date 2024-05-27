@@ -10,6 +10,9 @@
   - [ ] alias
     - [ ] `git vommit` -> `git commit`
 - [ ] replace with rust equivalent
+  - [x] bat
+    - [ ] batman with `alias man='batman'`
+    - [ ] [syntect](https://github.com/trishume/syntect/) [theme](https://github.com/sharkdp/bat?tab=readme-ov-file#adding-new-syntaxes--language-definitions) with [nix](https://mynixos.com/home-manager/options/programs.bat)
   - [ ] core utils [pkgs](https://search.nixos.org/packages?channel=23.11&show=uutils-coreutils&from=0&size=50&sort=relevance&type=packages&query=uutils-coreutils) [git](https://github.com/uutils/coreutils/tree/main)
   - [ ] [list](https://zaiste.net/posts/shell-commands-rust/)
   - [ ] [list](https://github.com/unpluggedcoder/awesome-rust-tools)
@@ -22,4 +25,3 @@
 - [ ] vscode
   - [ ] extension
   - [ ] theme
-- [ ] [syntect](https://github.com/trishume/syntect/) theme for [bat](https://github.com/sharkdp/bat?tab=readme-ov-file#adding-new-syntaxes--language-definitions) with [nix](https://mynixos.com/home-manager/options/programs.bat)
