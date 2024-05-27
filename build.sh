@@ -69,6 +69,7 @@ msg="home-manager generation id $generation_id"
 
 if [ -s "$pkg_diff_log" ]; then
 	msg="$msg
+
 package changes:
 $(cat $pkg_diff_log)"
 fi
