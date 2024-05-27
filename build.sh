@@ -65,4 +65,4 @@ fi
 
 git commit -m "$msg" -q
 
-printf "  \033[32m* commit\033[0m"
+printf "  \033[32m* commit\033[0m\n"
