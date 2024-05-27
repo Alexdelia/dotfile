@@ -3,12 +3,18 @@
   lib,
   pkgs,
   ...
-}: let
-  gitIdentity =
-    pkgs.writeShellScriptBin "git-identity" (builtins.readFile ./git-identity.sh);
-in {
+}:
+# let
+#   gitIdentity =
+#     pkgs.writeShellScriptBin "git-identity" (builtins.readFile ./git-identity.sh);
+# in
+{
   home.packages = with pkgs; [
-    gitIdentity
+    # gitIdentity
+    (symlinkJoin {
+      name = "git-identity";
+      paths = [./git-identity.sh];
+    })
   ];
 
   programs.git = {
