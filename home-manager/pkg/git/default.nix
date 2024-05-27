@@ -16,7 +16,7 @@
       paths = [./git-identity.sh];
       buildInputs = [makeWrapper];
       postBuild = ''
-        wrapProgram $out/bin/my-script.sh --prefix PATH : ${stdenv.shell}
+        wrapProgram $out/bin/git-identify.sh --prefix PATH : ${stdenv.shell}
       '';
     })
   ];
