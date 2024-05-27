@@ -10,7 +10,15 @@ git add '*.nix'
 
 if git --paginate diff --staged --exit-code; then
 	printf "  \033[36m* no changes\033[0m\n"
-	exit 0
+
+	printf "  ╰╴\033[1;32mbuild\033[0m and \033[1;32mcommit\033[0m anyway?\033[0m [\033[1;32my\033[0m/\033[1;31mN\033[0m]"
+	read -r -p " " response
+	case "$response" in
+	[yY][eE][sS] | [yY]) ;;
+	*)
+		exit 0
+		;;
+	esac
 fi
 
 if command -v home-manager &>/dev/null; then
@@ -65,6 +73,6 @@ package changes:
 $(cat $pkg_diff_log)"
 fi
 
-git commit -m "$msg" -q
+git commit -m "$msg" -q --allow-empty || exit 1
 
 printf "  \033[32m* commit\033[0m\n"
