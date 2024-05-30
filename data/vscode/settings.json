@@ -32,7 +32,8 @@
 		"*": true,
 		"plaintext": true,
 		"markdown": true,
-		"yaml": true
+		"yaml": true,
+		"scminput": false
 	},
 	"terminal.integrated.inheritEnv": false,
 	"vim.statusBarColorControl": false,
@@ -168,7 +169,6 @@
 	"python.analysis.extraPaths": [
 		"./sources"
 	],
-	"python.formatting.provider": "yapf",
 	/* Flutter/Dart automatically generated */
 	// Causes the debug view to automatically appear when a breakpoint is hit. This
 	// setting is global and not configurable per-language.
