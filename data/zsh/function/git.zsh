@@ -66,7 +66,9 @@ function gpn() {
 	git push --quiet
 }
 
-unalias gmc # remove git plugin alias
+if whence -w gmc | grep "alias"; then
+	unalias gmc # remove git plugin alias
+fi
 function gmc() {
 	if [[ $# -lt 1 ]]; then
 		echo -e "usage: \033[1m$0 \033[35m<branch1> <branch2> <...>\033[0m"
