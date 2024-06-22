@@ -16,6 +16,7 @@
 	"editor.renderFinalNewline": "off",
 	"editor.autoClosingBrackets": "never",
 	"editor.autoClosingQuotes": "never",
+	"editor.autoClosingComments": "never",
 	"editor.inlineSuggest.enabled": true,
 	"editor.codeActionsOnSave": {
 		"source.organizeImports": "always",
