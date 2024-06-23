@@ -20,7 +20,9 @@
   - [ ] [list](https://github.com/rust-unofficial/awesome-rust)
   - [ ] [ouch](https://github.com/ouch-org/ouch) compress/decompress
   - [ ] tokei
-  - [ ] dust
+  - [ ] ncdu, dust, dua-cli
+  - [ ] [dysk](https://github.com/Canop/dysk)
+	- [ ] alias `df` -> `dysk -c label+mount+use+size+used+free -s use`
   - [ ] zoxide (autojump)
   - [x] oxker (docker tui)
 - [ ] vscode
