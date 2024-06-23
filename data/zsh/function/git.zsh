@@ -66,7 +66,7 @@ function gpn() {
 	git push --quiet
 }
 
-if whence -w gmc | grep "alias"; then
+if whence -w gmc | grep "alias" &>/dev/null; then
 	unalias gmc # remove git plugin alias
 fi
 function gmc() {

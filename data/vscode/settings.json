@@ -16,6 +16,7 @@
 	"editor.renderFinalNewline": "off",
 	"editor.autoClosingBrackets": "never",
 	"editor.autoClosingQuotes": "never",
+	"editor.autoClosingComments": "never",
 	"editor.inlineSuggest.enabled": true,
 	"editor.codeActionsOnSave": {
 		"source.organizeImports": "always",
@@ -35,6 +36,7 @@
 		"yaml": true,
 		"scminput": false
 	},
+	"github.copilot.editor.enableAutoCompletions": true,
 	"terminal.integrated.inheritEnv": false,
 	"vim.statusBarColorControl": false,
 	"vim.statusBarColors.normal": "#0C0E14",
@@ -118,6 +120,9 @@
 			}
 		}
 	},
+	"files.associations": {
+		"*.jinja2": "jinja-md"
+	},
 	"[c]": {
 		"editor.formatOnSave": false
 	},
@@ -160,7 +165,8 @@
 		"editor.insertSpaces": true,
 		"editor.formatOnSave": true,
 		"editor.formatOnType": true,
-		"editor.defaultFormatter": "charliermarsh.ruff"
+		"editor.defaultFormatter": "charliermarsh.ruff",
+		"editor.semanticHighlighting.enabled": true
 	},
 	"python.analysis.typeCheckingMode": "basic",
 	"python.terminal.activateEnvironment": true,
