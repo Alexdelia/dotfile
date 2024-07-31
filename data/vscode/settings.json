@@ -216,6 +216,5 @@
 	},
 	"[lua]": {
 		"editor.defaultFormatter": "notnoobmaster.lua-beautifier"
-	},
-	"github.copilot.editor.enableAutoCompletions": true
+	}
 }
