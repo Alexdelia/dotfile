@@ -71,7 +71,6 @@ export UPDATE_ZSH_DAYS=30
 plugins=(
 	git
 	rust
-	ripgrep
 	docker
 	docker-compose
 	extract
