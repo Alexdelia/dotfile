@@ -216,5 +216,7 @@
 	},
 	"[lua]": {
 		"editor.defaultFormatter": "notnoobmaster.lua-beautifier"
-	}
+	},
+	"nix.enableLanguageServer": true,
+	"nix.serverPath": "nil"
 }
