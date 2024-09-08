@@ -1,9 +1,8 @@
 # todo
 
-- [ ] shell
-  - [ ] alias (show alias with `alias` command)
-    - [ ] omz alias
-    - [ ] `gh` -> `git checkout`
+also count task resolved in https://github.com/Alexdelia/nixconf
+
+- [x] shell
 - [x] [git](https://mynixos.com/nixpkgs/options/programs.git)
   - [x] [delta](https://mynixos.com/home-manager/options/programs.git.delta)
     - [ ] [theme](https://github.com/dandavison/delta?tab=readme-ov-file#a-syntax-highlighting-pager-for-git-diff-and-grep-output)
@@ -12,19 +11,16 @@
     - [x] `git vommit` -> `git commit`
 - [ ] replace with rust equivalent
   - [x] bat
-    - [ ] batman with `alias man='batman'`
+    - [x] batman with `alias man='batman'`
     - [ ] [syntect](https://github.com/trishume/syntect/) [theme](https://github.com/sharkdp/bat?tab=readme-ov-file#adding-new-syntaxes--language-definitions) with [nix](https://mynixos.com/home-manager/options/programs.bat)
   - [ ] core utils [pkgs](https://search.nixos.org/packages?channel=23.11&show=uutils-coreutils&from=0&size=50&sort=relevance&type=packages&query=uutils-coreutils) [git](https://github.com/uutils/coreutils/tree/main)
   - [ ] [list](https://zaiste.net/posts/shell-commands-rust/)
   - [ ] [list](https://github.com/unpluggedcoder/awesome-rust-tools)
   - [ ] [list](https://github.com/rust-unofficial/awesome-rust)
-  - [ ] [ouch](https://github.com/ouch-org/ouch) compress/decompress
+  - [x] [ouch](https://github.com/ouch-org/ouch) compress/decompress
   - [ ] tokei
   - [ ] ncdu, dust, dua-cli
-  - [ ] [dysk](https://github.com/Canop/dysk)
-	- [ ] alias `df` -> `dysk -c label+mount+use+size+used+free -s use`
-  - [ ] zoxide (autojump)
+  - [x] [dysk](https://github.com/Canop/dysk)
+    - [x] alias `df` -> `dysk -c label+mount+use+size+used+free -s use`
+  - [x] zoxide (autojump)
   - [x] oxker (docker tui)
-- [ ] vscode
-  - [ ] extension
-  - [ ] theme
